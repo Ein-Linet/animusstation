@@ -1078,7 +1078,7 @@
 
 /obj/item/weapon/cell/super
 	name = "super-capacity power cell"
-	origin_tech = "powerstorage=3"
+	origin_tech = "powerstorage=5"
 	maxcharge = 20000
 	g_amt = 70
 
@@ -1447,15 +1447,17 @@
 	name = "d6"
 	desc = "A dice with six sides."
 	var/sides = 6
-	icon_state = "dice"
-	item_state = "dice"
+	icon = 'dice.dmi'
+	icon_state = "d66"
+
+/obj/item/weapon/dice/New()
+	icon_state = "[name][rand(sides)]"
 
 /obj/item/weapon/dice/d20 // -- TLE
 	name = "d20"
-	desc = "A dice with...hell that is many sides."
+	desc = "A dice with twenty sides."
 	sides = 20
-	icon_state = "d20"
-	item_state = "dice"
+	icon_state = "d2020"
 
 /obj/item/weapon/pai_cable
 	desc = "A flexible coated cable with a universal jack on one end."

@@ -102,12 +102,10 @@
 					for(var/mob/M in A)
 						M.bullet_act(src, def_zone)
 
-				world << "[A.name]"
 				if(!istype(A,/mob))
 					on_hit(A)
 					world << "[A.name] удар"
 
-				density = 0
 				invisibility = 101
 				del(src)
 		return

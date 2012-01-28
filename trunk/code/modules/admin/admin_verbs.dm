@@ -81,6 +81,7 @@
 				verbs += /client/proc/jumptokey
 				verbs += /client/proc/jumptomob
 				verbs += /client/proc/jumptoturf
+				verbs += /client/proc/jumptocoord
 
 				verbs += /client/proc/cmd_admin_add_freeform_ai_law
 				verbs += /client/proc/cmd_admin_rejuvenate
@@ -210,6 +211,8 @@
 			verbs += /client/proc/set_max_players
 			verbs += /proc/possess
 			verbs += /proc/release
+			verbs += /client/proc/jumptocoord
+
 		if (holder.level >= 3)//Trial Admin********************************************************************
 			verbs += /client/proc/Getmob
 			verbs += /client/proc/Getkey
