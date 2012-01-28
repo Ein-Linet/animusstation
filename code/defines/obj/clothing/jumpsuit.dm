@@ -226,8 +226,10 @@
 
 
 /obj/item/clothing/under/rank/commissar
+	animus = 1
 	desc = "A jumpsuit worn by those few with the dedication to achieve the position of \"Commissar\". Has slight armor to protect the wearer."
 	name = "Commissar Jumpsuit"
+	icon = 'uniforms_animus.dmi'
 	icon_state = "commissar"
 	item_state = "b_suit"
 	color = "commissar"
