@@ -5,6 +5,7 @@
 	icon_state = "s-casing"
 	flags = FPRINT | TABLEPASS | CONDUCT | ONBELT
 	throwforce = 1
+	m_amt = 500
 	w_class = 1.0
 	var
 		caliber = ""							//Which kind of guns it can be loaded into
@@ -30,7 +31,7 @@
 	icon = 'ammo.dmi'
 	flags = FPRINT | TABLEPASS | CONDUCT | ONBELT
 	item_state = "syringe_kit"
-	m_amt = 50000
+	m_amt = 5000
 	throwforce = 2
 	w_class = 1.0
 	throw_speed = 4

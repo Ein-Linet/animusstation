@@ -20,7 +20,9 @@
 		H.equip_if_possible(new /obj/item/clothing/head/commissar(H), H.slot_head)
 		H.equip_if_possible(new /obj/item/clothing/glasses/sunglasses/sechud(H), H.slot_glasses)
 		H.equip_if_possible(new /obj/item/weapon/handcuffs(H), H.slot_in_backpack)
-		H.equip_if_possible(new /obj/item/weapon/gun/energy/gun(H), H.slot_s_store)
+		H.equip_if_possible(new /obj/item/weapon/gun/projectile/c96/stun(H), H.slot_s_store)
+		H.equip_if_possible(new /obj/item/ammo_magazine/c96/stun(H), H.slot_l_store)
+		H.equip_if_possible(new /obj/item/ammo_magazine/c96(H.back), H.slot_in_backpack)
 		var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(H)
 		L.imp_in = H
 		L.implanted = 1
