@@ -4,6 +4,7 @@
 	icon_state = "blindfold"
 	item_state = "blindfold"
 	vision_flags = BLIND
+	nontransparent = 1
 
 /obj/item/clothing/glasses/meson
 	name = "Optical Meson Scanner"
@@ -12,12 +13,14 @@
 	item_state = "glasses"
 	origin_tech = "magnets=2;engineering=2"
 	vision_flags = SEE_TURFS
+	nontransparent = 1
 
 /obj/item/clothing/glasses/science
 	name = "Science Goggles"
 	desc = "nothing"
 	icon_state = "purple"
 	item_state = "glasses"
+	nontransparent = 1
 
 /obj/item/clothing/glasses/night
 	name = "Night Vision Goggles"
@@ -27,6 +30,7 @@
 	origin_tech = "magnets=2"
 	vision_flags = SEE_TURFS
 	darkness_view = 3
+	nontransparent = 1
 
 /obj/item/clothing/glasses/material
 	name = "Optical Material Scanner"
@@ -35,6 +39,7 @@
 	item_state = "glasses"
 	origin_tech = "magnets=3;engineering=3"
 	vision_flags = SEE_OBJS
+	nontransparent = 1
 
 /obj/item/clothing/glasses/regular
 	name = "Prescription Glasses"
@@ -55,11 +60,13 @@
 	item_state = "sunglasses"
 	protective_temperature = 1300
 	darkness_view = -1
+	nontransparent = 1
 
 /obj/item/clothing/glasses/sunglasses/sechud
 	name = "HUDSunglasses"
 	desc = "Sunglasses with a HUD."
 	icon_state = "sunhud"
+	nontransparent = 1
 	var/obj/item/clothing/glasses/hud/security/hud = null
 
 	New()
@@ -75,6 +82,7 @@
 	origin_tech = "magnets=3"
 	vision_flags = SEE_MOBS
 	invisa_view = 2
+	nontransparent = 1
 
 /obj/item/clothing/glasses/thermal/monocle
 	name = "Thermoncle"

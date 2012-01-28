@@ -7,6 +7,7 @@
 		vision_flags = 0
 		darkness_view = 0//Base human is 2
 		invisa_view = 0
+		nontransparent = 0
 
 /*
 SEE_SELF  // can see self, no matter what
