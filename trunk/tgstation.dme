@@ -1045,6 +1045,6 @@
 #include "code\WorkInProgress\virus2_animus\diseases\syndroms4.dm"
 #include "code\WorkInProgress\virus2_animus\diseases\VirusDefinitions.dm"
 #include "interface\skin.dmf"
-#include "maps\tgstation.2.0.8b.dmm"
+#include "maps\tgstation.2.0.8m.dmm"
 // END_INCLUDE
 
