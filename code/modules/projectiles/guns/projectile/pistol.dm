@@ -46,15 +46,21 @@
 	origin_tech = "combat=3"
 	ammo_type = "/obj/item/ammo_casing/a75"
 
-/*
+
 /obj/item/weapon/gun/projectile/c96
 	name = "Mauser C96"
-	desc = "An antique pistol that uses 9mm ammo"
-	icon_state = "c96-load"
+	desc = "An antique pistol that uses 7.63mm ammo"
+	icon_state = "c96"
 	origin_tech = "combat=4;materials=3"
-	w_class = 3.0
+	load_method = 0 //0 = single shells or quick loader
 	force = 14.0
 	max_shells = 10
-	ammo_type = "/obj/item/ammo_casing/c9mm"
-	caliber = "9mm"
-*/
+	ammo_type = "/obj/item/ammo_casing/a763mm"
+	caliber = "7.63mm"
+
+	animate_load()
+		icon_state = "c96load"
+		spawn(15) icon_state = "c96"
+
+/obj/item/weapon/gun/projectile/c96/stun
+	ammo_type = "/obj/item/ammo_casing/a763mm_stun"

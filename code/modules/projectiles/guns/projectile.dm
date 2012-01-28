@@ -14,6 +14,9 @@
 		load_method = 0 //0 = Single shells or quick loader, 1 = box, 2 = magazine
 		obj/item/ammo_magazine/empty_mag = null
 
+	proc
+		animate_load()
+			return
 
 	New()
 		..()
@@ -49,12 +52,15 @@
 				if(AC.caliber == caliber && loaded.len < max_shells)
 					AC.loc = src
 					AM.stored_ammo -= AC
+					AM.m_amt -= AC.m_amt //No more free ammo
 					loaded += AC
 					num_loaded++
 			if(load_method == 2)
 				user.remove_from_mob(AM)
 				empty_mag = AM
 				empty_mag.loc = src
+			if(num_loaded)
+				animate_load()
 		if(istype(A, /obj/item/ammo_casing) && !load_method)
 			var/obj/item/ammo_casing/AC = A
 			if(AC.caliber == caliber && loaded.len < max_shells)

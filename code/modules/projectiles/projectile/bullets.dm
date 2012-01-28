@@ -20,6 +20,22 @@
 	eyeblur = 3		// Use the egun scrubs.
 */
 
+/obj/item/projectile/bullet/c96_BRT
+	damage = 40
+
+/obj/item/projectile/bullet/c96_STN
+	damage = 0
+	nodamage = 1
+	stun = 15
+	weaken = 15
+
+/obj/item/projectile/bullet/c96_EMP
+	damage = 0
+	nodamage = 1
+	on_hit(var/atom/target, var/blocked = 0)
+		empulse(target, -1, 0)
+		return 1
+
 /obj/item/projectile/bullet/suffocationbullet//How does this even work?
 	name = "co bullet"
 	damage = 20

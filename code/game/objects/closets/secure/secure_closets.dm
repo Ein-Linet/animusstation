@@ -14,8 +14,12 @@
 	for(var/obj/O in src)
 		O.emp_act(severity)
 	if(!broken)
-		if(prob(50/severity))
+		if(prob(50/severity) && !opened)
 			src.locked = !src.locked
+			if(src.locked)
+				src.icon_state = src.icon_locked
+			else
+				src.icon_state = src.icon_closed
 		if(prob(20/severity) && !opened)
 			if(!locked)
 				open()
