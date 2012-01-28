@@ -15,6 +15,12 @@
 		t_his = "her"
 		t_him = "her"
 
+	if (src.head)
+		if (src.head.blood_DNA)
+			usr << "\red [src.name] is wearing a[src.head.blood_DNA ? " bloody " : " "] \icon[src.head] [src.head.name] on head!"
+		else
+			usr << "\blue [src.name] is wearing a \icon[src.head] [src.head.name] on head."
+
 	if (src.w_uniform)
 		if (src.w_uniform.blood_DNA)
 			usr << "\red [src.name] is wearing a[src.w_uniform.blood_DNA ? " bloody " : " "] \icon[src.w_uniform] [src.w_uniform.name]!"
@@ -32,6 +38,13 @@
 
 	if (src.ears)
 		usr << "\blue [src.name] has a \icon[src.ears] [src.ears.name] by [t_his] mouth."
+
+	if (src.glasses)
+		if ((!(src.head) || !(src.head.flags) || !(HEADCOVERSEYES)) && (!(src.wear_mask) || !(src.wear_mask.flags) || !(MASKCOVERSEYES)))
+			if (src.glasses.blood_DNA)
+				usr << "\red [src.name] is wearing a[src.glasses.blood_DNA ? " bloody " : " "] \icon[src.glasses] [src.glasses.name] on [t_his] face!"
+			else
+				usr << "\blue [src.name] has a \icon[src.glasses] [src.glasses.name] on [t_his] face."
 
 	if (src.wear_mask)
 		if (src.wear_mask.blood_DNA)
@@ -97,6 +110,21 @@
 			else
 				usr << "\blue [src.name] is wearing \icon[src.wear_id] [src.wear_id.name]."
 
+	if (src.eye_stat > 10)
+		var/block = 0
+		if ((src.head && src.head.flags & HEADCOVERSEYES) || (src.wear_mask && src.wear_mask.flags & MASKCOVERSEYES))
+			block = 2
+		if (block !=2)
+			if (src.glasses && src.glasses.nontransparent == 1)
+				block = 1
+			switch (src.eye_stat)
+				if (11 to 20)
+					if (block == 0)
+						usr << "\red [src.name]'s eyes slighty damaged!"
+				if (21 to 30)
+					usr << "\red [src.name]'s eyes are bleeding!"
+				if (31 to INFINITY)
+					usr << "\red [src.name]'s eyes are extremly damaged and can't stop bleeding!"
 
 	if (src.is_jittery)
 		switch(src.jitteriness)

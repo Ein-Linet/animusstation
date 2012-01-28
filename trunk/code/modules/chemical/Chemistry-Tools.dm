@@ -1776,6 +1776,9 @@
 			del(D)
 			del(src)
 		if (istype(D, /obj/item/weapon/mop))
+			if(!istype(loc,/turf))
+				user << "\red You need to place the bucket on the ground before wet mop in it!"
+				return
 			if (src.reagents.total_volume >= 2)
 				src.reagents.trans_to(D, 2)
 				user << "\blue You wet the mop"
