@@ -61,6 +61,12 @@
 //  - Books shouldn't print straight from the library computer. Make it synch with a machine like the book binder to print instead. This should consume some sort of resource.
 
 
+// Run all strings to be used in an SQL query through this proc first to properly escape out injection attempts.
+/proc/sanitizeSQL(var/t as text)
+	var/sanitized_text = dd_replacetext(t, "'", "\\'")
+	sanitized_text = dd_replacetext(sanitized_text, "\"", "\\\"")
+	return sanitized_text
+
 
 
 /obj/structure/bookcase
@@ -375,21 +381,21 @@ datum/borrowbook // Datum used to keep track of who has borrowed what when and f
 			title = sanitize(newtitle)
 		else
 			title = null
-		title = dd_replacetext(title, "'", "''")
+		title = sanitizeSQL(title)
 	if(href_list["setcategory"])
 		var/newcategory = input("Choose a category to search for:") in list("Any", "Fiction", "Non-Fiction", "Adult", "Reference", "Religion")
 		if(newcategory)
 			category = sanitize(newcategory)
 		else
 			category = "Any"
-		category = dd_replacetext(category, "'", "''")
+		category = sanitizeSQL(category)
 	if(href_list["setauthor"])
 		var/newauthor = sanitize(input("Enter an author to search for:") as text|null)
 		if(newauthor)
 			author = sanitize(newauthor)
 		else
 			author = null
-		author = dd_replacetext(author, "'", "''")
+		author = sanitizeSQL(author)
 	if(href_list["search"])
 		SQLquery = "SELECT author, title, category, id FROM library WHERE "
 		if(category == "Any")
@@ -596,7 +602,8 @@ datum/borrowbook // Datum used to keep track of who has borrowed what when and f
 			if("7")
 				screenstate = 7
 	if(href_list["arccheckout"])
-		src.arcanecheckout = 1
+		if(src.emagged)
+			src.arcanecheckout = 1
 		src.screenstate = 0
 	if(href_list["increasetime"])
 		checkoutperiod += 1
@@ -652,14 +659,10 @@ datum/borrowbook // Datum used to keep track of who has borrowed what when and f
 						query_set.Execute()
 						query_set= dbcon.NewQuery("SET SESSION collation_connection = 'cp1251_general_ci';")
 						query_set.Execute()
-
-						var/sqltitle = dd_replacetext(scanner.cache.name, "'", "''")
-						var/sqlauthor = dd_replacetext(scanner.cache.author, "'", "''")
-						var/sqlcontent = dd_replacetext(scanner.cache.dat, "'", "''")
-						//sqlcontent = nonascii_to_entities(sqlcontent)
-						sqlcontent = dd_replacetext(sqlcontent, "�", "&#1103;")
-						var/sqlcategory = upload_category
-						///proc/dd_replacetext(text, search_string, replacement_string)
+						var/sqltitle = sanitizeSQL(scanner.cache.name)
+						var/sqlauthor = sanitizeSQL(scanner.cache.author)
+						var/sqlcontent = sanitizeSQL(scanner.cache.dat)
+						var/sqlcategory = sanitizeSQL(upload_category)
 						var/DBQuery/query = dbcon.NewQuery("INSERT INTO library (author, title, content, category) VALUES ('[sqlauthor]', '[sqltitle]', '[sqlcontent]', '[sqlcategory]')")
 						if(!query.Execute())
 							usr << query.ErrorMsg()
@@ -668,7 +671,7 @@ datum/borrowbook // Datum used to keep track of who has borrowed what when and f
 							alert("Upload Complete.")
 						dbcon.Disconnect()
 	if(href_list["targetid"])
-		var/sqlid = dd_replacetext(href_list["targetid"], "'", "''")
+		var/sqlid = sanitizeSQL(href_list["targetid"])
 		var/DBConnection/dbcon = new()
 		dbcon.Connect("dbi:mysql:[sqldb]:[sqladdress]:[sqlport]","[sqllogin]","[sqlpass]")
 		if(!dbcon.IsConnected())
@@ -682,7 +685,7 @@ datum/borrowbook // Datum used to keep track of who has borrowed what when and f
 			query_set= dbcon.NewQuery("SET SESSION collation_connection = 'cp1251_general_ci';")
 			query_set.Execute()
 
-			var/DBQuery/query = dbcon.NewQuery("SELECT * FROM library WHERE id=[sqlid]")
+			var/DBQuery/query = dbcon.NewQuery("SELECT * FROM library WHERE id=\"[sqlid]\"")
 			query.Execute()
 
 			while(query.NextRow())
@@ -701,7 +704,7 @@ datum/borrowbook // Datum used to keep track of who has borrowed what when and f
 	if(href_list["orderbyid"])
 		var/orderid = input("Enter your order:") as num|null
 		if(orderid)
-			orderid = dd_replacetext(orderid, "'", "''")
+			orderid = sanitizeSQL(orderid)
 			var/nhref = "src=\ref[src];targetid=[orderid]"
 			spawn() src.Topic(nhref, params2list(nhref), src)
 	if(href_list["vote"])
@@ -792,7 +795,7 @@ datum/borrowbook // Datum used to keep track of who has borrowed what when and f
 				out+="&#[char-224+1072];"
 			if (192 to 223) //А-Я
 				out+="&#[char-192+1040];"
-			if (184) //ё
+			if (184) //
 				out+="&#1105;"
 			if (168) //Ё
 				out+="&#1025;"

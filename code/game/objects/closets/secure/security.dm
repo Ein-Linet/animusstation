@@ -85,6 +85,7 @@
 		new /obj/item/clothing/head/helmet/warden(src)
 		new /obj/item/device/radio/headset/headset_sec(src)
 		new /obj/item/weapon/storage/flashbang_kit(src)
+		new /obj/item/weapon/pepperspray(src)
 		new /obj/item/weapon/storage/belt/security(src)
 		new /obj/item/weapon/melee/baton(src)
 		new /obj/item/weapon/gun/energy/taser(src)

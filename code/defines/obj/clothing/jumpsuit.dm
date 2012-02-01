@@ -141,9 +141,9 @@
 /obj/item/clothing/under/rank/warden
 	desc = "Made of a slightly sturdier material than standard jumpsuits, to allow for more robust protection. This one has the word \"Warden\" written on the shoulders."
 	name = "Warden Jumpsuit"
-	icon_state = "warden"
-	item_state = "warden"
-	color = "warden"
+	icon_state = "darkred"
+	item_state = "r_suit"
+	color = "darkred"
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 
 /obj/item/clothing/under/rank/security

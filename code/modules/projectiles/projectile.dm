@@ -104,7 +104,6 @@
 
 				if(!istype(A,/mob))
 					on_hit(A)
-					world << "[A.name] удар"
 
 				invisibility = 101
 				del(src)
