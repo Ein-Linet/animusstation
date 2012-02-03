@@ -953,7 +953,7 @@ note dizziness decrements automatically in the mob's Life() proc.
 					statpanel("Spells","[S.charge_counter]/[S.charge_max]",S)
 				if("holdervar")
 					statpanel("Spells","[S.holder_var_type] [S.holder_var_amount]",S)
-	if(isys.implants.len)
+	if(isys && isys.implants && isys.implants.len)
 		for(var/I in isys.implants)
 			statpanel("Implants", "[I:name]", I)
 
