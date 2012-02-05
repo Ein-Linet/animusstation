@@ -71,6 +71,7 @@
 	item_state = "death"
 	flags = FPRINT | TABLEPASS | CONDUCT
 	fire_resist = T0C+5200
+	flags_inv = HIDEGLOVES|HIDESHOES|HIDEJUMPSUIT
 
 /*/obj/item/clothing/under/nazi1
 	name = "Nazi uniform"
@@ -326,6 +327,7 @@
 	icon_state = "hgpirate"
 	item_state = "hgpirate"
 	flags = FPRINT | TABLEPASS
+	flags_inv = HIDEJUMPSUIT
 
 /obj/item/clothing/glasses/eyepatch
 	name = "eyepatch"
@@ -358,6 +360,7 @@
 	desc = "Perfect for winter in Siberia, da?"
 	icon_state = "ushankadown"
 	item_state = "ushankadown"
+	flags_inv = HIDEEARS
 
 /obj/item/clothing/head/collectable			//Hat Station 13
 	name = "Collectable Hat"
@@ -547,6 +550,7 @@ obj/item/clothing/suit/justice
 	icon_state = "justice"
 	item_state = "justice"
 	flags = FPRINT | TABLEPASS
+	flags_inv = HIDEGLOVES|HIDESHOES|HIDEJUMPSUIT
 
 
 /obj/item/clothing/under/shell
@@ -597,8 +601,6 @@ obj/item/clothing/suit/justice
 	flags = NOSLIP | NODELAY | SUITSPACE
 	armor = list(melee = 40, bullet = 30, laser = 20, taser = 40, bomb = 20, bio = 0, rad = 0)
 	slowdown = -5
-
-//prosthesis section by catratcat
 	flags = FPRINT | TABLEPASS
 
 /obj/item/clothing/under/gladiator
@@ -615,3 +617,4 @@ obj/item/clothing/suit/justice
 	icon_state = "gladiator"
 	flags = FPRINT|TABLEPASS|SUITSPACE|HEADCOVERSEYES|HEADCOVERSMOUTH|BLOCKHAIR
 	item_state="gladiator"
+	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES

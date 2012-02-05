@@ -149,9 +149,9 @@
 /obj/item/clothing/under/rank/security
 	name = "Security Jumpsuit"
 	desc = "Made of a slightly sturdier material than standard jumpsuits, to allow for more robust protection."
-	icon_state = "sec"
-	item_state = "sec"
-	color = "sec"
+	icon_state = "red"
+	item_state = "r_suit"
+	color = "red"
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 
 /obj/item/clothing/under/rank/vice
