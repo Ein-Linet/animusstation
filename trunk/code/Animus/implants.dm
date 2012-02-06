@@ -1,4 +1,9 @@
-
+/*
+* All new implant - add to design.
+*
+*
+*
+*/
 /obj/proc_holder/animus_implant
 //	var/category = "Implants"
 	name = "Master verb"
@@ -50,9 +55,13 @@
 	var/obj/proc_holder/animus_implant/loc_i = null
 	attack(mob/living/carbon/human/M as mob, mob/living/carbon/human/user as mob)
 		if(istype(M) && M.isys)
-			if(M.isys.implants.len > 5)
+			if(M.isys.implants.len >= 5)
 				user << "Too many implants."
 				return
+			for(var/I in M.isys.implants)
+				if(src.name == I:name)
+					user << "Same implant already added"
+					return
 			src.loc = M
 			loc_i.add_implant(M)
 			user << "Implant added"
@@ -60,13 +69,14 @@
 		..()
 
 /obj/proc_holder/animus_implant/food_eat
-	use_food = 0
+	use_food = 10
 	use_food_on_action = 100
 	name = "NanoBot"
 	action = "Feed"
 
 /obj/item/mecha_parts/animus_implant/food_eat
 	name = "HungryNanoBot"
+	origin_tech = ""
 	loc_i = new /obj/proc_holder/animus_implant/food_eat()
 
 /obj/proc_holder/animus_implant/gib
@@ -88,6 +98,7 @@
 	use_food_on_action = 100
 	name = "NanoBloodControl"
 	action = "Clean"
+	origin_tech = "biotech=2;materials=1;plasmatech=1"
 	action()
 		var/datum/reagents/holder = owner_implant.reagents
 		if(!..())
@@ -154,6 +165,7 @@
 
 /obj/item/mecha_parts/animus_implant/secret_slot
 	name = "NanoSlot"
+	construction_cost = list("metal"=20000,"glass"=10000,"gold"=1)
 	loc_i = new /obj/proc_holder/animus_implant/secret_slot()
 
 /obj/proc_holder/animus_implant/claws
@@ -188,3 +200,24 @@
 		for(var/O in implants)
 			O:process_implant()
 		return
+
+/datum/design/nanobot
+	build_type = 16//MECHFAB
+	claws
+		name = "Claws Nanobot"
+		desc = "Very dangerous!."
+		id = "claws"
+		req_tech = list("bluespace" = 2, "combat" = 3, "biotech" = 2)
+		build_path = "/obj/item/mecha_parts/animus_implant/claws"
+	secret_slot
+		name = "NanoSlot"
+		desc = "Can hide item."
+		id = "secret_slot"
+		req_tech = list("bluespace" = 2, "biotech" = 3, "syndicate" = 2)
+		build_path = "/obj/item/mecha_parts/animus_implant/secret_slot"
+	bloodclean
+		name = "NanoSlot"
+		desc = "Can hide item."
+		id = "bloodclean"
+		req_tech = list("materials" = 2, "biotech" = 3, "plasmatech" = 2)
+		build_path = "/obj/item/mecha_parts/animus_implant/blood_clean"

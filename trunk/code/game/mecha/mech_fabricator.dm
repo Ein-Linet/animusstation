@@ -111,12 +111,9 @@
 						/obj/item/mecha_parts/mecha_equipment/weapon/honker
 						),
 	"Nanobots Implants"=list(
-							/obj/item/mecha_parts/animus_implant/claws,
-							/obj/item/mecha_parts/animus_implant/secret_slot,
-							/obj/item/mecha_parts/animus_implant/blood_clean,
-							/obj/item/mecha_parts/animus_implant/gib,
-							/obj/item/mecha_parts/animus_implant/food_eat
-							),
+						/obj/item/mecha_parts/animus_implant/food_eat,
+						/obj/item/mecha_parts/animus_implant/gib
+						),
 	"Misc"=list(/obj/item/mecha_tracking)
 	)
 	New()
@@ -393,6 +390,12 @@
 		if(!files) return
 		var/i = 0
 		for(var/datum/design/D in files.known_designs)
+			//ANIMUS NANOBOTS
+			if(istype(D, /datum/design/nanobot) && D.build_type&16)
+				if(add_part_to_set("Nanobots Implants", text2path(D.build_path)))
+					i++
+				continue
+			//END ANIMUS NANOBOTS
 			if(D.build_type&16)
 				if(add_part_to_set("Exosuit Equipment", text2path(D.build_path)))
 					i++

@@ -214,6 +214,11 @@ MASS SPECTROMETER
 				user.show_message(text("\blue \t []: []\blue-[]",capitalize(org.getDisplayName()),(org.brute_dam > 0)?"\red [org.brute_dam]":0,(org.burn_dam > 0)?"\red [org.burn_dam]":0),1)
 		else
 			user.show_message("\blue \t Limbs are OK.",1)
+		//ANIMUS NANOIMPLANTS
+		if(M.isys && M.isys.implants)
+			for(var/I in M.isys.implants)
+				user.show_message("Implant: [I:name]",1)
+		//END ANIMUS NANOIMPLANTS
 
 	if((M.changeling && M.changeling.changeling_fakedeath) ||  (M.reagents && M.reagents.has_reagent("zombiepowder")))
 		user.show_message(text("\blue [] | [] | [] | []", fake_oxy > 50 ? "\red Severe oxygen deprivation detected\blue" : "Subject bloodstream oxygen level normal", M.getToxLoss() > 50 ? "\red Dangerous amount of toxins detected\blue" : "Subject bloodstream toxin level minimal", M.getFireLoss() > 50 ? "\red Severe burn damage detected\blue" : "Subject burn injury status O.K", M.getBruteLoss() > 50 ? "\red Severe anatomical damage detected\blue" : "Subject brute-force injury status O.K"), 1)
