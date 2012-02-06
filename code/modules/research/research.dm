@@ -55,7 +55,7 @@ research holder datum.
 	New()		//Insert techs into possible_tech here. Known_tech automatically updated.
 		for(var/T in typesof(/datum/tech) - /datum/tech)
 			possible_tech += new T(src)
-		for(var/D in typesof(/datum/design) - /datum/design)
+		for(var/D in typesof(/datum/design) - /datum/design /*NanoBots stuff*/ - /datum/design/nanobot)
 			possible_designs += new D(src)
 		RefreshResearch()
 
