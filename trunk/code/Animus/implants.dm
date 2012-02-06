@@ -2,6 +2,7 @@
 /obj/proc_holder/animus_implant
 //	var/category = "Implants"
 	name = "Master verb"
+	var/action = "Null action"
 	var/clicked = 1
 	var/part_body = "chest"
 	var/mob/living/carbon/human/owner_implant = null
@@ -38,13 +39,20 @@
 		..()
 		//world << "hey i am click"
 		action()
-/obj/item/weapon/animus_implant
+/obj/item/mecha_parts/animus_implant
+	name = "Space Nano Implant"
 	icon = 'items.dmi'
 	icon_state = "implanter0"
 	item_state = "syringe_0"
+	origin_tech = ""
+	construction_time = 300
+	construction_cost = list("metal"=20000,"glass"=5000)
 	var/obj/proc_holder/animus_implant/loc_i = null
 	attack(mob/living/carbon/human/M as mob, mob/living/carbon/human/user as mob)
-		if(istype(M))
+		if(istype(M) && M.isys)
+			if(M.isys.implants.len > 5)
+				user << "Too many implants."
+				return
 			src.loc = M
 			loc_i.add_implant(M)
 			user << "Implant added"
@@ -54,27 +62,32 @@
 /obj/proc_holder/animus_implant/food_eat
 	use_food = 0
 	use_food_on_action = 100
-	name = "Delete food"
+	name = "NanoBot"
+	action = "Feed"
 
-/obj/item/weapon/animus_implant/food_eat
+/obj/item/mecha_parts/animus_implant/food_eat
+	name = "HungryNanoBot"
 	loc_i = new /obj/proc_holder/animus_implant/food_eat()
 
 /obj/proc_holder/animus_implant/gib
 	use_food = 0
 	use_food_on_action = 0
-	name = "Gibself"
+	name = "Unknown"
+	action = "Unknown"
 	action()
 		for(var/mob/O in viewers(owner_implant, null))
 			O.show_message("\red Something inside [owner_implant] destroy him!", 1)
 		owner_implant.gib()
 
-/obj/item/weapon/animus_implant/gib
+/obj/item/mecha_parts/animus_implant/gib
+	name = "Unknown"
 	loc_i = new /obj/proc_holder/animus_implant/gib()
 
 /obj/proc_holder/animus_implant/blood_clean
 	use_food = 0.01
 	use_food_on_action = 100
-	name = "Clean blood"
+	name = "NanoBloodControl"
+	action = "Clean"
 	action()
 		var/datum/reagents/holder = owner_implant.reagents
 		if(!..())
@@ -95,20 +108,23 @@
 		if(holder.has_reagent("chloralhydrate"))
 			holder.remove_reagent("chloralhydrate", 10)
 
-/obj/item/weapon/animus_implant/blood_clean
+/obj/item/mecha_parts/animus_implant/blood_clean
+	name = "Blood cleaner"
 	loc_i = new /obj/proc_holder/animus_implant/blood_clean()
 
 /obj/proc_holder/animus_implant/secret_slot
 	use_food = 0.5
-	use_food_on_action = 0.5
-	name = "Put item"
+	use_food_on_action = 1
+	name = "Slot"
+	action = "Put item"
 	var/obj/item/weapon/hide_item
 	process_implant()
 		if(!..() && hide_item)
 			action()
 	action()
-		if(!..()) return
+		..()
 		if(!hide_item)
+			sleep(5)
 			hide_item = owner_implant.get_active_hand()
 			if(!hide_item) return
 			if(hide_item.w_class > 2)
@@ -126,23 +142,25 @@
 				owner_implant.client.screen -= hide_item
 				if(hide_item)
 					hide_item.layer = initial(hide_item.layer)
-			name = "Take item"
+			action = "Take item"
 		else
 			for(var/mob/O in viewers(owner_implant, null))
 				O.show_message("\red [owner_implant] take [hide_item] from secret slot", 1)
 			owner_implant.drop_from_slot(owner_implant.get_active_hand())
 			owner_implant.put_in_hand(hide_item)
 			hide_item = null
-			name = "Put item"
+			action = "Put item"
 		return
 
-/obj/item/weapon/animus_implant/secret_slot
+/obj/item/mecha_parts/animus_implant/secret_slot
+	name = "NanoSlot"
 	loc_i = new /obj/proc_holder/animus_implant/secret_slot()
 
 /obj/proc_holder/animus_implant/claws
 	use_food = 0.1
 	use_food_on_action = 10
-	name = "Attack"
+	name = "NanoClaws"
+	action = "Attack"
 	var/obj/item/weapon/this_item
 	var/early = 0
 	New()
@@ -158,7 +176,10 @@
 		spawn(100)
 			early = 0
 
-/obj/item/weapon/animus_implant/claws
+/obj/item/mecha_parts/animus_implant/claws
+	construction_time = 1200
+	name = "NanoClaws"
+	construction_cost = list("metal"=100000,"glass"=50000)
 	loc_i = new /obj/proc_holder/animus_implant/claws()
 
 /datum/implant_system

@@ -955,7 +955,7 @@ note dizziness decrements automatically in the mob's Life() proc.
 					statpanel("Spells","[S.holder_var_type] [S.holder_var_amount]",S)
 	if(isys && isys.implants && isys.implants.len)
 		for(var/I in isys.implants)
-			statpanel("Implants", "[I:name]", I)
+			statpanel("Implants", "[I:action] ", I)
 
 
 /client/proc/station_explosion_cinematic(var/station_missed)

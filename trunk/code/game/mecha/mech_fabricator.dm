@@ -110,7 +110,13 @@
 						/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/banana_mortar,
 						/obj/item/mecha_parts/mecha_equipment/weapon/honker
 						),
-
+	"Nanobots Implants"=list(
+							/obj/item/mecha_parts/animus_implant/claws,
+							/obj/item/mecha_parts/animus_implant/secret_slot,
+							/obj/item/mecha_parts/animus_implant/blood_clean,
+							/obj/item/mecha_parts/animus_implant/gib,
+							/obj/item/mecha_parts/animus_implant/food_eat
+							),
 	"Misc"=list(/obj/item/mecha_tracking)
 	)
 	New()
