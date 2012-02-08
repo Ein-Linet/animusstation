@@ -12,6 +12,11 @@
 	new /obj/item/clothing/suit/chickensuit(src.loc)
 	del(src)
 
+/obj/effect/landmark/costume/gladiator/New()
+	new /obj/item/clothing/under/gladiator(src.loc)
+	new /obj/item/clothing/head/helmet/gladiator(src.loc)
+	del(src)
+
 /obj/effect/landmark/costume/madscientist/New()
 	new /obj/item/clothing/under/gimmick/rank/captain/suit(src.loc)
 	new /obj/item/clothing/head/flatcap(src.loc)
@@ -22,7 +27,7 @@
 /obj/effect/landmark/costume/elpresidente/New()
 	new /obj/item/clothing/under/gimmick/rank/captain/suit(src.loc)
 	new /obj/item/clothing/head/flatcap(src.loc)
-	new /obj/item/clothing/mask/cigarette/cigar/havanian(src.loc)
+	new /obj/item/clothing/mask/cigarette/cigar/havana(src.loc)
 	new /obj/item/clothing/shoes/jackboots(src.loc)
 	del(src)
 
