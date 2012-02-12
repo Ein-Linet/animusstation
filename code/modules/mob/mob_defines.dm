@@ -58,7 +58,7 @@
 	I'll make some notes on where certain variable defines should probably go.
 	Changing this around would probably require a good look-over the pre-existing code.
 	*/
-	var/midis = 1 //Check if midis should be played for someone
+	//var/midis = 1 //Check if midis should be played for someone - no, this is something that is tied to clients, not mobs.
 	var/alien_egg_flag = 0//Have you been infected?
 	var/last_special = 0
 	var/obj/screen/zone_sel/zone_sel = null
@@ -88,6 +88,7 @@
 	var/ear_damage = null//Carbon
 	var/stuttering = null//Carbon
 	var/real_name = null
+	var/original_name = null //Original name is only used in ghost chat! It is not to be edited by anything!
 	var/blinded = null
 	var/bhunger = 0//Carbon
 	var/ajourn = 0
@@ -256,6 +257,6 @@ the mob is also allowed to move without any sort of restriction. For instance, i
 
 	var/canstun = 1 	// determines if this mob can be stunned by things
 	var/canweaken = 1	// determines if this mob can be weakened/knocked down by things
-	var/relentless = 0 //Can they be shoved?
+	var/nopush = 0 //Can they be shoved?
 
 	var/area/lastarea = null

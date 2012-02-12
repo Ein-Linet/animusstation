@@ -460,8 +460,9 @@
 	icon_state = "0-1"
 	var/d1 = 0
 	var/d2 = 1
-	layer = 2.5
+	layer = 2.44 //Just below unary stuff, which is at 2.45 and above pipes, which are at 2.4
 	var/color="red"
+	var/obj/structure/powerswitch/power_switch
 
 /obj/structure/cable/yellow
 	color="yellow"
@@ -902,6 +903,7 @@
 
 
 
+
 /obj/structure/noticeboard
 	name = "Notice Board"
 	icon = 'stationobjs.dmi'
@@ -954,20 +956,6 @@
 		new /obj/item/weapon/glass( src )
 */
 
-/obj/item/weapon/storage/cupbox
-	name = "Paper-cup Box"
-	icon_state = "box"
-	item_state = "syringe_kit"
-	foldable = /obj/item/stack/sheet/cardboard	//BubbleWrap
-	New()
-		..()
-		new /obj/item/weapon/reagent_containers/food/drinks/sillycup( src )
-		new /obj/item/weapon/reagent_containers/food/drinks/sillycup( src )
-		new /obj/item/weapon/reagent_containers/food/drinks/sillycup( src )
-		new /obj/item/weapon/reagent_containers/food/drinks/sillycup( src )
-		new /obj/item/weapon/reagent_containers/food/drinks/sillycup( src )
-		new /obj/item/weapon/reagent_containers/food/drinks/sillycup( src )
-		new /obj/item/weapon/reagent_containers/food/drinks/sillycup( src )
 
 /obj/structure/falsewall
 	name = "wall"

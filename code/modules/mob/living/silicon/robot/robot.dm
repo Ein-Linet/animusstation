@@ -71,6 +71,7 @@
 			hands.icon_state = "standard"
 			icon_state = "robot"
 			modtype = "Stand"
+			feedback_inc("cyborg_standard",1)
 
 		if("Service")
 			module = new /obj/item/weapon/robot_module/butler(src)
@@ -87,37 +88,43 @@
 			else
 				icon_state = "Service2"
 			modtype = "Butler"
+			feedback_inc("cyborg_service",1)
 
 		if("Miner")
 			module = new /obj/item/weapon/robot_module/miner(src)
 			hands.icon_state = "miner"
 			icon_state = "Miner"
 			modtype = "Miner"
+			feedback_inc("cyborg_miner",1)
 
 		if("Medical")
 			module = new /obj/item/weapon/robot_module/medical(src)
 			hands.icon_state = "medical"
 			icon_state = "surgeon"
 			modtype = "Med"
-			relentless = 1
+			nopush = 1
+			feedback_inc("cyborg_medical",1)
 
 		if("Security")
 			module = new /obj/item/weapon/robot_module/security(src)
 			hands.icon_state = "security"
 			icon_state = "bloodhound"
 			modtype = "Sec"
+			feedback_inc("cyborg_security",1)
 
 		if("Engineering")
 			module = new /obj/item/weapon/robot_module/engineering(src)
 			hands.icon_state = "engineer"
 			icon_state = "landmate"
 			modtype = "Eng"
+			feedback_inc("cyborg_engineering",1)
 
 		if("Janitor")
 			module = new /obj/item/weapon/robot_module/janitor(src)
 			hands.icon_state = "janitor"
 			icon_state = "mopgearrex"
 			modtype = "Jan"
+			feedback_inc("cyborg_janitor",1)
 
 	overlays -= "eyes" //Takes off the eyes that it started with
 	updateicon()
@@ -247,7 +254,7 @@
 					now_pushing = 0
 					//unlock_medal("That's No Moon, That's A Gourmand!", 1)
 					return
-			if(tmob.relentless)
+			if(tmob.nopush)
 				now_pushing = 0
 				return
 		now_pushing = 0

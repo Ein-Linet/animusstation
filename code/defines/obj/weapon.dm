@@ -457,7 +457,6 @@
 	var/access = list()
 	var/registered = null
 	var/assignment = null
-	var/obj/item/weapon/photo/PHOTO = null
 	var/dorm = 0		// determines if this ID has claimed a dorm already
 
 /obj/item/weapon/card/id/gold
@@ -745,6 +744,11 @@
 	throw_range = 5
 	w_class = 2.0
 	flags = FPRINT | TABLEPASS
+
+/obj/item/weapon/caution/cone
+	desc = "This cone is trying to warn you of something!"
+	name = "warning cone"
+	icon_state = "cone"
 
 
 /obj/item/weapon/paper

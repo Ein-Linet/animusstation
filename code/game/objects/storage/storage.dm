@@ -97,7 +97,7 @@
 	return
 
 //This proc is called when you want to place an item into the storage item.
-/obj/item/weapon/storage/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/weapon/storage/attackby(obj/item/W as obj, mob/user as mob)
 	..()
 	if(isrobot(user))
 		user << "\blue You're a robot. No."
@@ -240,10 +240,6 @@
 		for(var/obj/O in contents)
 			O.emp_act(severity)
 	..()
-
-/obj/screen/storage/attackby(W, mob/user as mob)
-	src.master.attackby(W, user)
-	return
 
 // BubbleWrap - A box can be folded up to make card
 /obj/item/weapon/storage/attack_self(mob/user as mob)
