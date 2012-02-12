@@ -5,7 +5,7 @@
 	w_class = 4.0
 	flags = 259.0
 	max_w_class = 3
-	max_combined_w_class = 20
+	max_combined_w_class = 21
 
 /obj/item/weapon/storage/backpack/cultpack
 	name = "Trophy Rack"
@@ -55,6 +55,21 @@
 /obj/item/weapon/storage/box/engineer
 
 /obj/item/weapon/storage/box/syndicate
+
+/obj/item/weapon/storage/cupbox
+	name = "Paper-cup Box"
+	icon_state = "box"
+	item_state = "syringe_kit"
+	foldable = /obj/item/stack/sheet/cardboard	//BubbleWrap
+	New()
+		..()
+		new /obj/item/weapon/reagent_containers/food/drinks/sillycup( src )
+		new /obj/item/weapon/reagent_containers/food/drinks/sillycup( src )
+		new /obj/item/weapon/reagent_containers/food/drinks/sillycup( src )
+		new /obj/item/weapon/reagent_containers/food/drinks/sillycup( src )
+		new /obj/item/weapon/reagent_containers/food/drinks/sillycup( src )
+		new /obj/item/weapon/reagent_containers/food/drinks/sillycup( src )
+		new /obj/item/weapon/reagent_containers/food/drinks/sillycup( src )
 
 /obj/item/weapon/storage/pillbottlebox
 	name = "pill bottles"
@@ -143,10 +158,21 @@
 		"/obj/item/weapon/stamp")
 
 	attackby(obj/item/A as obj, mob/user as mob)
-		if (istype(A, /obj/item/weapon/card/id))
-			icon_state = "walletid"
 		..()
+		update_icon()
 		return
+
+	update_icon()
+		for(var/obj/item/weapon/card/id/ID in contents)
+			if(ID.icon_state == "gold")
+				icon_state = "walletid_gold"
+				return
+			else if(ID.icon_state == "id")
+				icon_state = "walletid"
+				return
+		icon_state = "wallet"
+
+
 
 	proc/get_id()
 		for(var/obj/item/weapon/card/id/ID in contents)

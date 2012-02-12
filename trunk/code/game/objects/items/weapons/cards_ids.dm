@@ -36,6 +36,14 @@ FINGERPRINT CARD
 	src.add_fingerprint(user)
 	return
 
+/obj/item/weapon/card/id/attack_hand(mob/user as mob)
+	var/obj/item/weapon/storage/wallet/WL
+	if( istype(loc, /obj/item/weapon/storage/wallet) )
+		WL = loc
+	..()
+	if(WL)
+		WL.update_icon()
+
 /obj/item/weapon/card/id/verb/read()
 	set name = "Read ID Card"
 	set category = "Object"
@@ -52,33 +60,6 @@ FINGERPRINT CARD
 		user << "\blue You successfully forge the ID card."
 	else
 		..()
-
-/obj/item/weapon/card/id/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	..()
-	if(istype(W,/obj/item/weapon/photo))
-		if(!(PHOTO))
-			src.PHOTO = W
-			usr.before_take_item(W)
-			W.loc = src
-			//src.orient2hud(usr)
-			add_fingerprint(usr)
-			usr << "\blue You add the photo to the ID"
-		else
-			usr << "\blue There is already a photo on this ID"
-
-			//PHOTO.loc = locate(0,0,0)
-
-/obj/item/weapon/card/id/verb/removePhoto()
-	set name = "Remove Photo From ID"
-	set category = "Object"
-
-	if(PHOTO)
-		contents -= PHOTO
-		PHOTO.loc = usr.loc
-		PHOTO.layer = 3
-		PHOTO = null
-	else
-		usr << "\blue There is no photo to remove"
 
 
 // FINGERPRINT HOLDER
