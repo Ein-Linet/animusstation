@@ -20,8 +20,8 @@ var
 				return 1
 			if(config.usewhitelist && !check_whitelist(M))
 				return 1
-		if(rank == "Commissar" && config.whitelist_commissar && !check_whitelist_commissar(M))
-			return 1
+//		if(rank == "Commissar" && config.whitelist_commissar && !check_whitelist_commissar(M))
+//			return 1
 
 		for (var/s in jobban_keylist)
 			if( findtext(s,"[M.ckey] - [rank]") )

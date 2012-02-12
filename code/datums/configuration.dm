@@ -55,7 +55,7 @@
 	var/maxPlayers = 0
 	var/anotherServer = "unknown"
 	var/redirect_if_full = null
-	var/whitelist_commissar = 0
+//	var/whitelist_commissar = 0
 
 	//Alert level description
 	var/alert_desc_green = "All threats to the station have passed. Security may not have weapons visible, privacy laws are once again fully enforced."
@@ -234,8 +234,8 @@
 				if ("usewhitelist")
 					config.usewhitelist = 1
 
-				if ("whitelist_commissar")
-					config.whitelist_commissar = 1
+//				if ("whitelist_commissar")
+//					config.whitelist_commissar = 1
 
 				if ("feature_object_spell_system")
 					config.feature_object_spell_system = 1
