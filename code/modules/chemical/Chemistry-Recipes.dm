@@ -1345,7 +1345,7 @@ datum
 			id = "andalusia"
 			result = "andalusia"
 			required_reagents = list("rum" = 1, "whiskey" = 1, "lemonjuice" = 1)
-			result_amount = 3
+			result_amount = 3*/
 
 		neurotoxin
 			name = "Neurotoxin"
@@ -1354,7 +1354,7 @@ datum
 			required_reagents = list("gargleblaster" = 1, "stoxin" = 1)
 			result_amount = 2
 
-		snowwhite
+/*		snowwhite
 			name = "Snow White"
 			id = "snowwhite"
 			result = "snowwhite"

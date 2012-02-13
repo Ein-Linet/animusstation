@@ -759,19 +759,15 @@ datum
 							M << "\red Your mask melts away!"
 							return
 						if(M:head)
-							if(prob(15))
-								del(M:head)
-								M << "\red Your helmet melts from the acid!"
-							else
-								M << "\red Your helmet protects you from the acid!"
+							del (M:head)
+							M << "\red Your helmet melts into uselessness!"
 							return
 						var/datum/organ/external/affecting = M:get_organ("head")
-						affecting.take_damage(15, 0)
+						affecting.take_damage(35, 0)
 						M:UpdateDamageIcon()
 						M:emote("scream")
-						if(prob(15))
-							M << "\red Your face has become disfigured!"
-							M.real_name = "Unknown"
+						M << "\red Your face has become disfigured!"
+						M.real_name = "Unknown"
 					else
 						if(istype(M, /mob/living/carbon/monkey) && M:wear_mask)
 							del (M:wear_mask)
@@ -781,12 +777,11 @@ datum
 				else
 					if(istype(M, /mob/living/carbon/human))
 						var/datum/organ/external/affecting = M:get_organ("head")
-						affecting.take_damage(15, 0)
+						affecting.take_damage(30, 0)
 						M:UpdateDamageIcon()
 						M:emote("scream")
-						if(prob(15))
-							M << "\red Your face has become disfigured!"
-							M.real_name = "Unknown"
+						M << "\red Your face has become disfigured!"
+						M.real_name = "Unknown"
 					else
 						M.take_organ_damage(min(15, volume * 4))
 
@@ -3786,7 +3781,7 @@ datum
 				else if(data >= 165 && prob(33))
 					M.confused = max(M:confused+5,0)
 				..()
-				return
+				return*/
 
 		neurotoxin
 			name = "Neurotoxin"
@@ -3816,7 +3811,7 @@ datum
 				return
 
 
-		hippies_delight
+/*		hippies_delight
 			name = "Hippies Delight"
 			id = "hippiesdelight"
 			description = "A drink enjoyed by people during the 1960's."
