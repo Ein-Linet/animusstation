@@ -3366,12 +3366,12 @@
 				if("amasec")
 					icon_state = "amasecglass"
 					name = "Amasec"
-					desc = "Always handy before COMBAT!!!"
+					desc = "Always handy before COMBAT!!!"*/
 				if("neurotoxin")
-					icon_state = "neurotoxinglass"
+					icon_state = "unused_neurotoxinglass"
 					name = "Neurotoxin"
 					desc = "A drink that is guaranteed to knock you silly."
-				if("hippiesdelight")
+/*				if("hippiesdelight")
 					icon_state = "hippiesdelightglass"
 					name = "Hippiesdelight"
 					desc = "A drink enjoyed by people during the 1960's."
