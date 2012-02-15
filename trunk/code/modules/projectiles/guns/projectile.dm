@@ -83,7 +83,7 @@
 //Point-blank shot
 
 /obj/item/weapon/gun/projectile/attack(mob/living/carbon/human/M as mob, mob/living/carbon/human/user as mob)
-	if ((user.zone_sel.selecting == "head") && (user.a_intent == "hurt") && istype(M,/mob/living/carbon/human))
+	if ((user.zone_sel.selecting == "head") && (user.a_intent == "hurt") && istype(M,/mob/living/carbon/human) && caliber == "357")
 		if (!load_into_chamber())
 			user << "\red *click*";
 			return
