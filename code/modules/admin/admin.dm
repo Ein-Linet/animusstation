@@ -1662,6 +1662,11 @@
 					else
 						alert("You cannot perform this action. You must be of a higher administrative rank!")
 						return
+				if("spacevines")
+					feedback_inc("admin_secrets_fun_used",1)
+					feedback_add_details("admin_secrets_fun_used","K")
+					spacevine_infestation()
+					message_admins("[key_name_admin(usr)] has spawned spacevines", 1)
 			if (usr)
 				log_admin("[key_name(usr)] used secret [href_list["secretsfun"]]")
 				if (ok)
@@ -2090,6 +2095,7 @@
 <A href='?src=\ref[src];secretsfun=immovable'>Spawn an Immovable Rod</A><BR>
 <A href='?src=\ref[src];secretsfun=lightsout'>Toggle a "lights out" event</A><BR>
 <A href='?src=\ref[src];secretsfun=ionstorm'>Spawn an Ion Storm</A><BR>
+<A href='?src=\ref[src];secretsfun=spacevines'>Spawn Space-Vines</A><BR>
 <BR>
 <B>Fun Secrets</B><BR>
 <BR>
@@ -2276,7 +2282,7 @@
 		log_admin("[key_name(usr)] initiated a reboot.")
 
 		feedback_set_details("end_error","admin reboot - by [usr.key] [usr.client.stealth ? "(stealth)" : ""]")
-		feedback_set_details("round_end","[time2text(world.realtime)]")
+
 		if(blackbox)
 			blackbox.save_all_data_to_sql()
 
@@ -2438,7 +2444,7 @@
 	log_admin("[key_name(usr)] initiated an immediate reboot.")
 
 	feedback_set_details("end_error","immediate admin reboot - by [usr.key] [usr.client.stealth ? "(stealth)" : ""]")
-	feedback_set_details("round_end","[time2text(world.realtime)]")
+
 	if(blackbox)
 		blackbox.save_all_data_to_sql()
 
@@ -2571,7 +2577,6 @@
 		new chosen(usr.loc)
 
 		log_admin("[key_name(usr)] spawned [chosen] at ([usr.x],[usr.y],[usr.z])")
-
 
 	else
 		alert("You cannot perform this action. You must be of a higher administrative rank!", null, null, null, null, null)
