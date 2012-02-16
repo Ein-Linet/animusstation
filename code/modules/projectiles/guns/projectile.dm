@@ -90,6 +90,8 @@
 		playsound(user,'Gunshot.ogg',100,1)
 		M.bullet_act(new/obj/item/projectile/bullet,"head")
 		M.bullet_act(new/obj/item/projectile/bullet/weakbullet,"head")
+		if (M == user)
+			M.bullet_act(new/obj/item/projectile/bullet,"head")
 		var/turf/location = M.loc
 		if(istype(location,/turf/simulated))	location.add_blood(M)
 	/*	if (user.gloves)	user.gloves.add_blood(M)
