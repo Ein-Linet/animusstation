@@ -4,6 +4,10 @@
 	m_amt = 450
 	projectile_type = "/obj/item/projectile/bullet"
 
+/obj/item/ammo_casing/a50
+	desc = "A .50AE bullet casing."
+	caliber = ".50"
+	projectile_type = "/obj/item/projectile/bullet"
 
 /obj/item/ammo_casing/a418
 	desc = "A .418 bullet casing."
@@ -30,7 +34,7 @@
 	desc = "A .38 bullet casing."
 	caliber = "38"
 	m_amt = 600
-	projectile_type = "/obj/item/projectile/bullet/weakbullet"
+	projectile_type = "/obj/item/projectile/bullet/bullet"
 
 
 /obj/item/ammo_casing/c9mm

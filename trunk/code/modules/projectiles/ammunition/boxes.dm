@@ -100,7 +100,6 @@
 	multiple_sprites = 1
 
 
-
 /obj/item/ammo_magazine/a12mm/empty
 	name = "magazine (12mm)"
 	icon_state = "12mm"
@@ -116,3 +115,18 @@
 	ammo_type = "/obj/item/ammo_casing/bolt"
 	m_amt = 50000
 	max_ammo = 20
+
+
+/obj/item/ammo_magazine/a50
+	name = "magazine (.50)"
+	icon_state = "50ae"
+	origin_tech = "combat=2"
+	ammo_type = "/obj/item/ammo_casing/a50"
+	max_ammo = 7
+	multiple_sprites = 1
+
+/obj/item/ammo_magazine/a50/empty
+	name = "magazine (.50)"
+	icon_state = "50ae"
+	ammo_type = "/obj/item/ammo_casing/a50"
+	max_ammo = 0
