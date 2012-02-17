@@ -34,7 +34,7 @@
 	desc = "A .38 bullet casing."
 	caliber = "38"
 	m_amt = 600
-	projectile_type = "/obj/item/projectile/bullet/bullet"
+	projectile_type = "/obj/item/projectile/bullet"
 
 
 /obj/item/ammo_casing/c9mm
