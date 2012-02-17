@@ -13,7 +13,7 @@
 /proc/event()
 	event = 1
 
-	var/eventNumbersToPickFrom = list(1,2,4,5,6,/*7,*/8,9,10,11,12,13,14) //so ninjas don't cause "empty" events.
+	var/eventNumbersToPickFrom = list(1,2,4,5,6,/*7,*/8,9,10,11,12,13/*,14*/) //so ninjas don't cause "empty" events.
 
 	if((world.time/10)>=3600 && toggle_space_ninja && !sent_ninja_to_station)//If an hour has passed, relatively speaking. Also, if ninjas are allowed to spawn and if there is not already a ninja for the round.
 		eventNumbersToPickFrom += 3
@@ -82,8 +82,8 @@
 			appendicitis()
 		if(13)
 			IonStorm()
-		if(14)
-			spacevine_infestation()
+//		if(14)
+//			spacevine_infestation()
 
 /proc/power_failure()
 	command_alert("Abnormal activity detected in [station_name()]'s powernet. As a precautionary measure, the station's power will be shut off for an indeterminate duration.", "Critical Power Failure")

@@ -190,7 +190,6 @@
 	src.add_fingerprint(user)
 	return
 
-	layer = 2.01
 /obj/structure/closet/relaymove(mob/user as mob)
 	if(user.stat)
 		return

@@ -4,6 +4,7 @@
 	icon = 'closet.dmi'
 	icon_state = "closed"
 	density = 1
+	layer = 2.5
 	var/icon_closed = "closed"
 	var/icon_opened = "open"
 	var/opened = 0
@@ -326,7 +327,6 @@
 	var/icon_off = "secureoff"
 	wall_mounted = 0 //never solid (You can always pass over it)
 	health = 200
-	layer = 2.01
 
 /obj/structure/closet/secure_closet/medical_wall
 	name = "First Aid Closet"

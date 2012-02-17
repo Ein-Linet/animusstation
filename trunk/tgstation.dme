@@ -406,7 +406,6 @@
 #include "code\game\gamemodes\events\ninja_abilities.dm"
 #include "code\game\gamemodes\events\ninja_equipment.dm"
 #include "code\game\gamemodes\events\space_ninja.dm"
-#include "code\game\gamemodes\events\spacevines.dm"
 #include "code\game\gamemodes\extended\extended.dm"
 #include "code\game\gamemodes\malfunction\Malf_Modules.dm"
 #include "code\game\gamemodes\malfunction\malfunction.dm"
