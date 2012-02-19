@@ -95,9 +95,9 @@
 			visible_message("\red <B>[M] has punched [src]!</B>")
 
 			apply_damage(damage, BRUTE, affecting, armor_block)
-			if(damage >= 9)
+			if(damage >= 7)
 				visible_message("\red <B>[M] has weakened [src]!</B>")
-				apply_effect(4, WEAKEN, armor_block)
+				apply_effect(5, WEAKEN, armor_block)
 			UpdateDamageIcon()
 
 
