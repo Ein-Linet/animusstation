@@ -98,7 +98,7 @@ emp_act
 	apply_damage(I.force, I.damtype, affecting, armor)
 
 	var/bloody = 0
-	if((I.damtype == BRUTE) && prob(25 + (I.force * 2)))
+	if((I.damtype == BRUTE) && prob(25 + (I.force * 3)))
 		src.add_blood(src)
 		if(prob(33))
 			bloody = 1
@@ -114,7 +114,7 @@ emp_act
 
 		switch(hit_area)
 			if("head")//Harder to score a stun but if you do it lasts a bit longer
-				if(prob(I.force))
+				if(prob(I.force * 3))
 					apply_effect(20, PARALYZE, armor)
 					visible_message("\red <B>[src] has been knocked unconscious!</B>")
 					if(src != user)
@@ -126,7 +126,7 @@ emp_act
 					if(glasses && prob(33))		glasses.add_blood(src)
 
 			if("chest")//Easier to score a stun but lasts less time
-				if(prob((I.force + 10)))
+				if(prob(((I.force * 3) + 15)))
 					apply_effect(5, WEAKEN, armor)
 					visible_message("\red <B>[src] has been knocked down!</B>")
 
