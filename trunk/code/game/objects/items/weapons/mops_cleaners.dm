@@ -109,7 +109,7 @@
 	origin_tech = "combat=3;materials=3;engineering=3"
 
 /obj/item/weapon/chemsprayer/New()
-	var/datum/reagents/R = new/datum/reagents(600)
+	var/datum/reagents/R = new/datum/reagents(1000)
 	reagents = R
 	R.my_atom = src
 

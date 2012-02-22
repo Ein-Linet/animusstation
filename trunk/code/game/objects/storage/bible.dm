@@ -76,9 +76,9 @@
 //		return
 
 	if (M.stat !=2)
-		if(M.mind && (M.mind.assigned_role == "Chaplain"))
+/*		if(M.mind && (M.mind.assigned_role == "Chaplain"))
 			user << "\red You can't heal yourself!"
-			return
+			return*/
 		if((M.mind in ticker.mode.cult) && (prob(20)))
 			M << "\red The power of [src.deity_name] clears your mind of heresy!"
 			user << "\red You see how [M]'s eyes become clear, the cult no longer holds control over him!"
@@ -91,7 +91,7 @@
 			playsound(src.loc, "punch", 25, 1, -1)
 		else
 			if(ishuman(M) && !istype(M:head, /obj/item/clothing/head/helmet))
-				M.adjustBrainLoss(10)
+				M.adjustBrainLoss(15)
 				M << "\red You feel dumber."
 			for(var/mob/O in viewers(M, null))
 				O.show_message(text("\red <B>[] beats [] over the head with []!</B>", user, M, src), 1)
