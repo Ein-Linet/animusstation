@@ -1,3 +1,5 @@
+//BUILD MODE SUCKS	-Pete
+
 /proc/togglebuildmode(mob/M as mob in world, var/log = 1)
 	set name = "Toggle Build Mode"
 	set category = "Special Verbs"

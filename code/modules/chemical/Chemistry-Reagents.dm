@@ -512,7 +512,7 @@ datum
 					holder.remove_reagent(src.id, 0.1)
 				return
 
-		silicate
+/*		silicate
 			name = "Silicate"
 			id = "silicate"
 			description = "A compound that can be used to reinforce glass."
@@ -546,7 +546,7 @@ datum
 							O.icon = I
 							O:silicateIcon = I
 
-				return
+				return*/
 
 		oxygen
 			name = "Oxygen"
@@ -820,11 +820,11 @@ datum
 				..()
 				return
 
-
 			reaction_turf(var/turf/T, var/volume)
 				src = null
 				if(!istype(T, /turf/space))
 					new /obj/effect/decal/cleanable/greenglow(T)
+					return
 
 
 		ryetalyn
