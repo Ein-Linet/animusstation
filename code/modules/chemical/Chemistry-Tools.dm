@@ -578,7 +578,7 @@
 	name = "rapid syringe gun"
 	desc = "A modification of the syringe gun design, using a rotating cylinder to store up to four syringes."
 	icon_state = "rapidsyringegun"
-	max_syringes = 4
+	max_syringes = 40
 
 /obj/structure/reagent_dispensers
 	name = "Dispenser"
