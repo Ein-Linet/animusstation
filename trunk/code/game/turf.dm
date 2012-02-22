@@ -348,7 +348,7 @@
 
 
 /turf/simulated/wall/attack_animal(mob/living/simple_animal/M as mob)
-	if((M.destroyer))
+	if(M.wall_smash)
 		if (istype(src, /turf/simulated/wall/r_wall))
 			M << text("\blue This wall is far too strong for you to destroy.")
 			return
@@ -480,6 +480,7 @@
 				dismantle_wall(1)
 				for(var/mob/O in viewers(user, 5))
 					O.show_message(text("\blue The wall was sliced apart by []!", user), 1, text("\red You hear metal being sliced and sparks flying."), 2)
+		return
 	else if(istype(W,/obj/item/apc_frame))
 		var/obj/item/apc_frame/AH = W
 		AH.try_build(src)

@@ -1,3 +1,9 @@
+var/list/forbidden_varedit_object_types = list(
+										/obj/admins,						//Admins editing their own admin-power object? Yup, sounds like a good idea.
+										/obj/machinery/blackbox_recorder,	//Prevents people messing with feedback gathering
+										/datum/feedback_variable			//Prevents people messing with feedback gathering
+									)
+
 /client/proc/cmd_modify_object_variables(obj/O as obj|mob|turf|area in world)
 	set category = "Debug"
 	set name = "Edit Variables"
@@ -266,6 +272,11 @@
 	if(!stealth && (!src.authenticated || !src.holder))
 		src << "Only administrators may use this command."
 		return
+
+	for(var/p in forbidden_varedit_object_types)
+		if( istype(O,p) )
+			usr << "\red It is forbidden to edit this object's variables."
+			return
 
 	var/class
 	var/variable

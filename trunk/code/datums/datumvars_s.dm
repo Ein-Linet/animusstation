@@ -470,7 +470,7 @@ client
 			if(!src.holder)
 				return
 			src.cmd_admin_gib(MOB, 0)
-		else if (href_list["build_mode"])
+/*		else if (href_list["build_mode"])
 			if(!href_list["build_mode"])
 				return
 			var/mob/MOB = locate(href_list["build_mode"])
@@ -481,7 +481,7 @@ client
 			if(!src.holder)
 				return
 			togglebuildmode(MOB, 0)
-			href_list["datumrefresh"] = href_list["build_mode"]
+			href_list["datumrefresh"] = href_list["build_mode"]*/
 		else if (href_list["delall"])
 			if(!href_list["delall"])
 				return
