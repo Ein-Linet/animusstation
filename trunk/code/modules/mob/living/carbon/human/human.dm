@@ -201,8 +201,8 @@
 	if (bodytemperature < 283.222)
 		tally += (283.222 - bodytemperature) / 10 * 1.75
 
-	if(pulling)
-		tally += 2
+/*	if(pulling)
+		tally += 2*/
 
 	return tally
 
