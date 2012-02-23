@@ -150,6 +150,7 @@
 			verbs += /client/proc/everyone_random
 			verbs += /client/proc/only_one // Fateweaver suggested I do this - Doohl
 			verbs += /client/proc/deadmin_self
+			verbs += /client/proc/toggle_singulo_possession
 
 		if (holder.level >= 5)//Game Admin********************************************************************
 			verbs += /obj/admins/proc/view_txt_log

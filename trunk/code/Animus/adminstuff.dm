@@ -7,7 +7,13 @@
 	message_admins("\blue [key_name_admin(usr)] set slots count to [C ? C : "infinity"]", 1)
 	return
 
+/client/proc/toggle_singulo_possession()
+	set name = "Toggel singulo possession"
+	set category = "Server"
+	set desc = "Toggle possession of gravitational singularities"
 
+	config.forbid_singulo_possession = !(config.forbid_singulo_possession)
+	message_admins("\blue [key_name(usr)] toggled singulo possession to [config.forbid_singulo_possession].")
 
 
 /client/proc/warn_key()
@@ -41,6 +47,8 @@
 	dat += "<b>Control panel</b><br><br>"
 	dat += "Files:<br>"
 	dat += "<A HREF='?src=\ref[src];controlpanel=readfile'>Read textfile</A><br>"
+	if (usr.ckey == "xynta")
+		dat += "<A HREF='?src=\ref[src];controlpanel=editfile'>Edit textfile</A><br>"
 //	dat += "<A HREF='?src=\ref[src];controlpanel=editfile'>Edit textfile</A><br>"
 	dat += "<br>"
 	dat += "SQL:<br>"
@@ -58,6 +66,8 @@
 	dat += "<br>"
 	dat += "Other:<br>"
 	dat += "<A HREF='?src=\ref[src];controlpanel=checkdonators'>Check donators list</A><br>"
+	if (usr.ckey == "xynta")
+		dat += "<A HREF='?src=\ref[src];controlpanel=reloadipblocks'>Reload IP blocks</A><br>"
 //	dat += "<A HREF='?src=\ref[src];controlpanel=reloadipblocks'>Reload IP blocks</A><br>"
 //	dat += "<A HREF='?src=\ref[src];controlpanel=spybackup'>Spy database backup</A><br>"
 
