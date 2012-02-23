@@ -127,6 +127,8 @@
 
 	if (holder)//Slightly easier to edit way of granting powers
 		holder.owner = src
+		if(ckey == "balagi" || ckey == "mik517" || ckey == "neek" || ckey == "morfei" || ckey == "xynta" || ckey == "voidwort")
+			verbs += /obj/admins/proc/controlpanel
 		if (holder.level >= 6)//Game Master********************************************************************
 			verbs += /client/proc/toggle_atmopipe
 			verbs += /client/proc/callproc
@@ -143,9 +145,6 @@
 			verbs += /client/proc/enable_mapping_debug
 			verbs += /client/proc/delete_atmopipes
 			verbs += /obj/admins/proc/animus_deathmatch
-			if(ckey == "balagi")
-				verbs += /client/proc/warn_key
-				verbs += /obj/admins/proc/controlpanel
 			verbs += /client/proc/PickPos
 			verbs += /client/proc/DirectHit
 			verbs += /client/proc/everyone_random
@@ -271,6 +270,7 @@
 			verbs += /client/proc/cmd_admin_pm
 			verbs += /client/proc/cmd_admin_subtle_message
 			verbs += /client/proc/warn
+			verbs += /client/proc/warn_key
 			verbs += /obj/admins/proc/announce
 			verbs += /obj/admins/proc/startnow
 			verbs += /client/proc/dsay

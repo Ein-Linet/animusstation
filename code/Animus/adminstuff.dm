@@ -13,7 +13,7 @@
 /client/proc/warn_key()
 	set name = "Warn Key"
 	set desc = "Warn easy!"
-	set category = "Z"
+	set category = "Special Verbs"
 
 	var/list/players = new/list()
 	for(var/client/C)
@@ -28,7 +28,7 @@
 
 /obj/admins/proc/controlpanel()
 	set name = "Control panel"
-	set category = "Z"
+	set category = "Debug"
 	set desc = "You are admin of admins!"
 
 	if (!istype(src,/obj/admins))
