@@ -1,5 +1,5 @@
 /mob/Login()
-
+	spawn() check_cache(src.key) //Checking whether the mob has cached the sounds
 	src.lastKnownIP = src.client.address
 	src.computer_id = src.client.computer_id
 	if (config.log_access)
