@@ -183,6 +183,7 @@
 #define FILE_DIR "maps"
 #define FILE_DIR "maps/backup"
 #define FILE_DIR "sound"
+#define FILE_DIR "sound/ai"
 #define FILE_DIR "sound/ambience"
 #define FILE_DIR "sound/announcer"
 #define FILE_DIR "sound/bots"

@@ -489,3 +489,34 @@
 		src << "\blue You are already in your Main Core."
 		return
 	apc.malfvacate()
+/mob/living/silicon/ai/var/last_announced = 6 //a var to keep a time of a last announcement
+
+/mob/living/silicon/ai/verb/ai_announcement(aiannouncement as text) //AI voice announcement system
+	set category = "AI Commands"
+	set name = "Announcement"
+	set desc = "Make an announcement once every two minutes"
+	var/current_time //current time of day
+	current_time = world.timeofday
+	if (lentext(aiannouncement) > 150) //so that AI can't spam millions of a's
+		usr << "Your announcement must consist of no more than 150 characters."
+		return 0
+	if ((current_time - last_announced) > 100 || last_announced > current_time) //10 second cooldown, check for the new day
+		last_announced = world.timeofday
+	else
+		usr << "Cannot make announcement right now."
+		return 0
+	usr << "You make an announcement: [aiannouncement]"
+	message_admins("[key_name(src)] has made an announcement: [aiannouncement]")
+	var/findspace
+	var/playsound //the sound we are playing
+	for (var/i=0, i<40, i++) //40 is the maximum number of words in the announcement
+		findspace = findtext(aiannouncement," ")
+		playsound = copytext(aiannouncement,1,findspace) //extracting a word from the string
+		playsound = addtext(addtext("sound/ai/",playsound),".wav")
+		var/z
+		z = fexists(playsound)
+		if (z > 0) //checking the existence of a file
+			world << sound (file(playsound),0,1,1)
+		aiannouncement = copytext(aiannouncement,findspace+1) //cutting out the word we just played
+		if (findspace == 0) //end of the announcement, and of the loop
+			break

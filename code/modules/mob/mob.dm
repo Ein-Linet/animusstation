@@ -17,6 +17,28 @@
 
 	usr.show_message(t, 1)
 
+/mob/proc/check_cache(ukey as text) // Checking the sound cache
+	var/cached_users
+	var/user
+	cached_users = file2text("config/cached_users.txt") // Transfering text from a file to the variable
+	user = findtext(cached_users,"  [ukey]  ",1) // Checking the key
+	if (user == 0) // If there is no such key in the file, calling the cache_voice proc and adding the key to the textfile
+		cache_voice()
+		text2file("  [ukey]  ","config/cached_users.txt")
+
+/mob/proc/cache_voice() //a proc to cache voice sound files, causes a certain lag, but happens quite rarely
+	var/textfile
+	textfile = file2text("config/voices.txt") //loading a textfile with all the sound files names
+	var/findspace
+	var/playsound
+	for (var/i=0, i<700, i++) //playing all the sounds at minimum volume
+		findspace = findtext(textfile," ")
+		playsound = copytext(textfile,1,findspace) //getting a single word from the whole string
+		playsound = addtext(addtext("sound/ai/",playsound),".wav")
+		usr << sound(playsound,0,0,0,0)
+		textfile = copytext(textfile,findspace+1) //cutting out the word we just played
+		if (findspace == 0) //end of a file, ending the loop
+			break
 /atom/proc/relaymove()
 	return
 
