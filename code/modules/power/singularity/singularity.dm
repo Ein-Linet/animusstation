@@ -38,7 +38,7 @@ var/global/list/uneatable = list(
 		for(var/obj/machinery/containment_field/CF in world)
 			count = 1
 			break
-		if(!count)	message_admins("A singulo has been created without containment fields active ([x],[y],[z])",1)
+		if(!count)	message_admins("A singulo has been created without containment fields active ([x],[y],[z])(<A HREF='?src=\ref[usr.client.holder];adminplayerobservejump=\ref[src]'>JMP</A>)",1)
 
 		src.energy = starting_energy
 		if(temp)
