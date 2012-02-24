@@ -149,6 +149,15 @@
 	opacity = 0
 	density = 0
 
+/obj/effect/sign/deathsposal
+	desc = "A warning sign which reads 'DISPOSAL LEADS TO SPACE'"
+	name = "DISPOSAL LEADS TO SPACE"
+	icon = 'decals.dmi'
+	icon_state = "deathsposal"
+	anchored = 1.0
+	opacity = 0
+	density = 0
+
 /obj/effect/sign/pods
 	desc = "A warning sign which reads 'ESCAPE PODS'"
 	name = "ESCAPE PODS"
@@ -159,8 +168,8 @@
 	density = 0
 
 /obj/effect/sign/fire
-	desc = "A warning sign which reads 'HOT! HOT! AAAH! I'M BURNING!'"
-	name = "HOT! HOT! AAAH! I'M BURNING!"
+	desc = "A warning sign which reads 'DANGER: FIRE'"
+	name = "DANGER: FIRE"
 	icon = 'decals.dmi'
 	icon_state = "fire"
 	anchored = 1.0

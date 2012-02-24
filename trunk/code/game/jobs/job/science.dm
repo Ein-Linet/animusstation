@@ -45,7 +45,7 @@
 		return 1
 
 
-
+//Chemist is a medical job damnit
 /datum/job/chemist
 	title = "Chemist"
 	flag = CHEMIST
