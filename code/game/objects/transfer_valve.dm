@@ -197,7 +197,7 @@
 		c_state()
 			return
 
-
+/obj/item/device/transfer_valve/syndie
 
 /obj/structure/falsewall/
 	attack_hand(mob/user as mob)

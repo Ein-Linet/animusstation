@@ -270,6 +270,7 @@
 			R:uplink = T
 			T.lock_code = pda_pass
 			T.hostpda = R
+			T.traitor_job = traitor_mob.mind.assigned_role
 			traitor_mob << "The Syndicate have cunningly disguised a Syndicate Uplink as your [R.name] [loc]. Simply enter the code \"[pda_pass]\" into the ringtone select to unlock its hidden features."
 			traitor_mob.mind.store_memory("<B>Uplink Passcode:</B> [pda_pass] ([R.name] [loc]).")
 	//Begin code phrase.
