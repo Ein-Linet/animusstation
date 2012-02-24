@@ -170,6 +170,8 @@
 
 			var/range = (pressure-TANK_FRAGMENT_PRESSURE)/TANK_FRAGMENT_SCALE
 			range = min(range, MAX_EXPLOSION_RANGE)		// was 8 - - - Changed to a configurable define -- TLE
+			if (istype(src.loc,/obj/item/device/transfer_valve/syndie))
+				range = (pressure-TANK_FRAGMENT_PRESSURE)/TANK_FRAGMENT_SCALE
 			var/turf/epicenter = get_turf(loc)
 
 			//world << "\blue Exploding Pressure: [pressure] kPa, intensity: [range]"

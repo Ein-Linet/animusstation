@@ -9,6 +9,7 @@
 	var/active = 0 //Are we currently active??
 	var/menu_message = ""
 	var/lock_code = "password" //What's the password?
+	var/traitor_job = null
 
 //Communicate with traitor through the PDA's note function.
 /obj/item/weapon/integrated_uplink/proc/print_to_host(var/text)
@@ -68,6 +69,17 @@
 	menu_message += "<A href='byond://?src=\ref[src];buy_item=balloon'>Syndicate Balloon</A> (Useless) (10)<BR>"
 	menu_message += "<BR>"
 	menu_message += "<A href='byond://?src=\ref[src];buy_item=bundle'>Syndicate Bundle</A> (Contains an assorted selection of syndicate items)(10)<BR>"
+	switch (traitor_job)
+		if ("Clown")
+			menu_message += "<A href='byond://?src=\ref[src];buy_item=clusterbang'>Clusterbang</A> (2)<BR>"
+		if ("Atmospheric Technician")
+			menu_message += "<A href='byond://?src=\ref[src];buy_item=t_valve'>Transfer Valve</A> (5)<BR>"
+		if ("Scientist")
+			menu_message += "<A href='byond://?src=\ref[src];buy_item=t_valve'>Transfer Valve</A> (5)<BR>"
+		if ("Research Director")
+			menu_message += "<A href='byond://?src=\ref[src];buy_item=t_valve'>Transfer Valve</A> (5)<BR>"
+		if ("Geneticist")
+			menu_message += "<A href='byond://?src=\ref[src];buy_item=gen_bundle'>Mutations Bundle</A> (6)<BR>"
 
 	menu_message += "<HR>"
 	return
@@ -242,6 +254,18 @@
 					uses -= 10
 					new /obj/item/weapon/storage/box/syndicate(get_turf(hostpda))
 					feedback_add_details("traitor_uplink_items_bought","BU")
+			if("clusterbang")
+				if(uses >= 2)
+					uses -= 2
+					new /obj/item/weapon/flashbang/clusterbang(get_turf(hostpda))
+			if("t_valve")
+				if(uses >= 5)
+					uses -= 5
+					new /obj/item/device/transfer_valve/syndie(get_turf(hostpda))
+			if("gen_bundle")
+				if(uses >= 6)
+					uses -= 6
+					new /obj/item/weapon/storage/box/gen_bundle/(get_turf(hostpda))
 
 		generate_menu()
 		print_to_host(menu_message)
