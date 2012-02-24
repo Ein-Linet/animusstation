@@ -351,5 +351,5 @@ field_generator power level display
 					if(O.last_warning && temp)
 						if((world.time - O.last_warning) > 50) //to stop message-spam
 							temp = 0
-							message_admins("A singulo exists and a containment field has failed.",1)
+							message_admins("A singulo exists and a containment field has failed.(<A HREF='?src=\ref[usr.client.holder];adminplayerobservejump=\ref[O]'>JMP</A>)",1)
 					O.last_warning = world.time
