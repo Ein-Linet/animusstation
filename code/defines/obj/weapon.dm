@@ -937,6 +937,7 @@
 	var/traitor_frequency = 0.0
 	var/mob/currentUser = null
 	var/obj/item/device/radio/origradio = null
+	var/traitor_job = null
 	flags = FPRINT | TABLEPASS | CONDUCT | ONBELT
 	w_class = 2.0
 	item_state = "radio"

@@ -260,6 +260,7 @@
 			T.name = R.name
 			T.icon_state = R.icon_state
 			T.origradio = R
+			T.traitor_job = traitor_mob.mind.assigned_role
 			traitor_mob << "The Syndicate have cunningly disguised a Syndicate Uplink as your [R.name] [loc]. Simply dial the frequency [format_frequency(freq)] to unlock its hidden features."
 			traitor_mob.mind.store_memory("<B>Radio Freq:</B> [format_frequency(freq)] ([R.name] [loc]).")
 		else if (istype(R, /obj/item/device/pda))

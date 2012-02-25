@@ -69,6 +69,17 @@ SYNDICATE UPLINK
 			dat += "<A href='byond://?src=\ref[src];buy_item=balloon'>Syndicate Balloon</A> (Useless) (10)<BR>"
 			dat += "<BR>"
 			dat += "<A href='byond://?src=\ref[src];buy_item=bundle'>Syndicate Bundle</A> (Contains an assorted selection of syndicate items)(10)<BR>"
+			switch (traitor_job)
+				if ("Clown")
+					dat += "<A href='byond://?src=\ref[src];buy_item=clusterbang'>Clusterbang</A> (2)<BR>"
+				if ("Atmospheric Technician")
+					dat += "<A href='byond://?src=\ref[src];buy_item=t_valve'>Transfer Valve</A> (5)<BR>"
+				if ("Scientist")
+					dat += "<A href='byond://?src=\ref[src];buy_item=t_valve'>Transfer Valve</A> (5)<BR>"
+				if ("Research Director")
+					dat += "<A href='byond://?src=\ref[src];buy_item=t_valve'>Transfer Valve</A> (5)<BR>"
+				if ("Geneticist")
+					dat += "<A href='byond://?src=\ref[src];buy_item=gen_bundle'>Mutations Bundle</A> (6)<BR>"
 			dat += "<HR>"
 			if (src.origradio)
 				dat += "<A href='byond://?src=\ref[src];lock=1'>Lock</A><BR>"
@@ -235,6 +246,18 @@ SYNDICATE UPLINK
 					if(uses >= 10)
 						uses -= 10
 						new /obj/item/weapon/storage/box/syndicate(get_turf(src))
+				if("clusterbang")
+					if(uses >= 2)
+						uses -= 2
+						new /obj/item/weapon/flashbang/clusterbang(get_turf(src))
+				if("t_valve")
+					if(uses >= 5)
+						uses -= 5
+						new /obj/item/device/transfer_valve/syndie(get_turf(src))
+				if("gen_bundle")
+					if(uses >= 6)
+						uses -= 6
+						new /obj/item/weapon/storage/box/gen_bundle/(get_turf(src))
 		else if (href_list["lock"] && src.origradio)
 			// presto chango, a regular radio again! (reset the freq too...)
 			shutdown_uplink()
