@@ -65,7 +65,7 @@
 
 	src << S
 
-client/verb/Toggle_Soundscape() //All new ambience should be added here so it works with this verb until someone better at things comes up with a fix that isn't awful
+client/proc/Toggle_Soundscape() //All new ambience should be added here so it works with this verb until someone better at things comes up with a fix that isn't awful
 	set category = "Special Verbs"
 	set name = "Toggle Ambience"
 	usr:client:no_ambi = !usr:client:no_ambi
