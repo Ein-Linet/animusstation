@@ -217,7 +217,7 @@ ZIPPO
 
 
 /obj/item/clothing/mask/cigarette/cigar/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/match))
+	if(istype(W, /obj/item/weapon/lighter/zippo))
 		..()
 	else
 		user << "\red The [src] straight out REFUSES to be lit by such uncivilized means."
