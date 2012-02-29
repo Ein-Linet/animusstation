@@ -6,7 +6,9 @@ client
 		set category = "Debug"
 		set name = "View Variables"
 		//set src in world
-
+		if (!(src.holder:rank in list( "Badmin", "Game Admin", "Game Master")))
+			alert("You cannot perform this action. You must be of a higher administrative rank!")
+			return
 
 		var/title = ""
 		var/body = ""

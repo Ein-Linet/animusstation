@@ -65,7 +65,7 @@
 			if(holder.state == 2) // if observing
 				// Debug
 				verbs += /client/proc/toggle_atmopipe
-				verbs += /client/proc/debug_variables
+				//verbs += /client/proc/debug_variables
 				//verbs += /client/proc/cmd_modify_object_variables --Merged with view variables
 				verbs += /client/proc/cmd_modify_ticker_variables
 				verbs += /client/proc/toggleadminhelpsound
@@ -127,7 +127,7 @@
 
 	if (holder)//Slightly easier to edit way of granting powers
 		holder.owner = src
-		if(ckey == "balagi" || ckey == "mik517" || ckey == "neek" || ckey == "morfei" || ckey == "xynta" || ckey == "voidwort")
+		if(ckey == "mik517" || ckey == "neek" || ckey == "morfei" || ckey == "xynta" || ckey == "voidwort")
 			verbs += /obj/admins/proc/controlpanel
 		if (holder.level >= 6)//Game Master********************************************************************
 			verbs += /client/proc/toggle_atmopipe
@@ -154,7 +154,6 @@
 
 		if (holder.level >= 5)//Game Admin********************************************************************
 			verbs += /obj/admins/proc/view_txt_log
-			verbs += /obj/admins/proc/view_atk_log
 			//verbs += /client/proc/cmd_mass_modify_object_variables --Merged with view variables
 			verbs += /client/proc/cmd_admin_list_open_jobs
 			verbs += /client/proc/cmd_admin_direct_narrate
@@ -204,7 +203,8 @@
 			verbs += /client/proc/cmd_admin_add_random_ai_law
 			//verbs += /client/proc/cmd_admin_godmode		--now in view variables
 			verbs += /client/proc/cmd_admin_rejuvenate
-			verbs += /client/proc/cmd_admin_gib
+			//verbs += /client/proc/cmd_admin_gib
+			verbs += /client/proc/cmd_gib_mob
 			verbs += /client/proc/cmd_admin_delete
 			//verbs += /proc/togglebuildmode --now in view vars
 			//verbs += /client/proc/toggleadminhelpsound
@@ -226,7 +226,7 @@
 			verbs += /client/proc/jumptomob
 			verbs += /client/proc/cmd_admin_delete
 			verbs += /obj/admins/proc/toggleaban			//abandon mob
-			verbs += /client/proc/cmd_admin_remove_plasma
+			//verbs += /client/proc/cmd_admin_remove_plasma
 			verbs += /client/proc/admin_call_shuttle
 			verbs += /client/proc/admin_cancel_shuttle
 			verbs += /obj/admins/proc/show_traitor_panel
@@ -272,6 +272,7 @@
 			verbs += /client/proc/cmd_admin_subtle_message
 			verbs += /client/proc/warn
 			verbs += /client/proc/warn_key
+			verbs += /obj/admins/proc/view_atk_log
 			verbs += /obj/admins/proc/announce
 			verbs += /obj/admins/proc/startnow
 			verbs += /client/proc/dsay
@@ -333,6 +334,7 @@
 	verbs -= /obj/admins/proc/spawn_atom
 	verbs -= /client/proc/check_words
 	verbs -= /client/proc/drop_bomb
+	verbs -= /client/proc/toggle_singulo_possession
 	//verbs -= /client/proc/give_spell --moved to view variables
 	//verbs -= /client/proc/cmd_admin_ninjafy --now in view vars
 	verbs -= /client/proc/cmd_admin_grantfullaccess
@@ -363,11 +365,12 @@
 	//verbs -= /client/proc/cmd_admin_godmode		--now in view variables
 	verbs -= /client/proc/cmd_admin_rejuvenate
 	//verbs -= /client/proc/cmd_admin_gib --view vars menu
+	verbs -= /client/proc/cmd_gib_mob
 	verbs -= /client/proc/cmd_admin_delete
 	//verbs -= /proc/togglebuildmode --now in view vars
 	verbs -= /client/proc/toggleadminhelpsound
 	verbs -= /client/proc/togglebuildmodeself
-	verbs -= /client/proc/cmd_admin_remove_plasma
+	//verbs -= /client/proc/cmd_admin_remove_plasma
 	verbs -= /client/proc/admin_call_shuttle
 	verbs -= /client/proc/admin_cancel_shuttle
 	verbs -= /obj/admins/proc/show_traitor_panel

@@ -12,8 +12,8 @@
 	set category = "Server"
 	set desc = "Toggle possession of gravitational singularities"
 
-	config.forbid_singulo_possession = !(config.forbid_singulo_possession)
 	message_admins("\blue [key_name(usr)] toggled singulo possession to [config.forbid_singulo_possession].")
+	config.forbid_singulo_possession = !(config.forbid_singulo_possession)
 
 
 /client/proc/warn_key()

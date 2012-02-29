@@ -267,7 +267,7 @@
 				href_list["ban"] = 1 // lets it fall through and refresh
 
 	if (href_list["newban"])
-		if ((src.rank in list( "Temporary Admin", "Admin Candidate", "Trial Admin", "Badmin", "Game Admin", "Game Master"  )))
+		if ((src.rank in list( "Moderator", "Temporary Admin", "Admin Candidate", "Trial Admin", "Badmin", "Game Admin", "Game Master"  )))
 			var/mob/M = locate(href_list["newban"])
 			if(!ismob(M)) return
 			if ((M.client && M.client.holder && (M.client.holder.level >= src.level)))
@@ -857,6 +857,9 @@
 		show_player_panel(M)
 
 	if (href_list["adminplayervars"])
+		if (!(usr.client.holder:rank in list ("Badmin", "Game Admin", "Game Master")))
+			alert("You cannot perform this action. You must be of a higher administrative rank!")
+			return
 		var/mob/M = locate(href_list["adminplayervars"])
 		if(src && src.owner)
 			if(istype(src.owner,/client))

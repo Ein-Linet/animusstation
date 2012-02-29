@@ -321,6 +321,21 @@ To combat this, I changed the window name. -- Doohl
 
 
 /obj/machinery/vending/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if (istype(W, /obj/item/weapon/reagent_containers/food/drinks/drinkingglass))
+		if (istype(src, /obj/machinery/vending/boozeomat))
+			var/n = src.product_records[19]
+			n:amount++
+			user.drop_item()
+			del W
+			user << "You put the drinking glass back into the booze-o-mat."
+			return
+		else if (istype(src, /obj/machinery/vending/dinnerware))
+			var/n = src.product_records[4]
+			n:amount++
+			user.drop_item()
+			del W
+			user << "You put the drinking glass back into the dinnerware."
+			return
 	if (istype(W, /obj/item/weapon/card/emag))
 		src.emagged = 1
 		user << "You short out the ID lock on [src]"

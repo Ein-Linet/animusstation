@@ -623,6 +623,11 @@ Traitors and the like can also be revived with the previous role mostly intact.
 	else
 		return
 
+/client/proc/cmd_gib_mob(mob/M as mob)
+	set category = "Special Verbs"
+	set name = "Gib mob"
+	cmd_admin_gib(M,1)
+
 /client/proc/cmd_admin_gib(mob/M as mob in world, var/log = 1)
 	set category = "Special Verbs"
 	set name = "Gib"
