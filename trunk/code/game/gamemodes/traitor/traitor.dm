@@ -8,6 +8,11 @@
 	restricted_jobs = list("Cyborg", "AI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Commissar")
 	required_players = 0
 	required_enemies = 1
+	recommended_enemies = 4
+
+
+	uplink_welcome = "Syndicate Uplink Console:"
+	uplink_uses = 10
 
 	var/const/waittime_l = 600 //lower bound on time before intercept arrives (in tenths of seconds)
 	var/const/waittime_h = 1800 //upper bound on time before intercept arrives (in tenths of seconds)
@@ -232,10 +237,16 @@
 			R = foo
 			loc = "in the [S.name] on your back"
 			break
+	if (!R && istype(traitor_mob.l_store, /obj/item/device/pda))
+		R = traitor_mob.l_store
+		loc = "in your pocket"
+	if (!R && istype(traitor_mob.r_store, /obj/item/device/pda))
+		R = traitor_mob.r_store
+		loc = "in your pocket"
 	if (!R && traitor_mob.w_uniform && istype(traitor_mob.belt, /obj/item/device/radio))
 		R = traitor_mob.belt
 		loc = "on your belt"
-	if (!R && istype(traitor_mob.ears, /obj/item/device/radio))
+	if ((!R && istype(traitor_mob.ears, /obj/item/device/radio)) || prob(10))
 		R = traitor_mob.ears
 		loc = "on your head"
 	if (!R)
@@ -254,24 +265,24 @@
 					freq += 1
 			freq = freqlist[rand(1, freqlist.len)]
 
-			var/obj/item/weapon/syndicate_uplink/T = new /obj/item/weapon/syndicate_uplink(R)
+			var/obj/item/device/uplink/radio/T = new /obj/item/device/uplink/radio(R)
 			R:traitorradio = T
 			R:traitor_frequency = freq
 			T.name = R.name
 			T.icon_state = R.icon_state
 			T.origradio = R
-			T.traitor_job = traitor_mob.mind.assigned_role
+//			T.traitor_job = traitor_mob.mind.assigned_role
 			traitor_mob << "The Syndicate have cunningly disguised a Syndicate Uplink as your [R.name] [loc]. Simply dial the frequency [format_frequency(freq)] to unlock its hidden features."
 			traitor_mob.mind.store_memory("<B>Radio Freq:</B> [format_frequency(freq)] ([R.name] [loc]).")
 		else if (istype(R, /obj/item/device/pda))
 			// generate a passcode if the uplink is hidden in a PDA
 			var/pda_pass = "[rand(100,999)] [pick("Alpha","Bravo","Delta","Omega")]"
 
-			var/obj/item/weapon/integrated_uplink/T = new /obj/item/weapon/integrated_uplink(R)
+			var/obj/item/device/uplink/pda/T = new /obj/item/device/uplink/pda(R)
 			R:uplink = T
 			T.lock_code = pda_pass
 			T.hostpda = R
-			T.traitor_job = traitor_mob.mind.assigned_role
+//			T.traitor_job = traitor_mob.mind.assigned_role
 			traitor_mob << "The Syndicate have cunningly disguised a Syndicate Uplink as your [R.name] [loc]. Simply enter the code \"[pda_pass]\" into the ringtone select to unlock its hidden features."
 			traitor_mob.mind.store_memory("<B>Uplink Passcode:</B> [pda_pass] ([R.name] [loc]).")
 	//Begin code phrase.

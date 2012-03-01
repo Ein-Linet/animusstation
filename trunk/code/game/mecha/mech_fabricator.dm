@@ -115,7 +115,7 @@
 						/obj/item/mecha_parts/animus_implant/food_eat,
 						/obj/item/mecha_parts/animus_implant/gib
 						),
-	"Misc"=list(/obj/item/mecha_tracking)
+	"Misc"=list(/obj/item/mecha_parts/mecha_tracking)
 	)
 	New()
 		..()
@@ -298,13 +298,14 @@
 		return output
 
 	proc/remove_resources(var/obj/item/mecha_parts/part)
-		for(var/resource in part.construction_cost)
-			if(resource in src.resources)
-				src.resources[resource] -= get_resource_cost_w_coeff(part,resource)
+		if(istype(part, /obj/item/robot_parts) || istype(part, /obj/item/mecha_parts))
+			for(var/resource in part.construction_cost)
+				if(resource in src.resources)
+					src.resources[resource] -= get_resource_cost_w_coeff(part,resource)
 		return
 
 	proc/check_resources(var/obj/item/mecha_parts/part)
-		if(istype(part, /obj/item))
+		if(istype(part, /obj/item/robot_parts) || istype(part, /obj/item/mecha_parts))
 			for(var/resource in part.construction_cost)
 				if(resource in src.resources)
 					if(src.resources[resource] < get_resource_cost_w_coeff(part,resource))
@@ -722,5 +723,7 @@
 		else
 			del res
 		return result
+
+
 
 

@@ -51,8 +51,8 @@
 		if(istype(I, /obj/item/weapon/trashbag))
 			user << "\blue You empty the bag."
 			for(var/obj/item/O in I.contents)
-				I.contents -= O
 				O.loc = src
+				I.contents -= O
 			I.update_icon()
 			update()
 			return
@@ -79,7 +79,9 @@
 		if(!I)	return
 
 		user.drop_item()
-		I.loc = src
+		if(I)
+			I.loc = src
+
 		user << "You place \the [I] into the [src]."
 		for(var/mob/M in viewers(src))
 			if(M == user)
@@ -386,7 +388,7 @@
 			del(H)
 
 	CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
-		if (istype(mover,/obj/item))
+		if (istype(mover,/obj/item) && mover.throwing)
 			var/obj/item/I = mover
 			if(istype(I, /obj/item/weapon/dummy) || istype(I, /obj/item/projectile))
 				return

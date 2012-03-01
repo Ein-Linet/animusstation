@@ -7,6 +7,10 @@
 	config_tag = "wizard"
 	required_players = 0
 	required_enemies = 1
+	recommended_enemies = 1
+
+	uplink_welcome = "Wizardly Uplink Console:"
+	uplink_uses = 10
 
 	var/finished = 0
 

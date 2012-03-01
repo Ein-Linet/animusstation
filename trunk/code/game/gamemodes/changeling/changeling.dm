@@ -8,6 +8,11 @@
 	restricted_jobs = list("AI", "Cyborg")
 	required_players = 0
 	required_enemies = 1
+	recommended_enemies = 4
+
+
+	uplink_welcome = "Syndicate Uplink Console:"
+	uplink_uses = 10
 
 	var
 		const

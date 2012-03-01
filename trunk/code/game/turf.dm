@@ -80,7 +80,7 @@
 
 
 /turf/Entered(atom/movable/M as mob|obj)
-	var/loopsanity = 10
+	var/loopsanity = 100
 	if(ismob(M))
 		if(!M:lastarea)
 			M:lastarea = get_area(M.loc)
@@ -494,6 +494,10 @@
 	if (!(istype(usr, /mob/living/carbon/human) || ticker) && ticker.mode.name != "monkey")
 		usr << "\red You don't have the dexterity to do this!"
 		return
+
+	if(!istype(src, /turf/simulated/wall/r_wall))
+		return // this may seem stupid and redundant but apparently floors can call this attackby() proc, it was spamming shit up. -- Doohl
+
 
 	if (istype(W, /obj/item/weapon/weldingtool) && W:welding)
 		W:eyecheck(user)
