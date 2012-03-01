@@ -225,6 +225,11 @@ About the new airlock wires panel:
 					return
 			else /*if(src.justzap)*/
 				return
+		else if(user.hallucination > 50 && prob(10) && src.operating == 0)
+			user << "\red <B>You feel a powerful shock course through your body!</B>"
+			user.halloss += 10
+			user.stunned += 10
+			return
 	..(user)
 
 
@@ -1083,7 +1088,10 @@ About the new airlock wires panel:
 			location.add_blood(M)
 
 	use_power(50)
-	playsound(src.loc, 'airlock.ogg', 30, 1)
+	if(istype(src, /obj/machinery/door/airlock/glass))
+		playsound(src.loc, 'windowdoor.ogg', 30, 1)
+	else
+		playsound(src.loc, 'airlock.ogg', 30, 1)
 	var/obj/structure/window/killthis = (locate(/obj/structure/window) in get_turf(src))
 	if(killthis)
 		killthis.ex_act(2)//Smashin windows

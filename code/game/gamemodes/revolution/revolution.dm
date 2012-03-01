@@ -17,6 +17,11 @@
 	restricted_jobs = list("Security Officer", "Warden", "Detective", "AI", "Cyborg","Captain", "Head of Personnel", "Head of Security", "Chief Engineer", "Research Director", "Chief Medical Officer", "Commissar")
 	required_players = 0
 	required_enemies = 3
+	recommended_enemies = 3
+
+
+	uplink_welcome = "Revolutionary Uplink Console:"
+	uplink_uses = 10
 
 	var/finished = 0
 	var/checkwin_counter = 0

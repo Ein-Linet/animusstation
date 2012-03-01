@@ -23,6 +23,54 @@
 		list/restricted_jobs = list()
 		required_players = 0
 		required_enemies = 0
+		recommended_enemies = 0
+		uplink_welcome
+		uplink_uses
+		uplink_items = {"Highly Visible and Dangerous Weapons;
+/obj/item/weapon/gun/projectile:6:Revolver;
+/obj/item/ammo_magazine/a357:2:Ammo-357;
+/obj/item/weapon/gun/energy/crossbow:5:Energy Crossbow;
+/obj/item/weapon/melee/energy/sword:4:Energy Sword;
+/obj/item/weapon/storage/box/syndicate:10:Syndicate Bundle;
+/obj/item/weapon/storage/emp_kit:4:5 EMP Grenades;
+Whitespace:Seperator;
+Stealthy and Inconspicuous Weapons;
+/obj/item/weapon/pen/parapen:3:Paralysis Pen;
+/obj/item/weapon/soap/syndie:1:Syndicate Soap;
+/obj/item/weapon/cartridge/syndicate:3:Detomatix PDA Cartridge;
+Whitespace:Seperator;
+Stealth and Camouflage Items;
+/obj/item/clothing/under/chameleon:3:Chameleon Jumpsuit;
+/obj/item/clothing/shoes/syndigaloshes:2:No-Slip Syndicate Shoes;
+/obj/item/weapon/card/id/syndicate:3:Agent ID card;
+/obj/item/clothing/mask/gas/voice:4:Voice Changer;
+/obj/item/device/chameleon:4:Chameleon-Projector;
+/obj/item/weapon/cloaking_device:4:Cloaking Device;
+Whitespace:Seperator;
+Devices and Tools;
+/obj/item/weapon/card/emag:3:Cryptographic Sequencer;
+/obj/item/weapon/storage/toolbox/syndicate:1:Fully Loaded Toolbox;
+/obj/item/weapon/storage/syndie_kit/space:3:Space Suit;
+/obj/item/device/encryptionkey/binary:3:Binary Translator Key;
+/obj/item/weapon/aiModule/syndicate:7:Hacked AI Upload Module;
+/obj/item/weapon/plastique:2:C-4 (Destroys walls);
+/obj/item/device/powersink:5:Powersink (DANGER!);
+/obj/machinery/singularity_beacon/syndicate:7:Singularity Beacon (DANGER!);
+/obj/item/weapon/circuitboard/teleporter:20:Teleporter Circuit Board;
+Whitespace:Seperator;
+Implants;
+/obj/item/weapon/storage/syndie_kit/imp_freedom:3:Freedom Implant;
+/obj/item/weapon/storage/syndie_kit/imp_uplink:10:Uplink Implant (Contains 5 Telecrystals);
+Whitespace:Seperator;
+Badassery;
+/obj/item/toy/syndicateballoon:10:For showing that You Are The BOSS (Useless Balloon);
+Whitespace:Seperator;"}
+
+// Items removed from above:
+/*
+/obj/item/clothing/glasses/thermal:4:Thermal Imaging Glasses;
+
+*/
 
 /datum/game_mode/proc/announce() //to be calles when round starts
 	world << "<B>Notice</B>: [src] did not define announce()"
@@ -185,23 +233,69 @@
 
 /datum/game_mode/proc/get_players_for_role(var/role, override_jobbans=1)
 	var/list/candidates = list()
+	var/list/drafted = list()
+	var/datum/mind/applicant = null
+
 	for(var/mob/new_player/player in world)
 		if(player.client && player.ready)
 			if(player.preferences.be_special & role)
 				if(!jobban_isbanned(player, "Syndicate"))
-					candidates += player.mind
+					candidates += player.mind				// Get a list of all the people who want to be the antagonist for this round
 
-	if(candidates.len < required_enemies)
+	if(restricted_jobs)
+		for(var/datum/mind/player in candidates)
+			for(var/job in restricted_jobs)					// Remove people who want to be antagonist but have a job already that precludes it
+				if(player.assigned_role == job)
+					candidates -= player
+
+	if(candidates.len < recommended_enemies)
 		for(var/mob/new_player/player in world)
 			if (player.client && player.ready)
-				if(!jobban_isbanned(player, "Syndicate"))
-					candidates += player.mind
+				if(!(player.preferences.be_special & role)) // We don't have enough people who want to be antagonist, make a seperate list of people who don't want to be one
+					if(!jobban_isbanned(player, "Syndicate"))
+						drafted += player.mind
 
-	if(candidates.len < required_enemies && override_jobbans) //just to be safe. Ignored jobbans are better than broken round. Shouldn't happen usually. --rastaf0
+	if(restricted_jobs)
+		for(var/datum/mind/player in drafted)				// Remove people who can't be an antagonist
+			for(var/job in restricted_jobs)
+				if(player.assigned_role == job)
+					drafted -= player
+
+	while(candidates.len < recommended_enemies)				// Pick randomlly just the number of people we need and add them to our list of candidates
+		if(drafted.len > 0)
+			applicant = pick(drafted)
+			if(applicant)
+				candidates += applicant
+				drafted.Remove(applicant)
+
+		else												// Not enough scrubs, ABORT ABORT ABORT
+			break
+
+	if(candidates.len < recommended_enemies && override_jobbans) //If we still don't have enough people, we're going to start drafting banned people.
 		for(var/mob/new_player/player in world)
 			if (player.client && player.ready)
-				candidates += player.mind
-	return candidates
+				if(jobban_isbanned(player, "Syndicate"))
+					drafted += player.mind
+
+	if(restricted_jobs)
+		for(var/datum/mind/player in drafted)				// Remove people who can't be an antagonist
+			for(var/job in restricted_jobs)
+				if(player.assigned_role == job)
+					drafted -= player
+
+	while(candidates.len < recommended_enemies)				// Pick randomlly just the number of people we need and add them to our list of candidates
+		if(drafted.len > 0)
+			applicant = pick(drafted)
+			if(applicant)
+				candidates += applicant
+				drafted.Remove(applicant)
+
+		else												// Not enough scrubs, ABORT ABORT ABORT
+			break
+
+	return candidates		// Returns: The number of people who had the antagonist role set to yes, regardless of recomended_enemies, if that number is greater than recommended_enemies
+							//			recommended_enemies if the number of people with that role set to yes is less than recomended_enemies,
+							//			Less if there are not enough valid players in the game entirely to make recommended_enemies.
 
 
 /datum/game_mode/proc/check_player_role_pref(var/role, var/mob/new_player/player)
