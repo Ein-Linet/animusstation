@@ -40,6 +40,10 @@
 //Gets the round setup, cancelling if there's not enough players at the start//
 ///////////////////////////////////////////////////////////////////////////////
 /datum/game_mode/revolution/pre_setup()
+
+	if(config.protect_roles_from_antagonist)
+		restricted_jobs += protected_jobs
+
 	var/list/datum/mind/possible_headrevs = get_players_for_role(BE_REV)
 
 	var/head_check = 0
@@ -77,7 +81,8 @@
 			rev_obj.explanation_text = "Assassinate [head_mind.current.real_name], the [head_mind.assigned_role]."
 			rev_mind.objectives += rev_obj
 
-		equip_traitor(rev_mind.current, 1) //changing how revs get assigned their uplink so they can get PDA uplinks. --NEO
+	//	equip_traitor(rev_mind.current, 1) //changing how revs get assigned their uplink so they can get PDA uplinks. --NEO
+	//	Removing revolutionary uplinks.	-Pete
 		equip_revolutionary(rev_mind.current)
 		update_rev_icons_added(rev_mind)
 
@@ -135,7 +140,7 @@
 	if (!where)
 		mob << "The Syndicate were unfortunately unable to get you a flash."
 	else
-		mob << "The flash in your [where] would help you to use your extremal persuade skill."
+		mob << "The flash in your [where] will help you to persuade the crew to join your cause."
 		return 1
 
 //////////////////////////////////////
