@@ -193,7 +193,7 @@
 			verbs += /obj/admins/proc/adrev					//toggle admin revives
 			verbs += /obj/admins/proc/adspawn				//toggle admin item spawning
 			if(ckey == "mik517")
-				verbs += /client/proc/debug_variables_s
+				verbs += /client/proc/debug_variables_s		//simple change to make my dealings less annoying for those around - mik517
 			else
 				verbs += /client/proc/debug_variables
 			//verbs += /client/proc/cmd_modify_object_variables --Merged with view variables
@@ -218,6 +218,7 @@
 			verbs += /proc/release
 			verbs += /client/proc/jumptocoord
 			verbs += /client/proc/deadmin_self
+			verbs += /client/proc/deb_check_reagents
 
 		if (holder.level >= 3)//Trial Admin********************************************************************
 			verbs += /client/proc/Getmob
@@ -441,6 +442,7 @@
 	verbs -= /client/proc/toggle_gravity_off
 	verbs -= /client/proc/toggle_random_events
 	//verbs -= /client/proc/make_space_marine
+	verbs -= /client/proc/deb_check_reagents
 	verbs -= /client/proc/set_max_players
 	verbs -= /client/proc/deadmin_self
 	verbs -= /client/proc/jumptocoord

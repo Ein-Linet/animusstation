@@ -1247,6 +1247,7 @@
 	icon_state = null
 	var/bitesize = 1
 	var/bitecount = 0
+	var/nutritious = 1
 	var/trash = null
 
 	//Placeholder for effect that trigger on eating that aren't tied to reagents.
@@ -1346,7 +1347,40 @@
 					return
 
 			if(reagents)								//Handle ingestion of the reagent.
-				if(reagents.total_volume)
+				var/nutriment = 0
+				if(src.nutritious)
+					nutriment = reagents.get_reagent_amount("nutriment")
+				if(nutriment)
+					reagents.reaction(M, INGEST)
+					spawn(5)
+						var/temp_bite
+						if(nutriment > bitesize)
+							/*
+							 * I totally cannot understand what this code supposed to do.
+							 * Right now every snack consumes in 2 bites, my popcorn does not work right, so I simplify it. -- rastaf0
+							var/temp_bitesize =  max(reagents.total_volume /2, bitesize)
+							reagents.trans_to(M, temp_bitesize)
+							*/
+							temp_bite = (bitesize * reagents.total_volume) / nutriment
+							reagents.trans_to(M, temp_bite)
+
+							if((temp_bite > (bitesize * 2)) && prob(65))
+								user << "\blue This piece feels liquid."
+
+						else
+
+							if((nutriment > (reagents.total_volume / 3)) && prob(35))
+								user << "\blue This piece feels liquid."
+
+							reagents.trans_to(M, reagents.total_volume)
+
+						bitecount++
+						On_Consume()
+						if(!reagents.total_volume)
+							if(M == user) user << "\red You finish eating [src]."
+							else user << "\red [M] finishes eating [src]."
+							del(src)
+				else if (reagents.total_volume)
 					reagents.reaction(M, INGEST)
 					spawn(5)
 						if(reagents.total_volume > bitesize)
@@ -1402,13 +1436,14 @@
 				istype(W, /obj/item/weapon/kitchenknife) || \
 				istype(W, /obj/item/weapon/butch) || \
 				istype(W, /obj/item/weapon/scalpel) || \
-				istype(W, /obj/item/weapon/kitchen/utensil/knife) \
+				istype(W, /obj/item/weapon/kitchen/utensil/knife) || \
+				istype(W, /obj/item/weapon/circular_saw) \
 			)
 		else if( \
-				istype(W, /obj/item/weapon/circular_saw) || \
 				istype(W, /obj/item/weapon/melee/energy/sword) && W:active || \
 				istype(W, /obj/item/weapon/melee/energy/blade) || \
-				istype(W, /obj/item/weapon/shovel) \
+				istype(W, /obj/item/weapon/shovel) || \
+				istype(W, /obj/item/weapon/fireaxe) \
 			)
 			inaccurate = 1
 		else if(W.w_class <= 2 && istype(src,/obj/item/weapon/reagent_containers/food/snacks/sliceable))
