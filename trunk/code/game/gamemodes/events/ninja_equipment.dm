@@ -842,11 +842,12 @@ ________________________________________________________________________________
 		else if(istype(I, /obj/item/weapon/disk/tech_disk))//If it's a data disk, we want to copy the research on to the suit.
 			if(I:stored)//If it has something on it.
 				U << "Research information detected, processing..."
+				var/datum/tech/stored_data = I:stored
 				if(do_after(U,s_delay))
 					for(var/datum/tech/current_data in stored_research)
-						if(current_data.id==I:stored.id)
-							if(current_data.level<I:stored.level)
-								current_data.level=I:stored.level
+						if(current_data.id==stored_data.id)
+							if(current_data.level<stored_data.level)
+								current_data.level=stored_data.level
 							break
 					I:stored = null
 					U << "\blue Data analyzed and updated. Disk erased."
