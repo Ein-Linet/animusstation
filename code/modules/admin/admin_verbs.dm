@@ -68,7 +68,7 @@
 				//verbs += /client/proc/debug_variables
 				//verbs += /client/proc/cmd_modify_object_variables --Merged with view variables
 				verbs += /client/proc/cmd_modify_ticker_variables
-				verbs += /client/proc/toggleadminhelpsound
+				//verbs += /client/proc/toggleadminhelpsound
 
 				// Admin helpers
 				verbs += /client/proc/toggle_view_range
@@ -240,6 +240,7 @@
 			verbs += /proc/release
 			verbs += /client/proc/toggleprayers
 			verbs += /client/proc/deadmin_self
+			verbs += /client/proc/toggleadminhelpsound
 
 
 		if (holder.level >= 2)//Admin Candidate********************************************************************

@@ -3823,7 +3823,7 @@ datum
 				return
 
 
-/*		hippies_delight
+		hippies_delight
 			name = "Hippies Delight"
 			id = "hippiesdelight"
 			description = "A drink enjoyed by people during the 1960's."
@@ -3856,7 +3856,7 @@ datum
 				..()
 				return
 
-		bananahonk
+/*		bananahonk
 			name = "Banana Honk"
 			id = "bananahonk"
 			description = "A drink from Clown Heaven."

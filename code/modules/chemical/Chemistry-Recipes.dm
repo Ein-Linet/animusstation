@@ -1394,7 +1394,7 @@ datum
 			id = "devilskiss"
 			result = "devilskiss"
 			required_reagents = list("blood" = 1, "kahlua" = 1, "rum" = 1)
-			result_amount = 3
+			result_amount = 3*/
 
 		hippiesdelight
 			name = "Hippies Delight"
@@ -1403,7 +1403,7 @@ datum
 			required_reagents = list("psilocybin" = 1, "gargleblaster" = 1)
 			result_amount = 2
 
-		bananahonk
+/*		bananahonk
 			name = "Banana Honk"
 			id = "bananahonk"
 			result = "bananahonk"

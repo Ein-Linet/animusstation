@@ -36,10 +36,10 @@
 	icon_state = "nullrod"
 	item_state = "nullrod"
 	flags = FPRINT | ONBELT | TABLEPASS
-	force = 15
+	force = 5
 	throw_speed = 1
 	throw_range = 4
-	throwforce = 10
+	throwforce = 5
 	w_class = 1
 
 /obj/item/weapon/sord
