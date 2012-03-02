@@ -47,7 +47,7 @@
 	dat += "<b>Control panel</b><br><br>"
 	dat += "Files:<br>"
 	dat += "<A HREF='?src=\ref[src];controlpanel=readfile'>Read textfile</A><br>"
-	if (usr.ckey == "xynta")
+	if (usr.ckey == "neek")
 		dat += "<A HREF='?src=\ref[src];controlpanel=editfile'>Edit textfile</A><br>"
 //	dat += "<A HREF='?src=\ref[src];controlpanel=editfile'>Edit textfile</A><br>"
 	dat += "<br>"
@@ -66,8 +66,7 @@
 	dat += "<br>"
 	dat += "Other:<br>"
 	dat += "<A HREF='?src=\ref[src];controlpanel=checkdonators'>Check donators list</A><br>"
-	if (usr.ckey == "xynta")
-		dat += "<A HREF='?src=\ref[src];controlpanel=reloadipblocks'>Reload IP blocks</A><br>"
+//	dat += "<A HREF='?src=\ref[src];controlpanel=reloadipblocks'>Reload IP blocks</A><br>"
 //	dat += "<A HREF='?src=\ref[src];controlpanel=reloadipblocks'>Reload IP blocks</A><br>"
 //	dat += "<A HREF='?src=\ref[src];controlpanel=spybackup'>Spy database backup</A><br>"
 

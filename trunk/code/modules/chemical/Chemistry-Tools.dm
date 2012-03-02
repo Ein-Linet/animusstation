@@ -3343,11 +3343,11 @@
 					icon_state = "unused_neurotoxinglass"
 					name = "Neurotoxin"
 					desc = "A drink that is guaranteed to knock you silly."
-/*				if("hippiesdelight")
+				if("hippiesdelight")
 					icon_state = "hippiesdelightglass"
 					name = "Hippiesdelight"
 					desc = "A drink enjoyed by people during the 1960's."
-				if("bananahonk")
+/*				if("bananahonk")
 					icon_state = "bananahonkglass"
 					name = "Banana Honk"
 					desc = "A drink from Clown Heaven."
