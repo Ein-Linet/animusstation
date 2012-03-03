@@ -862,7 +862,7 @@
 			else if (istype(src, /mob/living/carbon/alien))
 				xgibs(loc, viruses)
 			else
-				gibs(loc, viruses)
+				gibs(loc, viruses, dna)
 
 /*		else if(key)
 			if(istype(src, /mob/living/simple_animals))     //Should gib all simple_animals like a monkey
@@ -878,7 +878,7 @@ Currently doesn't work, but should be useful later or at least as a template
 			else if(istype(src, /mob/living/carbon/alien))
 				xgibs(loc, viruses)
 			else
-				gibs(loc, viruses)
+				gibs(loc, viruses, dna)
 		sleep(15)
 		del(src)
 
