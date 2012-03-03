@@ -1,34 +1,38 @@
 /obj/effect/decal/ash
-	name = "Ashes"
+	name = "ashes"
 	desc = "Ashes to ashes, dust to dust, and into space."
+	gender = PLURAL
 	icon = 'objects.dmi'
 	icon_state = "ash"
 	anchored = 1
 
 /obj/effect/decal/remains/human
 	name = "remains"
-	desc = "These remains have a strange sense about them..."
+	desc = "They look like human remains. They have a strange aura about them."
+	gender = PLURAL
 	icon = 'blood.dmi'
 	icon_state = "remains"
 	anchored = 1
 
 /obj/effect/decal/remains/xeno
 	name = "remains"
-	desc = "These remains have a strange sense about them..."
+	desc = "They look like the remains of something... alien. They have a strange aura about them."
+	gender = PLURAL
 	icon = 'blood.dmi'
 	icon_state = "remainsxeno"
 	anchored = 1
 
 /obj/effect/decal/remains/robot
 	name = "remains"
-	desc = "These remains have a strange sense about them..."
+	desc = "They look like the remains of something mechanical. They have a strange aura about them."
+	gender = PLURAL
 	icon = 'robots.dmi'
 	icon_state = "remainsrobot"
 	anchored = 1
 
 /obj/effect/decal/point
-	name = "point"
-	desc = "It is an arrow hanging in mid-air. There may be a wizard about."
+	name = "arrow"
+	desc = "It's an arrow hanging in mid-air. There may be a wizard about."
 	icon = 'screen1.dmi'
 	icon_state = "arrow"
 	layer = 16.0
@@ -40,8 +44,9 @@
 //HUMANS
 
 /obj/effect/decal/cleanable/blood
-	name = "Blood"
-	desc = "It's red. It's Gooye. It's the chef's cooking, perhaps?"
+	name = "blood"
+	desc = "It's red and gooey. Perhaps it's the chef's cooking?"
+	gender = PLURAL
 	density = 0
 	anchored = 1
 	layer = 2
@@ -62,12 +67,15 @@
 	random_icon_states = list("gibbl1", "gibbl2", "gibbl3", "gibbl4", "gibbl5")
 
 /obj/effect/decal/cleanable/blood/tracks
-	icon_state = "tracks"
+	icon_state = "blood"
+	desc = "They look like tracks left by wheels."
+	gender = PLURAL
 	random_icon_states = null
 
 /obj/effect/decal/cleanable/blood/gibs
 	name = "gibs"
-	desc = "Grisly...and not the good kind neither."
+	desc = "They look bloody and gruesome."
+	gender = PLURAL
 	density = 0
 	anchored = 0
 	layer = 2
@@ -94,7 +102,8 @@
 
 /obj/effect/decal/cleanable/xenoblood
 	name = "xeno blood"
-	desc = "It's green. Must be more of the chef's cooking."
+	desc = "It's green and acidic. It looks like... <i>blood?</i>"
+	gender = PLURAL
 	density = 0
 	anchored = 1
 	layer = 2
@@ -114,6 +123,7 @@
 /obj/effect/decal/cleanable/xenoblood/xgibs
 	name = "xeno gibs"
 	desc = "Gnarly..."
+	gender = PLURAL
 	icon = 'blood.dmi'
 	icon_state = "xgib1"
 	random_icon_states = list("xgib1", "xgib2", "xgib3", "xgib4", "xgib5", "xgib6")
@@ -141,7 +151,8 @@
 
 /obj/effect/decal/cleanable/robot_debris
 	name = "robot debris"
-	desc = "Useless heap of junk...or is it..."
+	desc = "It's a useless heap of junk... <i>or is it?</i>"
+	gender = PLURAL
 	density = 0
 	anchored = 0
 	layer = 2
@@ -160,7 +171,8 @@
 
 /obj/effect/decal/cleanable/oil
 	name = "motor oil"
-	desc = "It's black. Beepsky made another mess."
+	desc = "It's black and greasy. Looks like Beepsky made another mess."
+	gender = PLURAL
 	density = 0
 	anchored = 1
 	layer = 2
@@ -182,6 +194,7 @@
 /obj/effect/decal/cleanable/generic
 	name = "clutter"
 	desc = "Someone should clean that up."
+	gender = PLURAL
 	density = 0
 	anchored = 1
 	layer = 2
@@ -191,6 +204,7 @@
 /obj/effect/decal/cleanable/dirt
 	name = "dirt"
 	desc = "Someone should clean that up."
+	gender = PLURAL
 	density = 0
 	anchored = 1
 	layer = 2
@@ -198,8 +212,9 @@
 	icon_state = "dirt"
 
 /obj/effect/decal/cleanable/greenglow
-	name = "green glow"
-	desc = "Eerie. This makes you feel creepy."
+	name = "glowing goo"
+	desc = "Jeez. I hope that's not for lunch."
+	gender = PLURAL
 	density = 0
 	anchored = 1
 	layer = 2
@@ -208,7 +223,7 @@
 
 /obj/effect/decal/cleanable/cobweb
 	name = "cobweb"
-	desc = "Someone should remove that."
+	desc = "Somebody should remove that."
 	density = 0
 	anchored = 1
 	layer = 3
@@ -217,7 +232,7 @@
 
 /obj/effect/decal/cleanable/molten_item
 	name = "gooey grey mass"
-	desc = "Huh. Creepy..."
+	desc = "It looks like a melted... something."
 	density = 0
 	anchored = 1
 	layer = 3
@@ -226,7 +241,7 @@
 
 /obj/effect/decal/cleanable/cobweb2
 	name = "cobweb"
-	desc = "Someone should remove that."
+	desc = "Somebody should remove that."
 	density = 0
 	anchored = 1
 	layer = 3
@@ -241,8 +256,9 @@
 
 //Vomit (sorry)
 /obj/effect/decal/cleanable/vomit
-	name = "Vomit"
+	name = "vomit"
 	desc = "Gosh, how unpleasant."
+	gender = PLURAL
 	density = 0
 	anchored = 1
 	layer = 2
@@ -257,8 +273,8 @@
 		..()
 
 /obj/effect/decal/cleanable/tomato_smudge
-	name = "Tomato smooth"
-	desc = "It's red"
+	name = "tomato smudge"
+	desc = "It's red."
 	density = 0
 	anchored = 1
 	layer = 2
@@ -266,8 +282,8 @@
 	random_icon_states = list("tomato_floor1", "tomato_floor2", "tomato_floor3")
 
 /obj/effect/decal/cleanable/egg_smudge
-	name = "Smashed egg"
-	desc = "Seems like this one won't hatch"
+	name = "smashed egg"
+	desc = "Seems like this one won't hatch."
 	density = 0
 	anchored = 1
 	layer = 2
@@ -275,8 +291,8 @@
 	random_icon_states = list("smashed_egg1", "smashed_egg2", "smashed_egg3")
 
 /obj/effect/decal/cleanable/pie_smudge //honk
-	name = "Smashed pie"
-	desc = "Pie cream from a cream pie"
+	name = "smashed pie"
+	desc = "It's pie cream from a cream pie."
 	density = 0
 	anchored = 1
 	layer = 2
