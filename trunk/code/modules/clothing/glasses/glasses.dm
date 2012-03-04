@@ -84,6 +84,16 @@
 	invisa_view = 2
 	nontransparent = 1
 
+/obj/item/clothing/glasses/thermal/standart	//These are now a traitor item, concealed as mesons.	-Pete
+	name = "Optical Thermal Scanner"
+	desc = "Used for seeing walls, floors, and stuff through anything."
+	icon_state = "thermal"
+	item_state = "glasses"
+	origin_tech = "magnets=3"
+	vision_flags = SEE_MOBS
+	invisa_view = 2
+	nontransparent = 1
+
 /obj/item/clothing/glasses/thermal/monocle
 	name = "Thermoncle"
 	desc = "A monocle thermal."
