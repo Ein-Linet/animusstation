@@ -1575,7 +1575,7 @@ It can still be worn/put on as normal.
 					W.dropped(target)
 				if (W)
 					W.layer = initial(W.layer)
-				W.add_fingerprint(source)
+					W.add_fingerprint(source)
 			else
 				if (istype(item, /obj/item/clothing/mask))
 					source.drop_item()
@@ -1612,7 +1612,7 @@ It can still be worn/put on as normal.
 					W.loc = target.loc
 					W.dropped(target)
 					W.layer = initial(W.layer)
-				W.add_fingerprint(source)
+					W.add_fingerprint(source)
 			else
 				if (istype(item, /obj/item/clothing/gloves))
 					source.drop_item()
@@ -1632,7 +1632,7 @@ It can still be worn/put on as normal.
 					W.loc = target.loc
 					W.dropped(target)
 					W.layer = initial(W.layer)
-				W.add_fingerprint(source)
+					W.add_fingerprint(source)
 			else
 				if (istype(item, /obj/item/clothing/glasses))
 					source.drop_item()
@@ -1650,7 +1650,7 @@ It can still be worn/put on as normal.
 					W.loc = target.loc
 					W.dropped(target)
 					W.layer = initial(W.layer)
-				W.add_fingerprint(source)
+					W.add_fingerprint(source)
 			else
 				if ((istype(item, /obj) && item.flags & 128 && target.w_uniform))
 					source.drop_item()
@@ -1668,7 +1668,7 @@ It can still be worn/put on as normal.
 					W.loc = target.loc
 					W.dropped(target)
 					W.layer = initial(W.layer)
-				W.add_fingerprint(source)
+					W.add_fingerprint(source)
 			else
 				if (istype(item, /obj) && target.wear_suit)
 					var/confirm
@@ -1696,7 +1696,7 @@ It can still be worn/put on as normal.
 					W.loc = target.loc
 					W.dropped(target)
 					W.layer = initial(W.layer)
-				W.add_fingerprint(source)
+					W.add_fingerprint(source)
 			else
 				if (istype(item, /obj/item/clothing/head))
 					source.drop_item()
@@ -1716,7 +1716,7 @@ It can still be worn/put on as normal.
 					W.loc = target.loc
 					W.dropped(target)
 					W.layer = initial(W.layer)
-				W.add_fingerprint(source)
+					W.add_fingerprint(source)
 			else
 				if (istype(item, /obj/item/clothing/ears))
 					source.drop_item()
@@ -1742,7 +1742,7 @@ It can still be worn/put on as normal.
 					W.loc = target.loc
 					W.dropped(target)
 					W.layer = initial(W.layer)
-				W.add_fingerprint(source)
+					W.add_fingerprint(source)
 			else
 				if (istype(item, /obj/item/clothing/shoes))
 					source.drop_item()
@@ -1764,7 +1764,7 @@ It can still be worn/put on as normal.
 					W.loc = target.loc
 					W.dropped(target)
 					W.layer = initial(W.layer)
-				W.add_fingerprint(source)
+					W.add_fingerprint(source)
 			else
 				if(istype(item, /obj/item))
 					source.drop_item()
@@ -1788,7 +1788,7 @@ It can still be worn/put on as normal.
 					W.loc = target.loc
 					W.dropped(target)
 					W.layer = initial(W.layer)
-				W.add_fingerprint(source)
+					W.add_fingerprint(source)
 			else
 				if (istype(item, /obj/item))
 					source.drop_item()
@@ -1810,7 +1810,7 @@ It can still be worn/put on as normal.
 					W.loc = target.loc
 					W.dropped(target)
 					W.layer = initial(W.layer)
-				W.add_fingerprint(source)
+					W.add_fingerprint(source)
 				W = target.l_store
 				if (W)
 					target.u_equip(W)
@@ -1855,7 +1855,7 @@ It can still be worn/put on as normal.
 					W.loc = target.loc
 					W.dropped(target)
 					W.layer = initial(W.layer)
-				W.add_fingerprint(source)
+					W.add_fingerprint(source)
 			else
 				if (istype(item, /obj/item/clothing/suit))
 					source.drop_item()
@@ -1873,7 +1873,7 @@ It can still be worn/put on as normal.
 					W.loc = target.loc
 					W.dropped(target)
 					W.layer = initial(W.layer)
-				W.add_fingerprint(source)
+					W.add_fingerprint(source)
 			else
 				if (((istype(item, /obj/item/weapon/card/id)||istype(item, /obj/item/device/pda)) && target.w_uniform))
 					source.drop_item()
@@ -1891,7 +1891,7 @@ It can still be worn/put on as normal.
 					W.loc = target.loc
 					W.dropped(target)
 					W.layer = initial(W.layer)
-				W.add_fingerprint(source)
+					W.add_fingerprint(source)
 			else
 				if ((istype(item, /obj/item) && item.flags & 1))
 					source.drop_item()
@@ -1909,7 +1909,7 @@ It can still be worn/put on as normal.
 					W.loc = target.loc
 					W.dropped(target)
 					W.layer = initial(W.layer)
-				W.add_fingerprint(source)
+					W.add_fingerprint(source)
 		if("handcuff")
 			if (target.handcuffed)
 				var/obj/item/W = target.handcuffed
@@ -1920,7 +1920,7 @@ It can still be worn/put on as normal.
 					W.loc = target.loc
 					W.dropped(target)
 					W.layer = initial(W.layer)
-				W.add_fingerprint(source)
+					W.add_fingerprint(source)
 			else
 				if (istype(item, /obj/item/weapon/handcuffs))
 					target.drop_from_slot(target.r_hand)
@@ -1983,7 +1983,7 @@ It can still be worn/put on as normal.
 					W.loc = target.loc
 					W.dropped(target)
 					W.layer = initial(W.layer)
-				W.add_fingerprint(source)
+					W.add_fingerprint(source)
 			if (target.r_store)
 				var/obj/item/W = target.r_store
 				target.u_equip(W)
@@ -1993,7 +1993,7 @@ It can still be worn/put on as normal.
 					W.loc = target.loc
 					W.dropped(target)
 					W.layer = initial(W.layer)
-				W.add_fingerprint(source)
+					W.add_fingerprint(source)
 		if("internal")
 			if (target.internal)
 				target.internal.add_fingerprint(source)
