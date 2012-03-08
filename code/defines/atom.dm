@@ -4,10 +4,10 @@
 	var/level = 2
 	var/flags = FPRINT
 	var/flags_inv //This flag is used to determine when items in someone's inventory cover others. IE helmets making it so you can't see glasses, etc.
-	var/list/fingerprints = list()
-	var/list/fingerprintshidden = list()
+	var/list/fingerprints
+	var/list/fingerprintshidden
 	var/fingerprintslast = null
-	var/list/blood_DNA = list()
+	var/list/blood_DNA
 	var/last_bumped = 0
 	var/pass_flags = 0
 
@@ -19,7 +19,7 @@
 	///Chemistry.
 
 	//Detective Work, used for the duplicate data points kept in the scanners
-	var/atom/movable/original_atom = null
+	var/list/original_atom
 
 	proc/assume_air(datum/air_group/giver)
 		del(giver)

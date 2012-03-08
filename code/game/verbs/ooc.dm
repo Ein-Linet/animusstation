@@ -34,6 +34,9 @@
 		message_admins("[key_name_admin(src)] has attempted to advertise in OOC.")
 		return
 
+	if(src.censore_ooc(msg))
+		return
+
 	log_ooc("[src.name]/[src.key] : [msg]")
 
 	for (var/client/C)
