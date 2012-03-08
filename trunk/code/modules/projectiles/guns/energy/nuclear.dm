@@ -1,7 +1,7 @@
 /obj/item/weapon/gun/energy/gun
 	animus = 1
 	icon = 'gun_animus.dmi'
-	icon_state = "energy"
+	icon_state = "energystun100"
 	name = "energy gun"
 	desc = "A basic energy-based gun with two settings: Stun and kill."
 	fire_sound = 'Taser.ogg'
@@ -9,6 +9,7 @@
 	charge_cost = 100 //How much energy is needed to fire.
 	projectile_type = "/obj/item/projectile/energy/electrode"
 	origin_tech = "combat=3;magnets=2"
+	modifystate = "energystun"
 
 	var
 		mode = 0 //0 = stun, 1 = kill
@@ -22,12 +23,14 @@
 				fire_sound = 'Laser.ogg'
 				user << "\red [src.name] is now set to kill."
 				projectile_type = "/obj/item/projectile/beam"
+				modifystate = "energykill"
 			if(1)
 				mode = 0
 				charge_cost = 100
 				fire_sound = 'Taser.ogg'
 				user << "\red [src.name] is now set to stun."
 				projectile_type = "/obj/item/projectile/energy/electrode"
+				modifystate = "energystun"
 		update_icon()
 		return
 

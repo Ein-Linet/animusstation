@@ -1,10 +1,18 @@
 /world/proc/load_mode()
 	var/text = file2text("data/mode.txt")
-	if (text)
+	if(text)
 		var/list/lines = dd_text2list(text, "\n")
 		if (lines[1])
 			master_mode = lines[1]
 			diary << "Saved mode is '[master_mode]'"
+
+/world/proc/load_censore()
+	var/text = file2text("html/mat.txt")
+	if(text)
+		text = sanitize(text)
+		censore = dd_text2list(text, ",")
+	else
+		diary << "Failed to load config/mat.txt\n"
 
 /world/proc/save_mode(var/the_mode)
 	var/F = file("data/mode.txt")
@@ -102,6 +110,7 @@ world/proc/check_players_online()
 	src.load_motd()
 	src.load_rules()
 	src.load_admins()
+	src.load_censore()
 	spawn(150) src.check_players_online()
 	if (config.usewhitelist)
 		load_whitelist()
