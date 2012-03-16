@@ -149,6 +149,14 @@
 				src << "\red <B>You fail to push [tmob]'s fat ass out of the way.</B>"
 				now_pushing = 0
 				return
+		if(tmob.r_hand && istype(tmob.r_hand, /obj/item/weapon/shield/riot))
+			if(prob(99))
+				now_pushing = 0
+				return
+		if(tmob.l_hand && istype(tmob.l_hand, /obj/item/weapon/shield/riot))
+			if(prob(99))
+				now_pushing = 0
+				return
 		if(tmob.nopush)
 			now_pushing = 0
 			return
@@ -922,7 +930,7 @@
 		var/t1 = shoes.icon_state
 		overlays += image("icon" = shoes.animus ? 'feet_animus.dmi' : 'feet.dmi', "icon_state" = text("[][]", t1, (!( lying ) ? null : "2")), "layer" = MOB_LAYER)
 		if (shoes.blood_DNA)
-			var/icon/stain_icon = icon('blood.dmi', "shoesblood[!lying ? "" : "2"]")
+			var/icon/stain_icon = icon('blood.dmi', "shoeblood[!lying ? "" : "2"]")
 			overlays += image("icon" = stain_icon, "layer" = MOB_LAYER)	// Radio
 /*	if (w_radio)
 		overlays += image("icon" = 'ears.dmi', "icon_state" = "headset[!lying ? "" : "2"]", "layer" = MOB_LAYER) */

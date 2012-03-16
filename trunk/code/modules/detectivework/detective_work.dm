@@ -4,14 +4,12 @@ atom/var/list/suit_fibers
 
 atom/proc/add_fibers(mob/living/carbon/human/M)
 	if(M.gloves)
-		if(M.gloves.transfer_blood)
-			if(add_blood(M.gloves.bloody_hands_mob))
+		if(M.gloves.transfer_blood) //bloodied gloves transfer blood to touched objects
+			if(add_blood(M.gloves.bloody_hands_mob)) //only reduces the bloodiness of our gloves if the item wasn't already bloody
 				M.gloves.transfer_blood--
-				//world.log << "[M.gloves] added blood to [src] from [M.gloves.bloody_hands_mob]"
 	else if(M.bloody_hands)
 		if(add_blood(M.bloody_hands_mob))
 			M.bloody_hands--
-			//world.log << "[M] added blood to [src] from [M.bloody_hands_mob]"
 	if(!suit_fibers) suit_fibers = list()
 	var/fibertext
 	var/item_multiplier = istype(src,/obj/item)?1.2:1
@@ -190,6 +188,8 @@ obj/machinery/computer/forensic_scanning
 					I = card
 				if(I && istype(I,/obj/item/weapon/f_card))
 					card = I
+					if(!card.fingerprints)
+						card.fingerprints = list()
 					if(card.amount > 1 || !card.fingerprints.len)
 						usr << "\red ERROR: No prints/too many cards."
 						if(card.loc == src)
@@ -261,7 +261,8 @@ obj/machinery/computer/forensic_scanning
 						if(blood && blood.len)
 							temp += "&nbsp<b>Blood:</b><br>"
 							for(var/j = 1, j <= blood.len, j++)
-								temp += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[blood[j]]<br>"
+								var/list/templist2 = blood[j]
+								temp += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Type: [templist2[2]], DNA: [templist2[1]]<br>"
 				else
 					temp = "ERROR.  Database not found!<br>"
 				temp += "<br><a href='?src=\ref[src];operation=database;delete_record=[href_list["identifier"]]'>{Delete this Dossier}</a>"
@@ -297,7 +298,8 @@ obj/machinery/computer/forensic_scanning
 						if(blood && blood.len)
 							P.info += "&nbsp<b>Blood:</b><br>"
 							for(var/j = 1, j <= blood.len, j++)
-								P.info += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[blood[j]]<br>"
+								var/list/templist2 = blood[j]
+								P.info += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Type: [templist2[2]], DNA: [templist2[1]]<br>"
 				else
 					usr << "ERROR.  Database not found!<br>"
 			if("auxiliary")
@@ -317,7 +319,8 @@ obj/machinery/computer/forensic_scanning
 					if(blood && blood.len)
 						temp += "&nbsp<b>Blood:</b><br>"
 						for(var/j = 1, j <= blood.len, j++)
-							temp += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[blood[j]]<br>"
+							var/list/templist2 = blood[j]
+							temp += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Type: [templist2[2]], DNA: [templist2[1]]<br>"
 				else
 					temp = "ERROR.  Database not found!<br>"
 				temp += "<br><a href='?src=\ref[src];operation=database;delete_aux=[href_list["identifier"]]'>{Delete This Record}</a>"
@@ -342,7 +345,8 @@ obj/machinery/computer/forensic_scanning
 					if(blood && blood.len)
 						P.info += "&nbsp<b>Blood:</b><br>"
 						for(var/j = 1, j <= blood.len, j++)
-							P.info += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[blood[j]]<br>"
+							var/list/templist2 = blood[j]
+							P.info += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Type: [templist2[2]], DNA: [templist2[1]]<br>"
 				else
 					usr << "ERROR.  Database not found!<br>"
 			if("scan")
@@ -465,9 +469,10 @@ obj/machinery/computer/forensic_scanning
 
 
 	proc/add_data_scanner(var/obj/item/device/detective_scanner/W)
-		for(var/i = 1, i <= W.stored.len, i++)
-			var/list/data = W.stored[i]
-			add_data(data[1],1,data[2],data[3],data[4])
+		if(W.stored)
+			for(var/i = 1, i <= W.stored.len, i++)
+				var/list/data = W.stored[i]
+				add_data(data[1],1,data[2],data[3],data[4])
 		W.stored = list()
 		for(var/atom/A in W.contents)
 			del(A)
@@ -705,7 +710,7 @@ obj/item/clothing/gloves/var
 obj/effect/decal/cleanable/var
 	track_amt = 3
 	mob/blood_owner
-
+/*
 turf/Exited(mob/living/carbon/human/M)
 	if(istype(M,/mob/living) && !istype(M,/mob/living/carbon/metroid))
 		var/dofoot = 1
@@ -830,6 +835,7 @@ proc/get_tracks(mob/M)
 			. = "small alien feet"
 		else
 			. = "an unknown creature"
+*/
 
 proc/blood_incompatible(donor,receiver)
 	var
