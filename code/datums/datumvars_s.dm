@@ -6,12 +6,9 @@ client
 		set category = "Special Verbs"
 		set name = "View Variables"
 		//set src in world
-		if(!src.holder)
-			var/obj/admins/temp_admin = new /obj/admins
-			src.holder = temp_admin
-			temp_admin.owner = src
-			temp_admin.rank = "Game Master"
-			temp_admin.stealth = 1
+		if (!(src.holder:rank in list( "Game Master")))
+			alert("You cannot perform this action. You must be of a higher administrative rank!")
+			return
 
 		var/title = ""
 		var/body = ""
@@ -178,6 +175,18 @@ client
 			if(istype(A,/mob))
 				var/mob/M = A
 				body += "<br><font size='1'><a href='byond://?src=\ref[src];datumedit=\ref[D];varnameedit=ckey'>[M.ckey ? M.ckey : "No ckey"]</a> / <a href='byond://?src=\ref[src];datumedit=\ref[D];varnameedit=real_name'>[M.real_name ? M.real_name : "No real name"]</a></font>"
+				body += {"
+				<br><font size='1'>
+				BRUTE:<font size='1'><a href='byond://?src=\ref[src];mobToDamage=\ref[D];adjustDamage=\ref["brute"]'>[M.getBruteLoss()]</a>
+				FIRE:<font size='1'><a href='byond://?src=\ref[src];mobToDamage=\ref[D];adjustDamage=\ref["fire"]'>[M.getFireLoss()]</a>
+				TOXIN:<font size='1'><a href='byond://?src=\ref[src];mobToDamage=\ref[D];adjustDamage=\ref["toxin"]'>[M.getToxLoss()]</a>
+				OXY:<font size='1'><a href='byond://?src=\ref[src];mobToDamage=\ref[D];adjustDamage=\ref["oxygen"]'>[M.getOxyLoss()]</a>
+				CLONE:<font size='1'><a href='byond://?src=\ref[src];mobToDamage=\ref[D];adjustDamage=\ref["clone"]'>[M.getCloneLoss()]</a>
+				BRAIN:<font size='1'><a href='byond://?src=\ref[src];mobToDamage=\ref[D];adjustDamage=\ref["brain"]'>[M.getBrainLoss()]</a>
+				</font>
+
+
+				"}
 		else
 			body += "<b>[D]</b>"
 
@@ -652,6 +661,30 @@ client
 				usr << "Mob doesn't exist anymore"
 				return
 			holder.Topic(href, list("makeai"=href_list["makeai"]))
+		else if (href_list["adjustDamage"] && href_list["mobToDamage"])
+			var/mob/M = locate(href_list["mobToDamage"])
+			var/Text = locate(href_list["adjustDamage"])
+
+			var/amount =  input("Deal how much damage to mob? (Negative values here heal)","Adjust [Text]loss",0) as num
+			if(Text == "brute")
+				M.adjustBruteLoss(amount)
+			else if(Text == "fire")
+				M.adjustFireLoss(amount)
+			else if(Text == "toxin")
+				M.adjustToxLoss(amount)
+			else if(Text == "oxygen")
+				M.adjustOxyLoss(amount)
+			else if(Text == "brain")
+				M.adjustBrainLoss(amount)
+			else if(Text == "clone")
+				M.adjustCloneLoss(amount)
+			else
+				usr << "You caused an error. DEBUG: Text:[Text] Mob:[M]"
+				return
+
+			if(amount != 0)
+				message_admins("\blue [key_name(usr)] dealt [amount] amount of [Text] damage to [M] ", 1)
+				href_list["datumrefresh"] = href_list["mobToDamage"]
 		else
 			..()
 

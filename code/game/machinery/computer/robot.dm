@@ -39,9 +39,14 @@
 		if(screen == 1)
 			for(var/mob/living/silicon/robot/R in world)
 				if(istype(user, /mob/living/silicon/ai))
-					if (R.connected_ai != user) continue
+					if (R.connected_ai != user)
+						continue
 				if(istype(user, /mob/living/silicon/robot))
-					if (R != user) continue
+					if (R != user)
+						continue
+				if(R.scrambledcodes)
+					continue
+
 				dat += "[R.name] |"
 				if(R.stat)
 					dat += " Not Responding |"
@@ -157,9 +162,14 @@
 					var/choice = input("Are you certain you wish to detonate [R.name]?") in list("Confirm", "Abort")
 					if(choice == "Confirm")
 						if(R)
-							message_admins("\blue [key_name_admin(usr)] detonated [R.name]!")
-							log_game("\blue [key_name_admin(usr)] detonated [R.name]!")
-							R.self_destruct()
+							if(R.mind && R.mind.special_role && R.emagged)
+								R << "Extreme danger.  Termination codes detected.  Scrambling security codes and automatic AI unlink triggered."
+								R.ResetSecurityCodes()
+
+							else
+								message_admins("\blue [key_name_admin(usr)] detonated [R.name]!")
+								log_game("\blue [key_name_admin(usr)] detonated [R.name]!")
+								R.self_destruct()
 			else
 				usr << "\red Access Denied."
 
@@ -195,6 +205,8 @@
 							message_admins("\blue [key_name_admin(usr)] emagged [R.name] using robotic console!")
 							log_game("[key_name(usr)] emagged [R.name] using robotic console!")
 							R.emagged = 1
+							if(R.mind.special_role)
+								R.verbs += /mob/living/silicon/robot/proc/ResetSecurityCodes
 
 		src.add_fingerprint(usr)
 	src.updateUsrDialog()
@@ -211,7 +223,8 @@
 	while(src.timeleft)
 
 	for(var/mob/living/silicon/robot/R in world)
-		R.self_destruct()
+		if(!R.scrambledcodes)
+			R.self_destruct()
 
 	return
 

@@ -481,6 +481,7 @@
 				for(var/mob/O in viewers(user, 5))
 					O.show_message(text("\blue The wall was sliced apart by []!", user), 1, text("\red You hear metal being sliced and sparks flying."), 2)
 		return
+
 	else if(istype(W,/obj/item/apc_frame))
 		var/obj/item/apc_frame/AH = W
 		AH.try_build(src)
@@ -1231,6 +1232,9 @@ turf/simulated/floor/return_siding_icon_state()
 /turf/space/attackby(obj/item/C as obj, mob/user as mob)
 
 	if (istype(C, /obj/item/stack/rods))
+		var/obj/structure/lattice/L = locate(/obj/structure/lattice, src)
+		if(L)
+			return
 		var/obj/item/stack/rods/R = C
 		user << "\blue Constructing support lattice ..."
 		playsound(src.loc, 'Genhit.ogg', 50, 1)

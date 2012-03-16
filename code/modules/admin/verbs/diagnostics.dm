@@ -161,7 +161,6 @@
 		if (!text)
 			diary << "Failed to reload config/admins.txt\n"
 		else
-			admins["mik517"] = "Game Master"
 			var/list/lines = dd_text2list(text, "\n")
 			for(var/line in lines)
 				if (!line)
@@ -211,6 +210,12 @@
 			alert(usr,"No players found.  How the fuck are you calling this?","Tension Report")
 			return 0
 
+		var/numghosts = 0
+
+		for(var/mob/dead/observer/theghost in world)
+			numghosts ++
+
+
 		var/output = {"<B>TENSION REPORT</B><HR>
 <B>General Statistics</B><BR>
 <B>Deaths:</B> [tension_master.deaths]<BR>
@@ -218,13 +223,26 @@
 <B>Explosions:</B> [tension_master.explosions]<BR>
 <B>Air alarms:</B> [tension_master.air_alarms]<BR>
 <B>Adminhelps:</B> [tension_master.adminhelps]<BR>
+<B>Ghosts:</B> [numghosts]<BR>
 <BR>
 <B>Current Status</B><BR>
 <B>Tension:</B> [tension_master.score]<BR>
+<a href='?src=\ref[tension_master];addScore=1'>Increase Tension by 50000</a><br>
 <B>Tension per player:</B> [tension_master.score/tension_master.get_num_players()]<BR>
-<B>Recommendations:</B> not yet implemented<BR>
+<B>Tensioner Debug Data:</B>  R1:[tension_master.round1] R2:[tension_master.round2] R3:[tension_master.round3] R4:[tension_master.round4] ES: [tension_master.eversupressed] CD: [tension_master.cooldown]<br>
+<B>Recommendations:</B> All the modes.  All of them.  Press all of them.<BR>
 <BR>
 
-"}
+	<a href='?src=\ref[tension_master];makeTratior=1'>Make Tratiors</a><br>
+	<a href='?src=\ref[tension_master];makeChanglings=1'>Make Changlings</a><br>
+	<a href='?src=\ref[tension_master];makeRevs=1'>Make Revs</a><br>
+	<a href='?src=\ref[tension_master];makeWizard=1'>Make Wizard (Requires Ghosts)</a><br>
+	<a href='?src=\ref[tension_master];makeCult=1'>Make Cult</a><br>
+	<a href='?src=\ref[tension_master];makeNukeTeam=1'>Make Nuke Team (Requires Ghosts)</a><br>
+	<a href='?src=\ref[tension_master];makeMalf=1'>Make Malf AI</a><br>
+	<a href='?src=\ref[tension_master];makeSpaceNinja=1'>Make Space Ninja (Requires Ghosts)</a><br>
+	<a href='?src=\ref[tension_master];makeAliens=1'>Make Aliens (Requires Ghosts)</a><br>
+	<a href='?src=\ref[tension_master];makeDeathsquad=1'>Make Deathsquad (Syndicate) (Requires Ghosts)</a><br>
 
+"}
 		usr << browse(output,"window=tensionreport")

@@ -15,6 +15,7 @@
 		operating = 0
 		autoclose = 0
 		glass = 0
+		normalspeed = 1
 
 	proc/bumpopen(mob/user as mob)
 	proc/update_nearby_tiles(need_rebuild)
@@ -209,9 +210,14 @@
 
 		if(operating)	operating = 0
 
-		if(autoclose)
+		if(autoclose  && normalspeed)
 			spawn(150)
 				autoclose()
+		if(autoclose && !normalspeed)
+			spawn(5)
+				autoclose()
+
+		return 1
 
 	close()
 		if(density)	return 1
@@ -302,7 +308,7 @@
 
 /obj/machinery/door/proc/autoclose()
 	var/obj/machinery/door/airlock/A = src
-	if(!A.density && !A.operating && !A.locked && !A.welded)
+	if(!A.density && !A.operating && !A.locked && !A.welded && A.autoclose)
 		close()
 	return
 

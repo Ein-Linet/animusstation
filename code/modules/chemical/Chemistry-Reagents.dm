@@ -1005,6 +1005,7 @@ datum
 				fuel.moles = 15
 				napalm.trace_gases += fuel
 				the_turf.assume_air(napalm)
+
 			reaction_turf(var/turf/T, var/volume)
 				src = null
 				var/datum/gas_mixture/napalm = new
@@ -1013,11 +1014,13 @@ datum
 				napalm.trace_gases += fuel
 				T.assume_air(napalm)
 				return
+
 			on_mob_life(var/mob/living/M as mob)
 				if(!M) M = holder.my_atom
 				M:adjustToxLoss(1)
 				..()
 				return
+
 
 		space_cleaner
 			name = "Space cleaner"
