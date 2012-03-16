@@ -34,7 +34,7 @@
 	for (var/i=0, i<700, i++) //playing all the sounds at minimum volume
 		findspace = findtext(textfile," ")
 		playsound = copytext(textfile,1,findspace) //getting a single word from the whole string
-		playsound = addtext(addtext("sound/ai/",playsound),".wav")
+		playsound = addtext(addtext("sound/ai_voice/",playsound),".wav")
 		usr << sound(playsound,0,0,0,0)
 		textfile = copytext(textfile,findspace+1) //cutting out the word we just played
 		if (findspace == 0) //end of a file, ending the loop

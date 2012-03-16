@@ -508,7 +508,7 @@
 	if (lentext(aiannouncement) > 150) //so that AI can't spam millions of a's
 		usr << "Your announcement must consist of no more than 150 characters."
 		return 0
-	if ((current_time - last_announced) > 100 || last_announced > current_time) //10 second cooldown, check for the new day
+	if ((current_time - last_announced) > 300 || last_announced > current_time) //30 seconds cooldown, check for the new day
 		last_announced = world.timeofday
 	else
 		usr << "Cannot make announcement right now."
@@ -520,7 +520,7 @@
 	for (var/i=0, i<40, i++) //40 is the maximum number of words in the announcement
 		findspace = findtext(aiannouncement," ")
 		playsound = copytext(aiannouncement,1,findspace) //extracting a word from the string
-		playsound = addtext(addtext("sound/ai/",playsound),".wav")
+		playsound = addtext(addtext("sound/ai_voice/",playsound),".wav")
 		var/z
 		z = fexists(playsound)
 		if (z > 0) //checking the existence of a file
