@@ -186,6 +186,8 @@
 			verbs += /obj/admins/proc/animuspanel
 			//verbs += /client/proc/make_space_marine
 			verbs += /client/proc/deadmin_self
+			verbs += /client/proc/edit_dbaccess
+			verbs += /client/proc/update_sql_population
 
 		if (holder.level >= 4)//Badmin********************************************************************
 			verbs += /obj/admins/proc/adrev					//toggle admin revives
@@ -437,6 +439,8 @@
 	verbs -= /client/proc/toggle_hear_radio
 	verbs -= /client/proc/tension_report
 	verbs -= /client/proc/player_panel_new
+	verbs -= /client/proc/edit_dbaccess
+	verbs -= /client/proc/update_sql_population
 	verbs -= /client/proc/toggle_gravity_on
 	verbs -= /client/proc/toggle_gravity_off
 	verbs -= /client/proc/toggle_random_events
