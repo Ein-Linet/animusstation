@@ -49,7 +49,7 @@
 
 	var/server
 	var/banappeals
-	var/serverid = ""					//server ID for some SQL tables
+	var/serverid = "ss13_white"					//server ID for some SQL tables
 
 	var/enter_whitelist = 0
 	var/whitelist_error_message = ""

@@ -83,6 +83,7 @@
 	// apply some settings from config..
 	abandon_allowed = config.respawn
 
+/*
 world/proc/check_players_online()
 	var/players_num = 0
 
@@ -97,6 +98,7 @@ world/proc/check_players_online()
 	F << players_num
 
 	spawn(3000)	src.check_players_online()
+*/
 
 /world/New()
 	src.load_configuration()
@@ -110,7 +112,7 @@ world/proc/check_players_online()
 	src.load_rules()
 	src.load_admins()
 	src.load_censore()
-	spawn(150) src.check_players_online()
+//	spawn(150) src.check_players_online()
 	if (config.usewhitelist)
 		load_whitelist()
 	if (config.enter_whitelist)

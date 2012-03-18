@@ -37,6 +37,27 @@ proc/sql_poll_admins()
 			log_game("SQL ERROR during admin polling. Error : \[[err]\]\n")
 	dbcon.Disconnect()
 
+proc/sql_update_population()
+	if(!sqllogging)
+		return
+	var/playercount = 0
+	var/admincount = 0
+	for(var/mob/M in world)
+		if(M.client)
+			playercount += 1
+			if(M.client.holder && M.client.authenticated)
+				admincount += 1
+	var/DBConnection/dbcon = new()
+	dbcon.Connect("dbi:mysql:[sqldb]:[sqladdress]:[sqlport]","[sqllogin]","[sqlpass]")
+	if(!dbcon.IsConnected())
+		log_game("SQL ERROR during player polling. Failed to connect.")
+	else
+		var/DBQuery/query = dbcon.NewQuery("UPDATE `tgstation`.`population` SET `playercount` = '[playercount]',`admincount` = '[admincount]',`time` = NOW() WHERE `population`.`serverid` = '[config.serverid]'")
+		if(!query.Execute())
+			var/err = query.ErrorMsg()
+			log_game("SQL ERROR during player polling. Error : \[[err]\]\n")
+	dbcon.Disconnect()
+
 proc/sql_report_round_start()
 	// TODO
 	if(!sqllogging)
@@ -124,9 +145,10 @@ proc/statistic_cycle()
 	if(!sqllogging)
 		return
 	while(1)
-		sql_poll_players()
+		/*sql_poll_players()
 		sleep(600)
-		sql_poll_admins()
+		sql_poll_admins()*/
+		sql_update_population()
 		sleep(6000) // Poll every ten minutes
 
 //This proc is used for feedback. It is executed at round end.
