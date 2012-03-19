@@ -1,7 +1,9 @@
-#define PLAYER_WEIGHT 1
-#define HUMAN_DEATH -500
-#define OTHER_DEATH -500
-#define EXPLO_SCORE -1000 //boum
+#define PLAYER_WEIGHT 5
+#define HUMAN_DEATH -5000
+#define OTHER_DEATH -5000
+#define EXPLO_SCORE -10000 //boum
+
+#define COOLDOWN_TIME 12000 // Twenty minutes
 
 //estimated stats
 //80 minute round
@@ -38,16 +40,16 @@ var/global/datum/tension/tension_master
 	var/round4 = 0
 
 	var/list/antagonistmodes = list (
-	"POINTS_FOR_TRATIOR" 	=	10000,
-	"POINTS_FOR_CHANGLING"	=	12000,
-	"POINTS_FOR_REVS"		=	15000,
-	"POINTS_FOR_MALF"		=	25000,
-	"POINTS_FOR_WIZARD"		=	15000,
- 	"POINTS_FOR_CULT"		=	15000,
- 	"POINTS_FOR_NUKETEAM"	=	25000,
- 	"POINTS_FOR_ALIEN"		=	20000,
- 	"POINTS_FOR_NINJA"		=	20000,
- 	"POINTS_FOR_DEATHSQUAD"	=	50000
+	"POINTS_FOR_TRATIOR" 	=	100000,
+	"POINTS_FOR_CHANGLING"	=	120000,
+	"POINTS_FOR_REVS"		=	150000,
+	"POINTS_FOR_MALF"		=	250000,
+	"POINTS_FOR_WIZARD"		=	150000,
+ 	"POINTS_FOR_CULT"		=	150000,
+ 	"POINTS_FOR_NUKETEAM"	=	250000,
+ 	"POINTS_FOR_ALIEN"		=	200000,
+ 	"POINTS_FOR_NINJA"		=	200000,
+ 	"POINTS_FOR_DEATHSQUAD"	=	500000
 	)
 
 	var/list/potentialgames = list()
@@ -64,12 +66,12 @@ var/global/datum/tension/tension_master
 		score += get_num_players()*PLAYER_WEIGHT
 
 		if(config.Tensioner_Active)
-			if(score > 10000)
+			if(score > 100000)
 				round1++
 				if(!supress && !cooldown)
 					if(prob(1) || forcenexttick)
 						round2++
-						if(prob(50) || forcenexttick)
+						if(prob(10) || forcenexttick)
 							round3++
 							if(forcenexttick)
 								forcenexttick = 0
@@ -81,7 +83,7 @@ var/global/datum/tension/tension_master
 							spawn(300)
 								if(!supress)
 									cooldown = 1
-									spawn(6000)
+									spawn(COOLDOWN_TIME)
 										cooldown = 0
 									round4++
 									for(var/V in antagonistmodes)			// OH SHIT SOMETHING IS GOING TO HAPPEN NOW
@@ -228,6 +230,9 @@ var/global/datum/tension/tension_master
 			spawn(6000)
 				supress = 0
 
+		else if (href_list["ToggleStatus"])
+			config.Tensioner_Active = !config.Tensioner_Active
+
 
 	proc/makeMalfAImode()
 
@@ -235,7 +240,7 @@ var/global/datum/tension/tension_master
 		var/mob/living/silicon/malfAI = null
 		var/datum/mind/themind = null
 
-		for(var/mob/living/silicon/ai in world)
+		for(var/mob/living/silicon/ai/ai in world)
 			if(ai.client)
 				AIs += ai
 
@@ -264,9 +269,10 @@ var/global/datum/tension/tension_master
 			if(applicant.stat < 2)
 				if(applicant.mind)
 					if (!applicant.mind.special_role)
-						if(!(applicant.job in temp.restricted_jobs))
-							if(applicant.client)
-								candidates += applicant
+						if(!jobban_isbanned(applicant, "traitor") && !jobban_isbanned(applicant, "Syndicate"))
+							if(!(applicant.job in temp.restricted_jobs))
+								if(applicant.client)
+									candidates += applicant
 
 		if(candidates.len)
 			var/numTratiors = min(candidates.len, 3)
@@ -294,9 +300,10 @@ var/global/datum/tension/tension_master
 			if(applicant.stat < 2)
 				if(applicant.mind)
 					if (!applicant.mind.special_role)
-						if(!(applicant.job in temp.restricted_jobs))
-							if(applicant.client)
-								candidates += applicant
+						if(!jobban_isbanned(applicant, "changeling") && !jobban_isbanned(applicant, "Syndicate"))
+							if(!(applicant.job in temp.restricted_jobs))
+								if(applicant.client)
+									candidates += applicant
 
 		if(candidates.len)
 			var/numChanglings = min(candidates.len, 3)
@@ -323,9 +330,10 @@ var/global/datum/tension/tension_master
 			if(applicant.stat < 2)
 				if(applicant.mind)
 					if (!applicant.mind.special_role)
-						if(!(applicant.job in temp.restricted_jobs))
-							if(applicant.client)
-								candidates += applicant
+						if(!jobban_isbanned(applicant, "revolutionary") && !jobban_isbanned(applicant, "Syndicate"))
+							if(!(applicant.job in temp.restricted_jobs))
+								if(applicant.client)
+									candidates += applicant
 		if(candidates.len)
 			var/numRevs = min(candidates.len, 3)
 
@@ -344,14 +352,15 @@ var/global/datum/tension/tension_master
 		var/time_passed = world.time
 
 		for(var/mob/dead/observer/G in world)
-			spawn(0)
-				switch(alert(G, "Do you wish to be considered for the position of Space Wizard Foundation 'diplomat'?","Please answer in 30 seconds!","Yes","No"))
-					if("Yes")
-						if((world.time-time_passed)>300)//If more than 30 game seconds passed.
+			if(!jobban_isbanned(G, "wizard") && !jobban_isbanned(G, "Syndicate"))
+				spawn(0)
+					switch(alert(G, "Do you wish to be considered for the position of Space Wizard Foundation 'diplomat'?","Please answer in 30 seconds!","Yes","No"))
+						if("Yes")
+							if((world.time-time_passed)>300)//If more than 30 game seconds passed.
+								return
+							candidates += G
+						if("No")
 							return
-						candidates += G
-					if("No")
-						return
 
 
 		spawn(300)
@@ -383,9 +392,10 @@ var/global/datum/tension/tension_master
 			if(applicant.stat < 2)
 				if(applicant.mind)
 					if (!applicant.mind.special_role)
-						if(!(applicant.job in temp.restricted_jobs))
-							if(applicant.client)
-								candidates += applicant
+						if(!jobban_isbanned(applicant, "cultist") && !jobban_isbanned(applicant, "Syndicate"))
+							if(!(applicant.job in temp.restricted_jobs))
+								if(applicant.client)
+									candidates += applicant
 
 		if(candidates.len)
 			var/numCultists = min(candidates.len, 4)
@@ -409,14 +419,15 @@ var/global/datum/tension/tension_master
 		var/time_passed = world.time
 
 		for(var/mob/dead/observer/G in world)
-			spawn(0)
-				switch(alert(G,"Do you wish to be considered for a nuke team being sent in?","Please answer in 30 seconds!","Yes","No"))
-					if("Yes")
-						if((world.time-time_passed)>300)//If more than 30 game seconds passed.
+			if(!jobban_isbanned(G, "operative") && !jobban_isbanned(G, "Syndicate"))
+				spawn(0)
+					switch(alert(G,"Do you wish to be considered for a nuke team being sent in?","Please answer in 30 seconds!","Yes","No"))
+						if("Yes")
+							if((world.time-time_passed)>300)//If more than 30 game seconds passed.
+								return
+							candidates += G
+						if("No")
 							return
-						candidates += G
-					if("No")
-						return
 
 
 		spawn(300)
@@ -499,7 +510,7 @@ var/global/datum/tension/tension_master
 		var/mob/dead/observer/theghost = null
 		var/time_passed = world.time
 		var/input = "Purify the station."
-		if(prob(1))
+		if(prob(10))
 			input = "Save Runtime and any other cute things on the station."
 	/*
 		if (emergency_shuttle.direction == 1 && emergency_shuttle.online == 1)
@@ -542,12 +553,12 @@ var/global/datum/tension/tension_master
 							del(new_syndicate_commando)
 							break
 
-							new_syndicate_commando.mind.key = theghost.key//For mind stuff.
-							new_syndicate_commando.key = theghost.key
-							new_syndicate_commando.internal = new_syndicate_commando.s_store
-							new_syndicate_commando.internals.icon_state = "internal1"
-							candidates -= theghost
-							del(theghost)
+						new_syndicate_commando.mind.key = theghost.key//For mind stuff.
+						new_syndicate_commando.key = theghost.key
+						new_syndicate_commando.internal = new_syndicate_commando.s_store
+						new_syndicate_commando.internals.icon_state = "internal1"
+						candidates -= theghost
+						del(theghost)
 
 						//So they don't forget their code or mission.
 						new_syndicate_commando.mind.store_memory("<B>Mission:</B> \red [input].")
