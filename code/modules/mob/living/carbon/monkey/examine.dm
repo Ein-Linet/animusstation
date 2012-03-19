@@ -1,6 +1,11 @@
 /mob/living/carbon/monkey/examine()
 	set src in oview()
 
+	if(!usr || !src)	return
+	if(((usr.sdisabilities & 1) || usr.blinded || usr.stat) && !(istype(usr,/mob/dead/observer/)))
+		usr << "<span class='notice'>Something is there but you can't see it.</span>"
+		return
+
 	var/msg = "<span class='info'>*---------*\nThis is \icon[src] \a <EM>[src]</EM>!\n"
 
 	if (src.handcuffed)
@@ -30,6 +35,9 @@
 		if (src.stat == UNCONSCIOUS)
 			msg += "It isn't responding to anything around it; it seems to be asleep.\n"
 		msg += "</span>"
+
+	if (src.digitalcamo)
+		msg += "It looks replusingly uncanny!\n"
 
 	msg += "*---------*</span>"
 

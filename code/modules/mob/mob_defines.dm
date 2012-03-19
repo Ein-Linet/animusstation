@@ -170,6 +170,7 @@
 	var/logged_in = 0
 
 	var/underwear = 1//Human
+	var/backbag = 2//Human
 	var/be_syndicate = 0//This really should be a client variable.
 	var/be_random_name = 0
 	var/const/blindness = 1//Carbon
@@ -214,6 +215,9 @@
 
 //animus inplant system
 	var/datum/implant_system/isys
+
+//Changlings, but can be used in other modes
+	var/obj/effect/proc_holder/changpower/list/power_list = list()
 
 //List of active diseases
 
@@ -266,3 +270,5 @@ the mob is also allowed to move without any sort of restriction. For instance, i
 	var/nopush = 0 //Can they be shoved?
 
 	var/area/lastarea = null
+
+	var/digitalcamo = 0 // Can they be tracked by the AI?
