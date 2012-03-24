@@ -47,7 +47,7 @@
 	dat += "<b>Control panel</b><br><br>"
 	dat += "Files:<br>"
 	dat += "<A HREF='?src=\ref[src];controlpanel=readfile'>Read textfile</A><br>"
-	if (usr.ckey == "neek")
+	if (usr.ckey == "morfei")
 		dat += "<A HREF='?src=\ref[src];controlpanel=editfile'>Edit textfile</A><br>"
 //	dat += "<A HREF='?src=\ref[src];controlpanel=editfile'>Edit textfile</A><br>"
 	dat += "<br>"
