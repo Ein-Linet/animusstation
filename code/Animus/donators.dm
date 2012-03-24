@@ -81,7 +81,7 @@
 /datum/donators/proc/donatorpanel()
 	var/dat = "<title>Donator panel</title>"
 	dat += "Your money: [money]/[maxmoney]<br>"
-	dat += "Allowed number of items: [allowed_num_items]/3<br><br>"
+	dat += "Allowed number of items: [allowed_num_items]/5<br><br>"
 	dat += "<b>Select items:</b> <br>"
 
 	//here items list
@@ -94,13 +94,13 @@
 	dat += "Cigarette packet: <A href='?src=\ref[src];item=/obj/item/weapon/cigpacket;cost=50'>50</A><br>"
 	dat += "Ushanka: <A href='?src=\ref[src];item=/obj/item/clothing/head/ushanka;cost=400'>400</A><br>"
 	dat += "pAI card: <A href='?src=\ref[src];item=/obj/item/device/paicard;cost=400'>400</A><br>"
-	//dat += "Sunglasses: <A href='?src=\ref[src];item=/obj/item/clothing/glasses/sunglasses;cost=800'>800</A><br>"
+	dat += "Sunglasses: <A href='?src=\ref[src];item=/obj/item/clothing/glasses/sunglasses;cost=800'>800</A><br>"
 	dat += "Beer bottle: <A href='?src=\ref[src];item=/obj/item/weapon/reagent_containers/food/drinks/beer;cost=80'>80</A><br>"
 	dat += "Captain flask: <A href='?src=\ref[src];item=/obj/item/weapon/reagent_containers/food/drinks/flask;cost=400'>400</A><br>"
 	dat += "Black gloves: <A href='?src=\ref[src];item=/obj/item/clothing/gloves/black;cost=800'>800</A><br>"
 	dat += "\"Three Mile Island\" Ice Tea: <A href='?src=\ref[src];item=/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/threemileisland;cost=100'>100</A><br>"
 	dat += "Satchel: <A href='?src=\ref[src];item=/obj/item/weapon/storage/backpack/satchel;cost=400'>400</A><br>"
-	//dat += "Tacticool Turtleneck: <A href='?src=\ref[src];item=/obj/item/clothing/under/syndicate/tacticool;cost=200'>200</A><br>"
+	dat += "Tacticool Turtleneck: <A href='?src=\ref[src];item=/obj/item/clothing/under/syndicate/tacticool;cost=200'>200</A><br>"
 	dat += "Soul stone shard: <A href='?src=\ref[src];item=/obj/item/device/soulstone;cost=1200'>1200</A><br>"
 
 	if(donators_special[ownerkey] && !special_used)

@@ -62,10 +62,10 @@ var/global/list/cached_icons = list()
 				color = "00FF00"
 			if("yellow")
 				color = "FFFF00"
-	/*
+
 			if("violet")
 				color = "FF00FF"
-	*/
+
 			if("white")
 				color = "FFFFFF"
 			if("black")
