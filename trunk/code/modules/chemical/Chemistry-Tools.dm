@@ -1986,7 +1986,7 @@
 
 	New()
 		..()
-		reagents.add_reagent("chloralhydrate", 15)		//Intentionally low since it is so strong. Still enough to knock someone out.
+		reagents.add_reagent("chloralhydrate", 30)		//Intentionally low since it is so strong. Still enough to knock someone out.
 
 /obj/item/weapon/reagent_containers/glass/bottle/antitoxin
 	name = "anti-toxin bottle"
@@ -2103,7 +2103,7 @@
 		var/datum/disease/F = new /datum/disease/fake_gbs(0)
 		var/list/data = list("viruses"= list(F))
 		reagents.add_reagent("blood", 20, data)
-/*
+
 /obj/item/weapon/reagent_containers/glass/bottle/rhumba_beat
 	name = "Rhumba Beat culture bottle"
 	desc = "A small bottle. Contains The Rhumba Beat culture in synthblood medium."//Or simply - General BullShit
@@ -2118,7 +2118,46 @@
 		var/datum/disease/F = new /datum/disease/rhumba_beat
 		var/list/data = list("virus"= F)
 		R.add_reagent("blood", 20, data)
-*/
+
+/obj/item/weapon/reagent_containers/glass/bottle/zombiepowder
+	name = "Zombie Powder Bottle"
+	desc = "A small bottle of Zombie Powder. Santiago Delaverte's Favorite!"
+	icon = 'chemical.dmi'
+	icon_state = "bottle20"
+
+	New()
+		..()
+		reagents.add_reagent("zombiepowder", 30)
+
+/obj/item/weapon/reagent_containers/glass/bottle/LSD
+	name = "LSD Bottle"
+	desc = "A small bottle of LSD.Butch Glover's Favorite!"
+	icon = 'chemical.dmi'
+	icon_state = "bottle20"
+
+	New()
+		..()
+		reagents.add_reagent("LSD", 30)
+
+/obj/item/weapon/reagent_containers/glass/bottle/xenomicrobes
+	name = "Xenomicrobes Bottle"
+	desc = "A small bottle of Xenomicrobes.Horse With No Name's Favorite!"
+	icon = 'chemical.dmi'
+	icon_state = "bottle20"
+
+	New()
+		..()
+		reagents.add_reagent("xenomicrobes", 30)
+
+/obj/item/weapon/reagent_containers/glass/bottle/nanites
+	name = "Nanomachines Bottle"
+	desc = "A small bottle of Nanomachines.Quin Tei's Favorite!"
+	icon = 'chemical.dmi'
+	icon_state = "bottle20"
+
+	New()
+		..()
+		reagents.add_reagent("nanites", 30)
 
 /obj/item/weapon/reagent_containers/glass/bottle/brainrot
 	name = "Brainrot culture bottle"
@@ -2252,6 +2291,15 @@
 		reagents.add_reagent("anti_toxin", 15)
 		mode = SYRINGE_INJECT
 		update_icon()
+
+/obj/item/weapon/lubricatecleaner
+	name = "Lubricate Cleaner"
+	desc = "Weird looking cleaner. You don't know what the goddamn thing it is."
+	icon_state = "cleaner"
+	item_state = "cleaner"
+	New()
+		..()
+		reagents.add_reagent("lube", 250)
 
 /obj/item/weapon/reagent_containers/syringe/antiviral
 	name = "Syringe (spaceacillin)"
