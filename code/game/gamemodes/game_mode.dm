@@ -60,67 +60,67 @@ Devices and Tools;
 /obj/item/weapon/circuitboard/teleporter:20:Teleporter Circuit Board;
 Whitespace:Seperator;
 Profession Tools;
-switch (traitor_job)
-		if ("Clown")
-/obj/item/weapon/flashbang/clusterbang:2:Clusterbang;
-		if ("Atmospheric Technician")
-/obj/item/weapon/fireaxe:5:Fireaxe;
-		if ("Scientist")
-/obj/item/device/transfer_valve/syndie:3:Syndicate Transfer Valve;
-		if ("Research Director")
-/obj/item/weapon/reagent_containers/glass/bottle/xenomicrobes:7:Xenomicrobes Bottle;
-		if ("Geneticist")
-/obj/item/weapon/storage/box/gen_bundle:6:Genetic Bundle;
-		if ("Captain")
-/obj/item/weapon/aiModule/obeyMaster:5:AI Master Module;
-		if ("Assistant")
-/obj/item/weapon/card/captain/:10:Captain Card;
-		if ("Bartender")
-/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate:4:Chloralhydrate Bottle;
-		if ("Chaplain")
-/obj/item/weapon/storage/belt/soulstone:8:Soulstone Belt;
-		if ("Chef")
-/obj/item/weapon/reagent_containers/food/drinks/jar:4:Metroid Jam;
-		if ("Botanist")
-/obj/item/seeds/angelmycelium:3:Destroying Angel Seed;
-		if ("Janitor")
-/obj/item/weapon/lubricatecleaner:6:Lubricate Cleaner;
-		if ("Lawyer")
-/obj/item/weapon/gun/energy/temperature:5:Gun of Space Law;
-		if ("Mime")
-/obj/item/weapon/paint/anycolor:2:Paint Bucket;
-		if ("Librarian")
-/obj/item/weapon/pen/sleepy:3:Sleepy Pen;
-		if ("Chief Engineer")
-/obj/item/weapon/cell/hyper:4:Hyper Cell;
-		if ("Station Engineer")
-/obj/item/weapon/flamethrower/full:5:Flamethrower;
-		if ("Shaft Miner")
-/obj/item/weapon/pickaxe/diamonddrill:10:Diamond Drill;
-		if ("Quartermaster")
-/obj/item/weapon/spacecash/c1000:1:Space Credits;
-		if ("Cargo Technician")
-/obj/item/clothing/mask/cigarette/cigar/havana:1:Contraband Havana Cigar;
-		if ("Chief Medical Officer")
-/obj/item/weapon/chemsprayer:4:Chemical Sprayer;
-		if ("Chemist")
-/obj/item/weapon/reagent_containers/glass/bottle/cyanide:5:Cyanide Bottle;
-		if ("Medical Doctor")
-/obj/item/weapon/staff/stick:1:Dr.House's Stick;
-		if ("Virologist")
-/obj/item/weapon/reagent_containers/glass/bottle/gbs:7:True GBS Bottle;
-		if ("Roboticist")
-/obj/item/weapon/reagent_containers/glass/bottle/nanites:5:Nanites Bottle;
-		if ("Head of Personnel")
-/obj/effect/mine/proc/triggern2o(obj):5:N2O mine;
-		if ("Head of Security")
-/obj/machinery/deployable/barrier:3:Deployable Barrier;
-		if ("Detective")
-/obj/item/weapon/gun/energy/stunrevolver:4:Stun Revolver;
-		if ("Security Officer")
-/obj/item/weapon/melee/classic_baton:3:Classic Baton;
-		if ("Warden")
-/obj/structure/stool/bed/chair/e_chair:4:Electric Chair;
+			switch (traitor_job)
+				if ("Clown")
+				/obj/item/weapon/flashbang/clusterbang:2:Clusterbang;
+				if ("Atmospheric Technician")
+				/obj/item/weapon/fireaxe:5:Fireaxe;
+				if ("Scientist")
+				/obj/item/device/transfer_valve/syndie:3:Syndicate Transfer Valve;
+				if ("Research Director")
+				/obj/item/weapon/reagent_containers/glass/bottle/xenomicrobes:7:Xenomicrobes Bottle;
+				if ("Geneticist")
+				/obj/item/weapon/storage/box/gen_bundle:6:Genetic Bundle;
+				if ("Captain")
+				/obj/item/weapon/aiModule/obeyMaster:5:AI Master Module;
+				if ("Assistant")
+				/obj/item/weapon/card/captain/:10:Captain Card;
+				if ("Bartender")
+				/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate:4:Chloralhydrate Bottle;
+				if ("Chaplain")
+				/obj/item/weapon/storage/belt/soulstone:8:Soulstone Belt;
+				if ("Chef")
+				/obj/item/weapon/reagent_containers/food/drinks/jar:4:Metroid Jam;
+				if ("Botanist")
+				/obj/item/seeds/angelmycelium:3:Destroying Angel Seed;
+				if ("Janitor")
+				/obj/item/weapon/lubricatecleaner:6:Lubricate Cleaner;
+				if ("Lawyer")
+				/obj/item/weapon/gun/energy/temperature:5:Gun of Space Law;
+				if ("Mime")
+				/obj/item/weapon/paint/anycolor:2:Paint Bucket;
+				if ("Librarian")
+				/obj/item/weapon/pen/sleepy:3:Sleepy Pen;
+				if ("Chief")
+				/obj/item/weapon/cell/hyper:4:Hyper Cell;
+				if ("Engineer")
+				/obj/item/weapon/flamethrower/full:5:Flamethrower;
+				if ("Miner")
+				/obj/item/weapon/pickaxe/diamonddrill:10:Diamond Drill;
+				if ("Quartermaster")
+				/obj/item/weapon/spacecash/c1000:1:Space Credits;
+				if ("CargoTech")
+				/obj/item/clothing/mask/cigarette/cigar/havana:1:Contraband Havana Cigar;
+				if ("Chief Medical Officer")
+				/obj/item/weapon/chemsprayer:4:Chemical Sprayer;
+				if ("Chemist")
+				/obj/item/weapon/reagent_containers/glass/bottle/cyanide:5:Cyanide Bottle;
+				if ("Medical Doctor")
+				/obj/item/weapon/staff/stick:1:Dr.House's Stick;
+				if ("Virologist")
+				/obj/item/weapon/reagent_containers/glass/bottle/gbs:7:True GBS Bottle;
+				if ("Roboticist")
+				/obj/item/weapon/reagent_containers/glass/bottle/nanites:5:Nanites Bottle;
+				if ("Head Of Personnel")
+				/obj/effect/mine/proc/triggern2o(obj):5:N2O mine;
+				if ("Head Of Security")
+				/obj/machinery/deployable/barrier:3:Deployable Barrier;
+				if ("Detective")
+				/obj/item/weapon/gun/energy/stunrevolver:4:Stun Revolver;
+				if ("Security Officer")
+				/obj/item/weapon/melee/classic_baton:3:Classic Baton;
+				if ("Warden")
+				/obj/structure/stool/bed/chair/e_chair:4:Electric Chair;
 Whitespace:Seperator;
 Implants;
 /obj/item/weapon/storage/syndie_kit/imp_freedom:3:Freedom Implant;

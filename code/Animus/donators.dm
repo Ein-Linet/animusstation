@@ -81,12 +81,12 @@
 /datum/donators/proc/donatorpanel()
 	var/dat = "<title>Donator panel</title>"
 	dat += "Your money: [money]/[maxmoney]<br>"
-	dat += "Allowed number of items: [allowed_num_items]/5<br><br>"
+	dat += "Allowed number of items: [allowed_num_items]/3<br><br>"
 	dat += "<b>Select items:</b> <br>"
 
 	//here items list
 
-	dat += "Premium Havanian Cigar: <A href='?src=\ref[src];item=/obj/item/clothing/mask/cigarette/cigar/havanian;cost=250'>250</A><br>"
+	dat += "Premium Havanian Cigar: <A href='?src=\ref[src];item=/obj/item/clothing/mask/cigarette/cigar/havana;cost=250'>250</A><br>"
 	dat += "Kitty Ears: <A href='?src=\ref[src];item=/obj/item/clothing/head/kitty;cost=800'>800</A><br>"
 	dat += "Eye patch: <A href='?src=\ref[src];item=/obj/item/clothing/glasses/eyepatch;cost=200'>200</A><br>"
 	dat += "Walking stick: <A href='?src=\ref[src];item=/obj/item/weapon/staff/stick;cost=200'>200</A><br>"
