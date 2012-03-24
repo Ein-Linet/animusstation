@@ -74,6 +74,8 @@ var/global/list/datum/stack_recipe/metal_recipes = list ( \
 	null, \
 	new/datum/stack_recipe("canister", /obj/machinery/portable_atmospherics/canister, 2, one_per_turf = 1, on_floor = 1), \
 	null, \
+	new/datum/stack_recipe("Plasteel Sheet", /obj/item/stack/sheet/plasteel, 2, 1, 50), \
+	null, \
 	new/datum/stack_recipe("floor tile", /obj/item/stack/tile/plasteel, 1, 4, 10), \
 	new/datum/stack_recipe("metal rod", /obj/item/stack/rods, 1, 2, 60), \
 	null, \
