@@ -84,19 +84,23 @@ RCD
 					user << "The RCD now holds [matter]/30 matter-units."
 					desc = "A RCD. It currently holds [matter]/30 matter-units."
 				return
-			if(istype(A, /turf/simulated/floor) && matter >= 3)
-				user << "Building Wall (3)..."
-				playsound(src.loc, 'click.ogg', 50, 1)
-				if(do_after(user, 20))
-					if(!disabled && matter >= 3)
-						spark_system.set_up(5, 0, src)
-						src.spark_system.start()
-						A:ReplaceWithWall()
-						playsound(src.loc, 'Deconstruct.ogg', 50, 1)
+		if (istype(A, /turf/simulated/floor) && matter >= 3)
+			user << "Building Wall (3)..."
+			playsound(src.loc, 'click.ogg', 50, 1)
+			if(do_after(user, 20))
+				if (!disabled)
+					spark_system.set_up(5, 0, src)
+					src.spark_system.start()
+					A:ReplaceWithWall()
+					playsound(src.loc, 'Deconstruct.ogg', 50, 1)
+					if (isrobot(user))
+						var/mob/living/silicon/robot/engy = user
+						engy.cell.charge -= 90
+					else
 						matter -= 3
 						user << "The RCD now holds [matter]/30 matter-units."
 						desc = "A RCD. It currently holds [matter]/30 matter-units."
-				return
+			return
 		else if(istype(A, /turf/simulated/floor) && mode == 2 && matter >= 10)
 			user << "Building Airlock (10)..."
 			playsound(src.loc, 'click.ogg', 50, 1)
@@ -116,22 +120,40 @@ RCD
 					user << "The RCD now holds [matter]/30 matter-units."
 					desc = "A RCD. It currently holds [matter]/30 matter-units."
 			return
-		else if(mode == 3 && (istype(A, /turf) || istype(A, /obj/machinery/door/airlock) ) )
-			if(istype(A, /turf/simulated/wall) && !istype(A, /turf/simulated/wall/r_wall) && matter >= 4)
-				user << "Deconstructing Wall (4)..."
-				playsound(src.loc, 'click.ogg', 50, 1)
-				if(do_after(user, 40))
-					if(!disabled && matter >= 4)
-						spark_system.set_up(5, 0, src)
-						src.spark_system.start()
-						A:ReplaceWithPlating()
-						playsound(src.loc, 'Deconstruct.ogg', 50, 1)
-						matter -= 4
+		else if (mode == 3 && (istype(A, /turf/simulated/wall) && matter >= 5) )
+			user << "Deconstructing Wall (5)..."
+			playsound(src.loc, 'click.ogg', 50, 1)
+			if(do_after(user, 50))
+				if (!disabled)
+					spark_system.set_up(5, 0, src)
+					src.spark_system.start()
+					A:ReplaceWithFloor()
+					playsound(src.loc, 'Deconstruct.ogg', 50, 1)
+					if (isrobot(user))
+						var/mob/living/silicon/robot/engy = user
+						engy.cell.charge -= 150
+					else
+						matter -= 5
 						user << "The RCD now holds [matter]/30 matter-units."
 						desc = "A RCD. It currently holds [matter]/30 matter-units."
-				return
-			if(istype(A, /turf/simulated/wall/r_wall))
-				return
+			return
+		if (istype(A, /turf/simulated/wall/r_wall) && matter >= 5)
+			user << "Deconstructing RWall (5)..."
+			playsound(src.loc, 'click.ogg', 50, 1)
+			if(do_after(user, 50))
+				if (!disabled)
+					spark_system.set_up(5, 0, src)
+					src.spark_system.start()
+					A:ReplaceWithWall()
+					playsound(src.loc, 'Deconstruct.ogg', 50, 1)
+					if (isrobot(user))
+						var/mob/living/silicon/robot/engy = user
+						engy.cell.charge -= 150
+					else
+						matter -= 5
+						user << "The RCD now holds [matter]/30 matter-units."
+						desc = "A RCD. It currently holds [matter]/30 matter-units."
+			return
 			if(istype(A, /turf/simulated/floor) && matter >= 5)
 				user << "Deconstructing Floor (5)..."
 				playsound(src.loc, 'click.ogg', 50, 1)

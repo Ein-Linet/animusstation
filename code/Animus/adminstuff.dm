@@ -60,17 +60,17 @@
 	dat += "Spy: <A HREF='?src=\ref[src];controlpanel=sql_spyjustshow'>show selected ckey info</A><br>"
 	dat += "Spy: <A HREF='?src=\ref[src];controlpanel=sql_findip'>find ip</A><br>"
 	dat += "Spy: <A HREF='?src=\ref[src];controlpanel=sql_findcompid'>find compid</A><br>"
-//	dat += "Population: <A HREF='?src=\ref[src];controlpanel=sql_population'>create data file</A><br>"
+	dat += "Population: <A HREF='?src=\ref[src];controlpanel=sql_population'>create data file</A><br>"
 	dat += "Log: <A HREF='?src=\ref[src];controlpanel=sql_banslog'>bans log</A><br>"
 	dat += "Log: <A HREF='?src=\ref[src];controlpanel=sql_banslogspecial'>show bans log for ckey</A><br>"
 	dat += "<br>"
 	dat += "Other:<br>"
 	dat += "<A HREF='?src=\ref[src];controlpanel=checkdonators'>Check donators list</A><br>"
+	dat += "<A HREF='?src=\ref[src];controlpanel=reloadipblocks'>Reload IP blocks</A><br>"
 //	dat += "<A HREF='?src=\ref[src];controlpanel=reloadipblocks'>Reload IP blocks</A><br>"
-//	dat += "<A HREF='?src=\ref[src];controlpanel=reloadipblocks'>Reload IP blocks</A><br>"
-//	dat += "<A HREF='?src=\ref[src];controlpanel=spybackup'>Spy database backup</A><br>"
+	dat += "<A HREF='?src=\ref[src];controlpanel=spybackup'>Spy database backup</A><br>"
 
-//	dat += "<br><br><A HREF='?src=\ref[src];controlpanel=oldbanstodb'>Move bans to DB</A> - use only once!<br>"
+	dat += "<br><br><A HREF='?src=\ref[src];controlpanel=oldbanstodb'>Move bans to DB</A> - use only once!<br>"
 
 	usr << browse(dat, "window=controlpanel")
 
