@@ -30,7 +30,7 @@ var/global/datum/controller/gameticker/ticker
 
 
 /datum/controller/gameticker/proc/pregame()
-	login_music = pick('title2.ogg') // choose title music!
+	login_music = pick('title2.ogg','Parity.ogg','Spesschem.ogg','Zombienomad.ogg') // choose title music!
 
 	do
 		pregame_timeleft = 30

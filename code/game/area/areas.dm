@@ -316,8 +316,9 @@
 			if ("AI Satellite Teleporter Room") sound = pick('ambimalf.ogg')
 			if ("AI Upload Foyer") sound = pick('ambimalf.ogg')
 			if ("AI Upload Chamber") sound = pick('ambimalf.ogg')
-			if ("Mine")
-				sound = pick('ambimine.ogg')
+			if ("Mine") sound = pick('ambimine.ogg')
+			if ("Bar")
+				sound = pick('Parity.ogg')
 				musVolume = 25
 			else
 				sound = pick('ambigen1.ogg','ambigen3.ogg','ambigen4.ogg','ambigen5.ogg','ambigen6.ogg','ambigen7.ogg','ambigen8.ogg','ambigen9.ogg','ambigen10.ogg','ambigen11.ogg','ambigen12.ogg','ambigen14.ogg')

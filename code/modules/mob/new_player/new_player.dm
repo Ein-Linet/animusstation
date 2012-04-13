@@ -145,7 +145,7 @@
 			if(waits >= maxwaits)
 				break
 
-		src << sound(ticker.login_music, repeat = 0, wait = 0, volume = 85, channel = 1) // MAD JAMS
+		src << sound(ticker.login_music, repeat = 1, wait = 0, volume = 85, channel = 1) // MAD JAMS
 
 	Stat()
 		..()
