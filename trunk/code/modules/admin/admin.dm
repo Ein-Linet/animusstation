@@ -2634,6 +2634,22 @@
 	log_admin("[key_name(usr)] toggled OOC.")
 	message_admins("[key_name_admin(usr)] toggled Dead OOC.", 1)
 
+/obj/admins/proc/checkooc()
+	set category = "Server"
+	set desc="Check dis bitch"
+	set name="Check OOC"
+	if (ooc_allowed)
+		alert("OOC is on")
+	else
+		alert("OOC is off")
+
+	if (dooc_allowed)
+		alert("dOOC is on")
+	else
+		alert("dOOC is off")
+
+	log_admin("[key_name(usr)] checked OOC.")
+
 /obj/admins/proc/toggletraitorscaling()
 	set category = "Server"
 	set desc="Toggle traitor scaling"

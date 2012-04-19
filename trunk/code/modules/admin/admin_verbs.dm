@@ -264,6 +264,7 @@
 			verbs += /obj/admins/proc/toggleguests			//Toggle guests entering
 			verbs += /obj/admins/proc/toggleooc				//toggle ooc
 			verbs += /obj/admins/proc/toggleoocdead         //toggle ooc for dead/unc
+			verbs += /obj/admins/proc/checkooc				//Because, what the fuck?
 			verbs += /obj/admins/proc/voteres 				//toggle votes
 			verbs += /client/proc/deadchat					//toggles deadchat
 			verbs += /client/proc/cmd_admin_mute
@@ -393,6 +394,7 @@
 	verbs -= /obj/admins/proc/toggleguests			//Toggle guests entering
 	verbs -= /obj/admins/proc/toggleooc				//toggle ooc
 	verbs -= /obj/admins/proc/toggleoocdead         //toggle ooc for dead/unc
+	verbs -= /obj/admins/proc/checkooc
 	verbs -= /obj/admins/proc/voteres 				//toggle votes
 	verbs -= /client/proc/deadchat					//toggles deadchat
 	verbs -= /client/proc/cmd_admin_mute
@@ -720,6 +722,7 @@
 /client/proc/deadmin_self()
 	set name = "Go mortal"
 	set category = "Admin"
+	set desc = "Reject admin priveleges for the round"
 
 	if(src.holder)
 		if(alert("Confirm self-deadmin for the round? You can't re-admin yourself without someont promoting you.",,"Yes","No") == "Yes")
