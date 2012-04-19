@@ -148,11 +148,9 @@
 			verbs += /client/proc/DirectHit
 			verbs += /client/proc/everyone_random
 			verbs += /client/proc/only_one // Fateweaver suggested I do this - Doohl
-			verbs += /client/proc/deadmin_self
 			verbs += /client/proc/toggle_singulo_possession
 
 		if (holder.level >= 5)//Game Admin********************************************************************
-			verbs += /obj/admins/proc/view_txt_log
 			//verbs += /client/proc/cmd_mass_modify_object_variables --Merged with view variables
 			verbs += /client/proc/cmd_admin_list_open_jobs
 			verbs += /client/proc/cmd_admin_direct_narrate
@@ -185,7 +183,6 @@
 			verbs += /client/proc/toggle_random_events
 			verbs += /obj/admins/proc/animuspanel
 			//verbs += /client/proc/make_space_marine
-			verbs += /client/proc/deadmin_self
 			verbs += /client/proc/edit_dbaccess
 			verbs += /client/proc/update_sql_population
 
@@ -217,7 +214,6 @@
 			verbs += /proc/possess
 			verbs += /proc/release
 			verbs += /client/proc/jumptocoord
-			verbs += /client/proc/deadmin_self
 			verbs += /client/proc/deb_check_reagents
 			verbs += /client/proc/startSinglo
 
@@ -240,8 +236,8 @@
 			verbs += /proc/possess
 			verbs += /proc/release
 			verbs += /client/proc/toggleprayers
-			verbs += /client/proc/deadmin_self
 			verbs += /client/proc/toggleadminhelpsound
+			verbs += /obj/admins/proc/view_txt_log
 
 
 		if (holder.level >= 2)//Admin Candidate********************************************************************
@@ -249,7 +245,6 @@
 			verbs += /client/proc/secrets
 			verbs += /client/proc/play_sound
 			verbs += /client/proc/stealth
-			verbs += /client/proc/deadmin_self
 
 
 		if (holder.level >= 1)//Temp Admin********************************************************************
@@ -261,7 +256,6 @@
 			verbs += /client/proc/cmd_admin_create_centcom_report
 			verbs += /client/proc/toggle_hear_deadcast
 			verbs += /client/proc/toggle_hear_radio
-			verbs += /client/proc/deadmin_self
 
 
 		if (holder.level >= 0)//Mod********************************************************************
@@ -299,9 +293,9 @@
 			verbs += /client/proc/general_report
 			verbs += /client/proc/air_report
 			verbs += /client/proc/InfectMob
-			verbs += /client/proc/deadmin_self
+			verbs += /client/proc/stealth
 
-		if (holder.level >= -1)//Admin Observer
+		if (holder.level >= -1)//Admin Observer**********************************************************
 			verbs += /client/proc/cmd_admin_say
 			verbs += /client/proc/cmd_admin_gib_self
 			verbs += /client/proc/deadmin_self
@@ -724,7 +718,7 @@
 	usr << "You will now [STFU_radio ? "not hear" : "hear"] radio chatter from nearby radios or speakers"
 
 /client/proc/deadmin_self()
-	set name = "De-admin self"
+	set name = "Go mortal"
 	set category = "Admin"
 
 	if(src.holder)
