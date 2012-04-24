@@ -114,6 +114,7 @@
 		if("callshuttle2")
 			if(src.authenticated)
 				call_shuttle_proc(usr)
+				shuttlecoming = 1
 				if(emergency_shuttle.online)
 					post_status("shuttle")
 			src.state = STATE_DEFAULT
@@ -124,6 +125,7 @@
 		if("cancelshuttle2")
 			if(src.authenticated)
 				cancel_call_proc(usr)
+				shuttlecoming = 0
 			src.state = STATE_DEFAULT
 		if("messagelist")
 			src.currmsg = 0

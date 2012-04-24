@@ -26,7 +26,7 @@
 	var/vote_delay = 600				// minimum time between voting sessions (seconds, 10 minute default)
 	var/vote_period = 60				// length of voting period (seconds, default 1 minute)
 	var/vote_no_default = 0				// vote does not default to nochange/norestart (tbi)
-	var/vote_no_dead = 0				// dead people can't vote (tbi)
+	var/vote_no_dead = 1				// dead people can't vote (tbi)
 	var/enable_authentication = 0		// goon authentication
 	var/del_new_on_log = 1				// del's new players if they log before they spawn in
 	var/feature_object_spell_system = 0 //spawns a spellbook which gives object-type spells instead of verb-type spells for the wizard
