@@ -420,6 +420,7 @@
 		usr << "You can't call the shuttle because you are dead!"
 		return
 	call_shuttle_proc(src)
+	shuttlecoming = 1
 
 	// hack to display shuttle timer
 	if(emergency_shuttle.online)
