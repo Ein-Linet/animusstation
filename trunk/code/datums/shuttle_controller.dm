@@ -90,6 +90,7 @@ datum/shuttle_controller
 
 					else if((fake_recall != 0) && (timeleft <= fake_recall))
 						recall()
+						shuttlecoming = 0
 
 						return 0
 

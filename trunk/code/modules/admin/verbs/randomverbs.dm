@@ -794,6 +794,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 			return
 
 	emergency_shuttle.incall()
+	shuttlecoming = 1
 	world << "\blue <B>Alert: The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes.</B>"
 	world << sound('shuttlecalled.ogg')
 	return
@@ -814,6 +815,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 	if(confirm != "Yes") return
 
 	emergency_shuttle.recall()
+	shuttlecoming = 0
 
 	return
 
