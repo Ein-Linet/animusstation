@@ -3,6 +3,9 @@
 /proc/gibs(atom/location, var/list/viruses, var/datum/dna/MobDNA)
 	new /obj/effect/gibspawner/human(get_turf(location),viruses,MobDNA)
 
+//Note: add braingibs here.
+//Also, implement the damn bears.
+
 /proc/xgibs(atom/location, var/list/viruses)
 	new /obj/effect/gibspawner/xeno(get_turf(location),viruses)
 
@@ -15,6 +18,8 @@
 	var/list/gibtypes = list()
 	var/list/gibamounts = list()
 	var/list/gibdirections = list() //of lists
+	var/meattype = null
+	var/meatamount = 0
 
 	New(location, var/list/viruses, var/datum/dna/MobDNA)
 		..()
@@ -60,12 +65,17 @@
 					if(directions.len)
 						gib.streak(directions)
 
+		for(var/i = 0, i< meatamount, i++)
+			new meattype(location)
+
 		del(src)
 
 /obj/effect/gibspawner
 	human
 		gibtypes = list(/obj/effect/decal/cleanable/blood/gibs/up,/obj/effect/decal/cleanable/blood/gibs/down,/obj/effect/decal/cleanable/blood/gibs,/obj/effect/decal/cleanable/blood/gibs,/obj/effect/decal/cleanable/blood/gibs/body,/obj/effect/decal/cleanable/blood/gibs/limb,/obj/effect/decal/cleanable/blood/gibs/core)
 		gibamounts = list(1,1,1,1,1,1,1)
+		meattype = /obj/item/weapon/reagent_containers/food/snacks/meat
+		meatamount = 4
 
 		New()
 			gibdirections = list(list(NORTH, NORTHEAST, NORTHWEST),list(SOUTH, SOUTHEAST, SOUTHWEST),list(WEST, NORTHWEST, SOUTHWEST),list(EAST, NORTHEAST, SOUTHEAST), alldirs, alldirs, list())
@@ -75,6 +85,8 @@
 	xeno
 		gibtypes = list(/obj/effect/decal/cleanable/xenoblood/xgibs/up,/obj/effect/decal/cleanable/xenoblood/xgibs/down,/obj/effect/decal/cleanable/xenoblood/xgibs,/obj/effect/decal/cleanable/xenoblood/xgibs,/obj/effect/decal/cleanable/xenoblood/xgibs/body,/obj/effect/decal/cleanable/xenoblood/xgibs/limb,/obj/effect/decal/cleanable/xenoblood/xgibs/core)
 		gibamounts = list(1,1,1,1,1,1,1)
+		meattype = /obj/item/weapon/reagent_containers/food/snacks/xenomeat
+		meatamount = 4
 
 		New()
 			gibdirections = list(list(NORTH, NORTHEAST, NORTHWEST),list(SOUTH, SOUTHEAST, SOUTHWEST),list(WEST, NORTHWEST, SOUTHWEST),list(EAST, NORTHEAST, SOUTHEAST), alldirs, alldirs, list())
@@ -85,6 +97,8 @@
 		sparks = 1
 		gibtypes = list(/obj/effect/decal/cleanable/robot_debris/up,/obj/effect/decal/cleanable/robot_debris/down,/obj/effect/decal/cleanable/robot_debris,/obj/effect/decal/cleanable/robot_debris,/obj/effect/decal/cleanable/robot_debris,/obj/effect/decal/cleanable/robot_debris/limb)
 		gibamounts = list(1,1,1,1,1,1)
+
+		//Maybe add metal gibs as meat
 
 		New()
 			gibdirections = list(list(NORTH, NORTHEAST, NORTHWEST),list(SOUTH, SOUTHEAST, SOUTHWEST),list(WEST, NORTHWEST, SOUTHWEST),list(EAST, NORTHEAST, SOUTHEAST), alldirs, alldirs)
