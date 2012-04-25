@@ -6,7 +6,6 @@
 
 		temperature_alert = 0
 
-
 /mob/living/carbon/alien/humanoid/Life()
 	set invisibility = 0
 	set background = 1
