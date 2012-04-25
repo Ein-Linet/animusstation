@@ -7,12 +7,12 @@
 	if(holder.rank == "Game Admin")
 		Debug2 = !Debug2
 
-		world << "Debugging [Debug2 ? "On" : "Off"]"
+		//world << "Debugging [Debug2 ? "On" : "Off"]"
 		log_admin("[key_name(src)] toggled debugging to [Debug2]")
 	else if(holder.rank == "Game Master")
 		Debug2 = !Debug2
 
-		world << "Debugging [Debug2 ? "On" : "Off"]"
+		//world << "Debugging [Debug2 ? "On" : "Off"]"   //Wtf these are world-wide?
 		log_admin("[key_name(src)] toggled debugging to [Debug2]")
 	else
 		alert("Coders only baby")

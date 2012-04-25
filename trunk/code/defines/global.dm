@@ -58,7 +58,7 @@ var
 
 	datum/engine_eject/engine_eject_control = null
 	host = null
-	aliens_allowed = 1
+	aliens_allowed = 0
 	ooc_allowed = 1
 	dooc_allowed = 1
 	traitor_scaling = 1
