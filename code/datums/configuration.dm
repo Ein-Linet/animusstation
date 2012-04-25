@@ -25,12 +25,12 @@
 	var/allow_admin_rev = 1				// allows admin revives
 	var/vote_delay = 600				// minimum time between voting sessions (seconds, 10 minute default)
 	var/vote_period = 60				// length of voting period (seconds, default 1 minute)
-	var/vote_no_default = 0				// vote does not default to nochange/norestart (tbi)
-	var/vote_no_dead = 1				// dead people can't vote (tbi)
+	var/vote_no_default = 1				// If 1 people voting = 100% population. If 0 everyone = 100% population
+	var/vote_no_dead = 0				// Dead people (can vote and) are accounted when calculating needed votes
 	var/enable_authentication = 0		// goon authentication
 	var/del_new_on_log = 1				// del's new players if they log before they spawn in
 	var/feature_object_spell_system = 0 //spawns a spellbook which gives object-type spells instead of verb-type spells for the wizard
-	var/traitor_scaling = 0 //if amount of traitors scales based on amount of players
+	var/traitor_scaling = 0				//if amount of traitors scales based on amount of players
 	var/protect_roles_from_antagonist = 0// If security and such can be tratior/cult/other
 	var/Tensioner_Active = 0			// If the tensioner is running.
 

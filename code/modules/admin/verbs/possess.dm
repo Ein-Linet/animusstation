@@ -20,8 +20,8 @@
 		usr.name_archive = usr.real_name
 
 	usr.loc = O
-	usr.real_name = O.name
-	usr.name = O.name
+//	usr.real_name = O.name
+//	usr.name = O.name	//Hello, my name is big meteor
 	usr.client.eye = O
 	usr.control_object = O
 

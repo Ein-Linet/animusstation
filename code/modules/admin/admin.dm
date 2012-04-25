@@ -2639,14 +2639,14 @@
 	set desc="Check dis bitch"
 	set name="Check OOC"
 	if (ooc_allowed)
-		alert("OOC is on")
+		src << ("OOC is on")
 	else
-		alert("OOC is off")
+		src << ("OOC is off")
 
 	if (dooc_allowed)
-		alert("dOOC is on")
+		src << ("dOOC is on")
 	else
-		alert("dOOC is off")
+		src << ("dOOC is off")
 
 	log_admin("[key_name(usr)] checked OOC.")
 
@@ -2671,7 +2671,7 @@
 		message_admins("<font color='blue'>[usr.key] has started the game.</font>")
 		return 1
 	else
-		alert("Game has already started you fucking jerk, stop spamming up the chat :ARGH:")
+		alert("Game has already started. Sorry, slowpoke.")
 		return 0
 
 /obj/admins/proc/toggleenter()
