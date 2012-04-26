@@ -12,7 +12,7 @@
 
 	dat += "<b>Events panel</b><br><br>"
 	dat += "<A HREF='?src=\ref[src];animuspanel=statistics'>Statistics</A><br>"
-	dat += "<A HREF='?src=\ref[src];animuspanel=zombieevent'>Zombie Event</A><br>"
+//	dat += "<A HREF='?src=\ref[src];animuspanel=zombieevent'>Zombie Event</A><br>" //Le fu~ Uncomment zombies first
 //	else
 //		dat += "Zombie Event<br>"
 	dat += "<A HREF='?src=\ref[src];animuspanel=easybuttons'>Buttons</A><br>"
