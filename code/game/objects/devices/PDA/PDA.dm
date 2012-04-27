@@ -25,13 +25,14 @@
 	var/tnote = null //Current Texts
 	var/last_text //No text spamming
 	var/last_honk //Also no honk spamming that's bad too
-	var/ttone = "beep" //The ringtone!
+	var/ttone = "Beep!" //The ringtone!
 	var/honkamt = 0 //How many honks left when infected with honk.exe
 	var/mimeamt = 0 //How many silence left when infected with mime.exe
 	var/note = "Congratulations, your station has chosen the Thinktronic 5230 Personal Data Assistant!" //Current note in the notepad function.
 	var/cart = "" //A place to stick cartridge menu information
 
 	var/obj/item/device/uplink/pda/uplink = null
+	var/obj/item/device/uplink/pda/uplink/owner_traitor_job = null	//Must be separate, so traitor HoP can't specialize as RD.
 
 	var/obj/item/weapon/card/id/id = null //Making it possible to slot an ID card into the PDA so it can function as both.
 	var/ownjob = null //related to above
@@ -57,24 +58,24 @@
 /obj/item/device/pda/janitor
 	default_cartridge = /obj/item/weapon/cartridge/janitor
 	icon_state = "pda-j"
-	ttone = "slip"
+	ttone = "Slip!"
 
 /obj/item/device/pda/toxins
 	default_cartridge = /obj/item/weapon/cartridge/signal/toxins
 	icon_state = "pda-tox"
-	ttone = "boom"
+	ttone = "Boom!"
 
 /obj/item/device/pda/clown
 	default_cartridge = /obj/item/weapon/cartridge/clown
 	icon_state = "pda-clown"
 	desc = "A portable microcomputer by Thinktronic Systems, LTD. The surface is coated with polytetrafluoroethylene and banana drippings."
-	ttone = "honk"
+	ttone = "Honk!"
 
 /obj/item/device/pda/mime
 	default_cartridge = /obj/item/weapon/cartridge/mime
 	icon_state = "pda-mime"
 	silent = 1
-	ttone = "silence"
+	ttone = "..."
 
 /obj/item/device/pda/heads
 	default_cartridge = /obj/item/weapon/cartridge/head
