@@ -698,8 +698,8 @@
 			if(getOxyLoss() > 50) Paralyse(3)
 
 			if(sleeping)
-				if(paralysis <= 0)
-					Paralyse(2)
+				if(paralysis <= 5)		//Ok, so it figures that people stand up and start running faster than they are paralysed
+					Paralyse(4)
 				if (prob(10) && health && !hal_crit) spawn(0) emote("snore")
 				//sleeping--
 

@@ -1651,17 +1651,21 @@ datum
 
 			on_mob_life(var/mob/living/M as mob)
 				if(!M) M = holder.my_atom
-				if(!data) data = 1
-				data++
-				switch(data)
-					if(1)
-						M:confused += 2
-						M:drowsyness += 2
-					if(2 to 50)
-						M:sleeping += 1
-					if(51 to INFINITY)
-						M:sleeping += 1
-						M:adjustToxLoss(data - 50)
+				if(volume<= 5)					//Fuck. The. Droppers.
+					M:confused += 2
+					M:drowsyness += 2
+				else
+					if(!data) data = 1
+					data++
+					switch(data)
+						if(1)
+							M:confused += 2
+							M:drowsyness += 2
+						if(2 to 50)
+							M:sleeping += 1
+						if(51 to INFINITY)
+							M:sleeping += 1
+							M:adjustToxLoss(data - 50)
 				..()
 				return
 
@@ -1676,7 +1680,7 @@ datum
 				if(!M) M = holder.my_atom
 				if(!data) data = 1
 				switch(data)
-					if(1)
+					if(1)				//Leaving this for brobots, as beer actually takes time to feed it.
 						M:confused += 2
 						M:drowsyness += 2
 					if(2 to 50)

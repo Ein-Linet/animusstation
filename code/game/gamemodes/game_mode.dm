@@ -48,7 +48,7 @@ Stealth and Camouflage Items;
 /obj/item/device/chameleon:4:Chameleon-Projector;
 Whitespace:Seperator;
 Devices and Tools;
-/obj/item/weapon/card/emag:3:Cryptographic Sequencer;
+/obj/item/weapon/card/emag:3:Cryptographic Sequencer (E-mag);
 /obj/item/weapon/storage/toolbox/syndicate:1:Fully Loaded Toolbox;
 /obj/item/weapon/storage/syndie_kit/space:3:Space Suit;
 /obj/item/clothing/glasses/thermal:4:Thermal Imaging Glasses;
@@ -133,7 +133,9 @@ Whitespace:Seperator;"}
 // Items removed from above:
 /*
 /obj/item/weapon/cloaking_device:4:Cloaking Device;	//Replacing cloakers with thermals.	-Pete
-/obj/item/toy/syndicateballoon:10:For showing that You Are The BOSS (Useless Balloon);	//That fucking balloon	-Pete
+
+Why do we have thermals, if we don't have cloaks?
+Also, does xenobottle work?
 */
 
 /datum/game_mode/proc/announce() //to be calles when round starts

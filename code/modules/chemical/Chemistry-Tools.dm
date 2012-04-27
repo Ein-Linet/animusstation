@@ -2121,7 +2121,7 @@
 
 /obj/item/weapon/reagent_containers/glass/bottle/zombiepowder
 	name = "Zombie Powder Bottle"
-	desc = "A small bottle of Zombie Powder. Santiago Delaverte's Favorite!"
+	desc = "A small bottle of Zombie Powder. Makes you dead, but alive."
 	icon = 'chemical.dmi'
 	icon_state = "bottle20"
 
@@ -2131,7 +2131,7 @@
 
 /obj/item/weapon/reagent_containers/glass/bottle/LSD
 	name = "LSD Bottle"
-	desc = "A small bottle of LSD.Butch Glover's Favorite!"
+	desc = "A small bottle of LSD. You gonna love ponies with these."
 	icon = 'chemical.dmi'
 	icon_state = "bottle20"
 
@@ -2141,7 +2141,7 @@
 
 /obj/item/weapon/reagent_containers/glass/bottle/xenomicrobes
 	name = "Xenomicrobes Bottle"
-	desc = "A small bottle of Xenomicrobes.Horse With No Name's Favorite!"
+	desc = "A small bottle of Xenomicrobes. First you eat it, then it eats you."
 	icon = 'chemical.dmi'
 	icon_state = "bottle20"
 
@@ -2151,7 +2151,7 @@
 
 /obj/item/weapon/reagent_containers/glass/bottle/nanites
 	name = "Nanomachines Bottle"
-	desc = "A small bottle of Nanomachines.Quin Tei's Favorite!"
+	desc = "A small bottle of Nanomachines. Makes you go beep-boop."
 	icon = 'chemical.dmi'
 	icon_state = "bottle20"
 
