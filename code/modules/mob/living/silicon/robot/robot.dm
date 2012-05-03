@@ -130,7 +130,7 @@
 			updatename(mod)
 			module = new /obj/item/weapon/robot_module/engineering(src)
 			hands.icon_state = "engineer"
-			icon_state = "landmate"
+			icon_state = "scuzzer"
 			modtype = "Eng"
 			feedback_inc("cyborg_engineering",1)
 
@@ -679,7 +679,7 @@
 			return 0
 	return 1
 
-/mob/living/silicon/robot/proc/updateicon()
+/mob/living/silicon/robot/proc/updateicon()	//For automating borg overlays. Feel free to add borgs that can't appear directly in game
 
 	overlays = null
 	if(stat == 0)
@@ -690,16 +690,22 @@
 		if(icon_state == "bloodhound")
 			overlays = null
 			overlays += "eyes-bloodhound"
-		if(icon_state =="landmate")
+		if(icon_state =="scuzzer")
 			overlays = null
-			overlays += "eyes-landmate"
+			overlays += "eyes-scuzzer"
 		if(icon_state =="mopgearrex")
 			overlays = null
 			overlays += "eyes-mopgearrex"
 	else
 		overlays -= "eyes"
-
-	if(opened)
+	if((opened)&&(icon_state == "scuzzer"))
+		if(wiresexposed)
+			overlays += "ov-openpanel +w-sc"
+		else if(cell)
+			overlays += "ov-openpanel +c-sc"
+		else
+			overlays += "ov-openpanel -c-sc"
+	else if(opened)
 		if(wiresexposed)
 			overlays += "ov-openpanel +w"
 		else if(cell)
