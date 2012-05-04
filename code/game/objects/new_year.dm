@@ -14,7 +14,7 @@
 /obj/effect/new_year_tree/attackby(obj/item/W, mob/user)
 	if (istype(W, /obj/item/weapon/grab))
 		return
-	if (istype(W, /obj/item/weapon/fireaxe))
+	if (istype(W, /obj/item/weapon/twohanded/fireaxe))
 		for(var/atom/movable/A as mob|obj in src)
 			A.loc = src.loc
 		del(src)

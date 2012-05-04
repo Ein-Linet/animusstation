@@ -40,6 +40,10 @@ var/const
 	BE_MONKEY    =(1<<8)
 	BE_PAI       =(1<<9)
 
+
+
+
+
 datum/preferences
 	var
 		real_name
@@ -54,6 +58,7 @@ datum/preferences
 		midis = 1
 		//Toggle ghost ears
 		ghost_ears = 1
+		ghost_sight = 1
 		//Saved changlog filesize to detect if there was a change
 		lastchangelog = 0
 
@@ -109,7 +114,8 @@ datum/preferences
 		job_engsec_med = 0
 		job_engsec_low = 0
 
-
+		// OOC Metadata:
+		metadata = ""
 
 
 	New()
@@ -137,6 +143,10 @@ datum/preferences
 		dat += "<b>UI Style:</b> <a href=\"byond://?src=\ref[user];preferences=1;UI=input\"><b>[UI == UI_NEW ? "New" : "Old"]</b></a><br>"
 		dat += "<b>Play admin midis:</b> <a href=\"byond://?src=\ref[user];preferences=1;midis=input\"><b>[midis == 1 ? "Yes" : "No"]</b></a><br>"
 		dat += "<b>Ghost ears:</b> <a href=\"byond://?src=\ref[user];preferences=1;ghost_ears=input\"><b>[ghost_ears == 0 ? "Nearest Creatures" : "All Speech"]</b></a><br>"
+		dat += "<b>Ghost sight:</b> <a href=\"byond://?src=\ref[user];preferences=1;ghost_sight=input\"><b>[ghost_sight == 0 ? "Nearest Creatures" : "All Emotes"]</b></a><br>"
+
+		if(config.allow_Metadata)
+			dat += "<b>OOC Notes:</b> <a href='byond://?src=\ref[user];preferences=1;OOC=input'> Edit </a><br>"
 
 		if((user.client) && (user.client.holder) && (user.client.holder.rank) && (user.client.holder.level >= 5))
 			dat += "<hr><b>OOC</b><br>"
@@ -362,6 +372,8 @@ datum/preferences
 
 
 	proc/process_link(mob/user, list/link_tags)
+		if(!usr)
+			return
 		if(link_tags["occ"])
 			if(link_tags["cancel"])
 				user << browse(null, "window=\ref[user]occupation")
@@ -409,11 +421,29 @@ datum/preferences
 		if(link_tags["age"])
 			switch(link_tags["age"])
 				if("input")
-					var/new_age = input(user, "Please select type in age: 20-45", "Character Generation")  as num
+					var/new_age = input(user, "Please select type in age: 15-45", "Character Generation")  as num
 					if(new_age)
-						age = max(min(round(text2num(new_age)), 45), 20)
+						age = max(min(round(text2num(new_age)), 45), 15)
 				if("random")
 					age = rand (20, 45)
+
+		if(link_tags["OOC"])
+			var/tempnote = ""
+			tempnote = input(user, "Please enter your OOC/ERP Notes!:", "OOC notes" , metadata)  as text
+			var/list/bad_characters = list("_", "\"", "<", ">", ";", "\[", "\]", "{", "}", "|", "\\","0","1","2","3","4","5","6","7","8","9")
+
+			for(var/c in bad_characters)
+				tempnote = dd_replacetext(tempnote, c, "")
+
+			if(length(tempnote) >= 255)
+				alert("That name is too long. (255 character max, please)")
+				return
+
+			metadata = tempnote
+			return
+
+
+
 
 		if(link_tags["b_type"])
 			switch(link_tags["b_type"])
@@ -558,6 +588,9 @@ datum/preferences
 		if(link_tags["ghost_ears"])
 			ghost_ears = !ghost_ears
 
+		if(link_tags["ghost_sight"])
+			ghost_sight = !ghost_sight
+
 		if(link_tags["underwear"])
 			switch(link_tags["underwear"])
 				if("inputmale")
@@ -671,7 +704,7 @@ datum/preferences
 		character.hair_style = hair_style
 		character.facial_hair_style = facial_hair_style
 
-		if(underwear > 5 || underwear < 1)
+		if(underwear > 6 || underwear < 1)
 			underwear = 1 //I'm sure this is 100% unnecessary, but I'm paranoid... sue me.
 		character.underwear = underwear
 
@@ -700,6 +733,7 @@ datum/preferences
 			C.be_pai = be_special & BE_PAI
 			if(isnull(src.ghost_ears)) src.ghost_ears = 1 //There were problems where the default was null before someone saved their profile.
 			C.ghost_ears = src.ghost_ears
+			C.ghost_sight = src.ghost_sight
 
 
 #undef UI_OLD

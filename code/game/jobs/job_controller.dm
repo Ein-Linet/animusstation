@@ -27,6 +27,8 @@ var/global/datum/controller/occupations/job_master
 			if(!job)	continue
 			if(job.faction != faction)	continue
 			occupations += job
+
+
 		return 1
 
 
@@ -140,6 +142,8 @@ var/global/datum/controller/occupations/job_master
 		Debug("Running DO")
 		SetupOccupations()
 
+		occupations = shuffle(occupations) //Shuffles job-list at round start so that people don't have their job picks randomized
+
 		//Get the players who are ready
 		for(var/mob/new_player/player in world)
 			if((player) && (player.client) && (player.ready) && (player.mind) && (!player.mind.assigned_role))
@@ -149,7 +153,6 @@ var/global/datum/controller/occupations/job_master
 		if(unassigned.len == 0)	return 0
 		//Shuffle players and jobs
 		unassigned = shuffle(unassigned)
-	//	occupations = shuffle(occupations) check and see if we can do this one
 
 		HandleFeedbackGathering()
 
@@ -179,9 +182,12 @@ var/global/datum/controller/occupations/job_master
 		for(var/level = 1 to 3)
 			for(var/datum/job/job in occupations)
 				Debug("Checking job: [job]")
-				if(!job)	continue
-				if(!unassigned.len)	break
-				if((job.current_positions >= job.spawn_positions) && job.spawn_positions != -1)	continue
+				if(!job)
+					continue
+				if(!unassigned.len)
+					break
+				if((job.current_positions >= job.spawn_positions) && job.spawn_positions != -1)
+					continue
 				var/list/candidates = FindOccupationCandidates(job, level)
 				while(candidates.len && ((job.current_positions < job.spawn_positions) || job.spawn_positions == -1))
 					var/mob/new_player/candidate = pick(candidates)
@@ -251,17 +257,24 @@ var/global/datum/controller/occupations/job_master
 	proc/spawnId(var/mob/living/carbon/human/H, rank)
 		if(!H)	return 0
 		var/obj/item/weapon/card/id/C = null
-		switch(rank)
-			if("Cyborg")
+
+		var/datum/job/job = null
+		for(var/datum/job/J in occupations)
+			if(J.title == rank)
+				job = J
+				break
+
+		if(job)
+			if(job.title == "Cyborg")
 				return
-			if("Captain")
-				C = new /obj/item/weapon/card/id/gold(H)
 			else
-				C = new /obj/item/weapon/card/id(H)
+				C = new job.idtype(H)
+		else
+			C = new /obj/item/weapon/card/id(H)
 		if(C)
-			C.registered = H.real_name
+			C.registered_name = H.real_name
 			C.assignment = rank
-			C.name = "[C.registered]'s ID Card ([C.assignment])"
+			C.name = "[C.registered_name]'s ID Card ([C.assignment])"
 			C.access = get_access(C.assignment)
 			H.equip_if_possible(C, H.slot_wear_id)
 		if(prob(50))

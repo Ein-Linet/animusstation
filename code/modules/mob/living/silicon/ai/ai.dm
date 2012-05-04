@@ -11,6 +11,7 @@
 
 	real_name = pickedName
 	name = real_name
+	original_name = real_name
 	anchored = 1
 	canmove = 0
 	loc = loc
@@ -79,7 +80,7 @@
 		return
 
 		//if(icon_state == initial(icon_state))
-	var/icontype = input("Please, select a display!", "AI", null/*, null*/) in list("Clown", "Monochrome", "Blue", "Inverted", "Firewall", "Green")
+	var/icontype = input("Please, select a display!", "AI", null/*, null*/) in list("Clown", "Monochrome", "Blue", "Inverted", "Firewall", "Green", "Red", "Static")
 	if(icontype == "Clown")
 		icon_state = "ai-clown2"
 	else if(icontype == "Monochrome")
@@ -92,7 +93,10 @@
 		icon_state = "ai-magma"
 	else if(icontype == "Green")
 		icon_state = "ai-wierd"
-
+	else if(icontype == "Red")
+		icon_state = "ai-malf"
+	else if(icontype == "Static")
+		icon_state = "ai-static"
 	//else
 			//usr <<"You can only change your display once!"
 			//return
@@ -260,6 +264,30 @@
 
 	if (href_list["laws"]) // With how my law selection code works, I changed statelaws from a verb to a proc, and call it through my law selection panel. --NeoFite
 		statelaws()
+
+	if (href_list["track"])
+		var/mob/target = locate(href_list["track"])
+		var/mob/living/silicon/ai/A = locate(href_list["track2"])
+		if(A && target)
+			A.ai_actual_track(target)
+		return
+
+	else if (href_list["faketrack"])
+		var/mob/target = locate(href_list["track"])
+		var/mob/living/silicon/ai/A = locate(href_list["track2"])
+		if(A && target)
+
+			A:cameraFollow = target
+			A << text("Now tracking [] on camera.", target.name)
+			if (usr.machine == null)
+				usr.machine = usr
+
+			while (usr:cameraFollow == target)
+				usr << "Target is not on or near any active cameras on the station. We'll check again in 5 seconds (unless you use the cancel-camera verb)."
+				sleep(40)
+				continue
+
+		return
 
 	return
 
@@ -450,7 +478,7 @@
 
 	malf_picker.use(src)
 
-//I am the icon meister. Bow fefore me.
+//I am the icon meister. Bow fefore me.	//>fefore
 /mob/living/silicon/ai/proc/ai_hologram_change()
 	set name = "Change Hologram"
 	set desc = "Change the default hologram available to AI to something else."

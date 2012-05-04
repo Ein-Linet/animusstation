@@ -8,6 +8,7 @@
 	if(alert("BEGIN THE TOURNAMENT?",,"Yes","No")=="No")
 		return
 
+	feedback_add_details("admin_verb","TCBOO") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	for(var/mob/living/carbon/human/H in world)
 		if(H.stat == 2 || !(H.client)) continue
 		if(is_special_character(H)) continue
@@ -48,7 +49,7 @@
 		W.access = get_all_accesses()
 		W.access += get_all_centcom_access()
 		W.assignment = "Highlander"
-		W.registered = H.real_name
+		W.registered_name = H.real_name
 		H.equip_if_possible(W, H.slot_wear_id)
 
 	message_admins("\blue [key_name_admin(usr)] used THERE CAN BE ONLY ONE!", 1)

@@ -21,8 +21,6 @@
 
 /world/proc/load_motd()
 	join_motd = file2text("config/motd.txt")
-	auth_motd = file2text("config/motd-auth.txt")
-	no_auth_motd = file2text("config/motd-noauth.txt")
 
 /world/proc/load_rules()
 	rules = file2text("config/rules.html")
@@ -120,6 +118,7 @@ world/proc/check_players_online()
 //	if (config.whitelist_commissar)
 //		load_whitelist_commissar()
 	LoadBansjob()
+	Get_Holiday()	//~Carn, needs to be here when the station is named so :P
 	src.update_status()
 
 	makepowernets()
@@ -155,7 +154,8 @@ world/proc/check_players_online()
 	src.update_status()
 
 	master_controller = new /datum/controller/game_controller()
-	spawn(-1) master_controller.setup()
+	spawn(-1)
+		master_controller.setup()
 
 	load_donators()
 	return

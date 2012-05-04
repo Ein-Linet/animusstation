@@ -67,15 +67,10 @@
 	return
 
 /atom/proc/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if (istype(W, /obj/item/device/detective_scanner))
+	if (!(istype(W, /obj/item/weapon/grab) ) && !(istype(W, /obj/item/weapon/plastique)) && !(istype(W, /obj/item/weapon/cleaner)) && !(istype(W, /obj/item/weapon/chemsprayer)) && !(istype(W, /obj/item/weapon/pepperspray)) && !(istype(W, /obj/item/weapon/plantbgone)) && !(istype(W, /obj/item/weapon/packageWrap)))
 		for(var/mob/O in viewers(src, null))
 			if ((O.client && !( O.blinded )))
-				O << "\red [src] has been scanned by [user] with the [W]"
-	else
-		if (!(istype(W, /obj/item/weapon/grab) ) && !(istype(W, /obj/item/weapon/plastique)) && !(istype(W, /obj/item/weapon/cleaner)) && !(istype(W, /obj/item/weapon/chemsprayer)) && !(istype(W, /obj/item/weapon/pepperspray)) && !(istype(W, /obj/item/weapon/plantbgone)) && !(istype(W, /obj/item/weapon/packageWrap)))
-			for(var/mob/O in viewers(src, null))
-				if ((O.client && !( O.blinded )))
-					O << "\red <B>[src] has been hit by [user] with [W]</B>"
+				O << "\red <B>[src] has been hit by [user] with [W]</B>"
 	return
 
 /atom/proc/add_hiddenprint(mob/living/M as mob)
@@ -111,7 +106,6 @@
 	if (ishuman(M))
 		if(!fingerprintshidden)
 			fingerprintshidden = list()
-		add_fibers(M)
 		var/mob/living/carbon/human/H = M
 		if (!istype(H.dna, /datum/dna) || !H.dna.uni_identity || (length(H.dna.uni_identity) != 32))
 			if(!istype(H.dna, /datum/dna))
@@ -225,7 +219,6 @@
 		//if there isn't a blood decal already, make one.
 		var/obj/effect/decal/cleanable/blood/newblood = new /obj/effect/decal/cleanable/blood(T)
 		newblood.blood_DNA =  list(list(M.dna.unique_enzymes, M.dna.b_type))
-		newblood.blood_owner = M
 		for(var/datum/disease/D in M.viruses)
 			var/datum/disease/newDisease = new D.type
 			newblood.viruses += newDisease
@@ -299,9 +292,6 @@
 		if (istype (src, /mob/living/carbon))
 			var/mob/living/carbon/M = src
 			del(M.blood_DNA)
-			if(ishuman(src))
-				var/mob/living/carbon/human/H = src
-				H.bloody_hands = 0
 
 		//Cleaning blood off of items
 		else if (istype (src, /obj/item))
@@ -309,10 +299,6 @@
 			del(O.blood_DNA)
 			if(O.blood_overlay)
 				O.overlays.Remove(O.blood_overlay)
-
-			if(istype(src, /obj/item/clothing/gloves))
-				var/obj/item/clothing/gloves/G = src
-				G.transfer_blood = 0
 
 		//Cleaning blood off of turfs
 		else if (istype(src, /turf/simulated))
@@ -362,8 +348,6 @@
 
 /atom/Click(location,control,params)
 	//world << "atom.Click() on [src] by [usr] : src.type is [src.type]"
-
-////I'm removing buildmode because it's shitty and runtimes a lot.	-Pete
 
 	if(usr.client.buildmode)
 		build_click(usr, usr.client.buildmode, location, control, params, src)
@@ -665,6 +649,25 @@ var/using_new_click_proc = 0 //TODO ERRORAGE (This is temporary, while the DblCl
 			if ( !animal.restrained() )
 				attack_animal(animal)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /atom/DblClick(location, control, params) //TODO: DEFERRED: REWRITE
 //	world << "checking if this shit gets called at all"
 
@@ -937,7 +940,18 @@ var/using_new_click_proc = 0 //TODO ERRORAGE (This is temporary, while the DblCl
 				// ------- YOU DO NOT HAVE AN ITEM IN YOUR HAND -------
 				if (istype(usr, /mob/living/carbon/human))
 					// ------- YOU ARE HUMAN -------
+					if(usr.hand) // if he's using his left hand.
+						var/datum/organ/external/temp = usr:get_organ("l_hand")
+						if(temp.destroyed)
+							usr << "\blue You look at your stump."
+							return
+					else
+						var/datum/organ/external/temp = usr:get_organ("r_hand")
+						if(temp.destroyed)
+							usr << "\blue You look at your stump."
+							return
 					src.attack_hand(usr, usr.hand)
+					usr:afterattack(src, usr, (t5 ? 1 : 0), params)
 				else
 					// ------- YOU ARE NOT HUMAN. WHAT ARE YOU - DETERMINED HERE AND PROPER ATTACK_MOBTYPE CALLED -------
 					if (istype(usr, /mob/living/carbon/monkey))
@@ -1064,9 +1078,11 @@ var/using_new_click_proc = 0 //TODO ERRORAGE (This is temporary, while the DblCl
 		else
 			var/nhref = "src=\ref[src];aiDisable=5"
 			src.Topic(nhref, params2list(nhref), src, 1)
+
+
 	return
 
-/atom/proc/AICtrlClick() // Bolts doors.
+/atom/proc/AICtrlClick() // Bolts doors, turns off APCs.
 	if(istype(src , /obj/machinery/door/airlock))
 		if(src:locked)
 			var/nhref = "src=\ref[src];aiEnable=4"
@@ -1074,6 +1090,13 @@ var/using_new_click_proc = 0 //TODO ERRORAGE (This is temporary, while the DblCl
 		else
 			var/nhref = "src=\ref[src];aiDisable=4"
 			src.Topic(nhref, params2list(nhref), src, 1)
+
+	else if (istype(src , /obj/machinery/power/apc/))
+		var/nhref = "src=\ref[src];breaker=1"
+		src.Topic(nhref, params2list(nhref), 0)
+
+
+
 	return
 
 

@@ -965,8 +965,6 @@ About the new airlock wires panel:
 			if(src.shock(user, 75))
 				return
 
-	if (istype(C, /obj/item/device/detective_scanner))
-		return
 	src.add_fingerprint(user)
 	if((istype(C, /obj/item/weapon/weldingtool) && !( src.operating ) && src.density))
 		var/obj/item/weapon/weldingtool/W = C
@@ -991,15 +989,15 @@ About the new airlock wires panel:
 	else if(istype(C, /obj/item/weapon/pai_cable))	// -- TLE
 		var/obj/item/weapon/pai_cable/cable = C
 		cable.plugin(src, user)
-	else if(istype(C, /obj/item/weapon/crowbar) || istype(C, /obj/item/weapon/fireaxe) )
+	else if(istype(C, /obj/item/weapon/crowbar) || istype(C, /obj/item/weapon/twohanded/fireaxe) )
 		var/beingcrowbarred = null
 		if(istype(C, /obj/item/weapon/crowbar) )
 			beingcrowbarred = 1 //derp, Agouri
 		else
 			beingcrowbarred = 0
-		if( ((src.density) && ( src.welded ) && !( src.operating ) && src.p_open && (!src.arePowerSystemsOn() || (stat & NOPOWER)) && !src.locked) && beingcrowbarred == 1 )
+		if( beingcrowbarred && (density && welded && !operating && src.p_open && (!src.arePowerSystemsOn() || stat & NOPOWER) && !src.locked) )
 			playsound(src.loc, 'Crowbar.ogg', 100, 1)
-			user.visible_message("[user] removes the electronics from the airlock assembly.", "You start to remove electronics into the airlock assembly.")
+			user.visible_message("[user] removes the electronics from the airlock assembly.", "You start to remove electronics from the airlock assembly.")
 			if(do_after(user,40))
 				user << "\blue You removed the airlock electronics!"
 				switch(src.doortype)
@@ -1011,6 +1009,10 @@ About the new airlock wires panel:
 					if(5) new/obj/structure/door_assembly/door_assembly_mai( src.loc )
 					if(6) new/obj/structure/door_assembly/door_assembly_ext( src.loc )
 					if(7) new/obj/structure/door_assembly/door_assembly_g( src.loc )
+					if(14) new/obj/structure/door_assembly/door_assembly_com/glass( src.loc )
+					if(15) new/obj/structure/door_assembly/door_assembly_eng/glass( src.loc )	//issue 301 -mysthic
+					if(16) new/obj/structure/door_assembly/door_assembly_sec/glass( src.loc )
+					if(17) new/obj/structure/door_assembly/door_assembly_med/glass( src.loc )
 				var/obj/item/weapon/airlock_electronics/ae
 				if(!electronics)
 					ae = new/obj/item/weapon/airlock_electronics( src.loc )
@@ -1029,8 +1031,8 @@ About the new airlock wires panel:
 		if((src.density) && (!( src.welded ) && !( src.operating ) && ((!src.arePowerSystemsOn()) || (stat & NOPOWER)) && !( src.locked )))
 
 			if(beingcrowbarred == 0) //being fireaxe'd
-				var/obj/item/weapon/fireaxe/F = C
-				if(F.wielded == 1)
+				var/obj/item/weapon/twohanded/fireaxe/F = C
+				if(F:wielded)
 					spawn( 0 )
 						src.operating = 1
 						animate("opening")
@@ -1066,8 +1068,8 @@ About the new airlock wires panel:
 		else
 			if((!src.density) && (!( src.welded ) && !( src.operating ) && !( src.locked )))
 				if(beingcrowbarred == 0)
-					var/obj/item/weapon/fireaxe/F = C
-					if(F.wielded == 1)
+					var/obj/item/weapon/twohanded/fireaxe/F = C
+					if(F:wielded)
 						spawn( 0 )
 							src.operating = 1
 							animate("closing")
@@ -1117,7 +1119,7 @@ About the new airlock wires panel:
 		return
 	if(safe)
 		if(locate(/mob/living) in get_turf(src))
-			playsound(src.loc, 'buzz-two.ogg', 50, 0)
+		//	playsound(src.loc, 'buzz-two.ogg', 50, 0)	//THE BUZZING IT NEVER STOPS	-Pete
 			spawn (60)
 				close()
 			return
@@ -1155,7 +1157,7 @@ About the new airlock wires panel:
 	..()
 	if(src.closeOtherId != null)
 		spawn (5)
-			for (var/obj/machinery/door/airlock/A in machines)
+			for (var/obj/machinery/door/airlock/A in world)
 				if(A.closeOtherId == src.closeOtherId && A != src)
 					src.closeOther = A
 					break

@@ -53,10 +53,10 @@ FINGERPRINT CARD
 	return
 
 /obj/item/weapon/card/id/syndicate/attack_self(mob/user as mob)
-	if(!src.registered)
-		src.registered = input(user, "What name would you like to put on this card?", "Agent card name", ishuman(user) ? user.real_name : user.name)
+	if(!src.registered_name)
+		src.registered_name = input(user, "What name would you like to put on this card?", "Agent card name", ishuman(user) ? user.real_name : user.name)
 		src.assignment = input(user, "What occupation would you like to put on this card?\nNote: This will not grant any access levels other than Maintenance.", "Agent card job assignment", "Assistant")
-		src.name = "[src.registered]'s ID Card ([src.assignment])"
+		src.name = "[src.registered_name]'s ID Card ([src.assignment])"
 		user << "\blue You successfully forge the ID card."
 	else
 		..()
@@ -181,7 +181,9 @@ FINGERPRINT CARD
 	return
 
 /obj/item/weapon/f_card/proc/display()
-
+	if(!fingerprints)	return
+	if (!istype(src.fingerprints, /list))
+		src.fingerprints = params2list(src.fingerprints)
 	if (length(src.fingerprints))
 		var/dat = "<B>Fingerprints on Card</B><HR>"
 		for(var/i = 1, i < (src.fingerprints.len + 1), i++)
@@ -193,6 +195,7 @@ FINGERPRINT CARD
 		return "<B>There are no fingerprints on this card.</B>"
 	return
 
+/*
 /obj/item/weapon/f_card/attack_hand(mob/user as mob)
 
 	if ((user.r_hand == src || user.l_hand == src))
@@ -213,6 +216,7 @@ FINGERPRINT CARD
 	else
 		..()
 	return
+*/
 
 /obj/item/weapon/f_card/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
@@ -251,10 +255,10 @@ FINGERPRINT CARD
 
 	..()
 	if (!istype(usr, /mob/living/silicon))
-		if (src.fingerprints)
+		if (fingerprints)
 			if (src.amount > 1)
 				var/obj/item/weapon/f_card/F = new /obj/item/weapon/f_card(get_turf(src))
 				F.amount = --src.amount
-				src.amount = 1
-			src.icon_state = "fingerprint1"
+				amount = 1
+			icon_state = "fingerprint1"
 	return

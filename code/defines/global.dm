@@ -134,9 +134,7 @@ var
 	shuttlecoming = 0
 
 	join_motd = null
-	auth_motd = null
 	rules = null
-	no_auth_motd = null
 	forceblob = 0
 
 	//airlockWireColorToIndex takes a number representing the wire color, e.g. the orange wire is always 1, the dark red wire is always 2, etc. It returns the index for whatever that wire does.
@@ -202,3 +200,7 @@ var
 	forumsqlpass = ""
 	forum_activated_group = "2"
 	forum_authenticated_group = "10"
+
+	// For FTP requests. (i.e. downloading runtime logs.)
+	// However it'd be ok to use for accessing attack logs and such too, which are even laggier.
+	fileaccess_timer = 1800 //Cannot access files by ftp until the game is finished setting up and stuff.

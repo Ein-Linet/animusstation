@@ -7,6 +7,7 @@
 	spawn_positions = 1
 	supervisors = "the captain"
 	selection_color = "#ffdddd"
+	idtype = /obj/item/weapon/card/id/silver
 
 
 	equip(var/mob/living/carbon/human/H)
@@ -20,7 +21,7 @@
 		H.equip_if_possible(new /obj/item/clothing/suit/armor/hos(H), H.slot_wear_suit)
 		H.equip_if_possible(new /obj/item/clothing/gloves/black(H), H.slot_gloves)
 		H.equip_if_possible(new /obj/item/clothing/head/helmet/HoS(H), H.slot_head)
-		H.equip_if_possible(new /obj/item/clothing/mask/gas/emergency(H), H.slot_wear_mask)
+		H.equip_if_possible(new /obj/item/clothing/mask/gas(H), H.slot_wear_mask)
 		H.equip_if_possible(new /obj/item/clothing/glasses/sunglasses/sechud(H), H.slot_glasses)
 		H.equip_if_possible(new /obj/item/weapon/gun/energy/gun(H), H.slot_s_store)
 		if(H.backbag == 1)
@@ -59,7 +60,7 @@
 		H.equip_if_possible(new /obj/item/clothing/head/helmet/warden(H), H.slot_head)
 		H.equip_if_possible(new /obj/item/clothing/gloves/black(H), H.slot_gloves)
 		H.equip_if_possible(new /obj/item/clothing/glasses/sunglasses/sechud(H), H.slot_glasses)
-		H.equip_if_possible(new /obj/item/clothing/mask/gas/emergency(H), H.slot_wear_mask)
+		H.equip_if_possible(new /obj/item/clothing/mask/gas(H), H.slot_wear_mask)
 		H.equip_if_possible(new /obj/item/device/flash(H), H.slot_l_store)
 		if(H.backbag == 1)
 			H.equip_if_possible(new /obj/item/weapon/storage/box/survival(H), H.slot_r_hand)
@@ -106,13 +107,9 @@
 			var/obj/item/weapon/storage/box/survival/Evipack = new /obj/item/weapon/storage/box/survival(H)
 			H.equip_if_possible(Evipack, H.slot_r_hand)
 			new /obj/item/weapon/fcardholder(Evipack)
-			H.equip_if_possible(new /obj/item/weapon/storage/box/evidence(H), H.slot_l_hand)
-			H.equip_if_possible(new /obj/item/device/detective_scanner(H), H.slot_r_store)
 		else
 			H.equip_if_possible(new /obj/item/weapon/storage/box/survival(H.back), H.slot_in_backpack)
-			H.equip_if_possible(new /obj/item/weapon/storage/box/evidence(H.back), H.slot_in_backpack)
 			H.equip_if_possible(new /obj/item/weapon/fcardholder(H), H.slot_in_backpack)
-			H.equip_if_possible(new /obj/item/device/detective_scanner(H), H.slot_in_backpack)
 
 		var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(H)
 		L.imp_in = H

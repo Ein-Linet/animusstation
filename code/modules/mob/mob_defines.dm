@@ -103,6 +103,7 @@
 	var/canmove = 1.0
 	var/eye_stat = null//Living, potentially Carbon
 	var/lastpuke = 0
+	var/unacidable = 0
 
 	var/name_archive //For admin things like possession
 
@@ -118,6 +119,7 @@
 	var/jitteriness = 0//Carbon
 	var/charges = 0.0
 	var/nutrition = 400.0//Carbon
+
 	var/overeatduration = 0		// How long this guy is overeating //Carbon
 	var/paralysis = 0.0
 	var/stunned = 0.0
@@ -244,7 +246,7 @@
 
 	var/robot_talk_understand = 0
 	var/alien_talk_understand = 0
-
+	var/taj_talk_understand = 0
 
 	//You can guess what these are for.  --SkyMarshal
 	var/list/atom/hallucinations = list()
@@ -272,3 +274,9 @@ the mob is also allowed to move without any sort of restriction. For instance, i
 	var/area/lastarea = null
 
 	var/digitalcamo = 0 // Can they be tracked by the AI?
+
+	var/datum/preferences/storedpreferences = null
+
+	var/geaslist = list()
+
+

@@ -542,6 +542,8 @@
 				var/turf/trg = get_turf(target)
 				var/obj/effect/syringe_gun_dummy/D = new/obj/effect/syringe_gun_dummy(get_turf(src))
 				var/obj/item/weapon/reagent_containers/syringe/S = syringes[1]
+				if((!S) || (!S.reagents))	//ho boy! wot runtimes!
+					return
 				S.reagents.trans_to(D, S.reagents.total_volume)
 				syringes -= S
 				del(S)
@@ -810,12 +812,46 @@
 				user << "\red You cannot directly fill this object."
 				return
 
+			var/trans = 0
+
 			if(ismob(target))
+				if(istype(target , /mob/living/carbon/human))
+					var/mob/living/carbon/human/victim = target
+
+					var/obj/item/safe_thing = null
+					if( victim.wear_mask )
+						if ( victim.wear_mask.flags & MASKCOVERSEYES )
+							safe_thing = victim.wear_mask
+					if( victim.head )
+						if ( victim.head.flags & MASKCOVERSEYES )
+							safe_thing = victim.head
+					if(victim.glasses)
+						if ( !safe_thing )
+							safe_thing = victim.glasses
+
+					if(safe_thing)
+						if(!safe_thing.reagents)
+							safe_thing.create_reagents(100)
+						trans = src.reagents.trans_to(safe_thing, amount_per_transfer_from_this)
+
+						for(var/mob/O in viewers(world.view, user))
+							O.show_message(text("\red <B>[] tries to squirt something into []'s eyes, but fails!</B>", user, target), 1)
+						spawn(5)
+							src.reagents.reaction(safe_thing, TOUCH)
+
+
+						user << "\blue You transfer [trans] units of the solution."
+						if (src.reagents.total_volume<=0)
+							filled = 0
+							icon_state = "dropper[filled]"
+						return
+
+
 				for(var/mob/O in viewers(world.view, user))
-					O.show_message(text("\red <B>[] drips something onto []!</B>", user, target), 1)
+					O.show_message(text("\red <B>[] squirts something into []'s eyes!</B>", user, target), 1)
 				src.reagents.reaction(target, TOUCH)
 
-			var/trans = src.reagents.trans_to(target, amount_per_transfer_from_this)
+			trans = src.reagents.trans_to(target, amount_per_transfer_from_this)
 			user << "\blue You transfer [trans] units of the solution."
 			if (src.reagents.total_volume<=0)
 				filled = 0
@@ -1443,7 +1479,7 @@
 				istype(W, /obj/item/weapon/melee/energy/sword) && W:active || \
 				istype(W, /obj/item/weapon/melee/energy/blade) || \
 				istype(W, /obj/item/weapon/shovel) || \
-				istype(W, /obj/item/weapon/fireaxe) \
+				istype(W, /obj/item/weapon/twohanded/fireaxe) \
 			)
 			inaccurate = 1
 		else if(W.w_class <= 2 && istype(src,/obj/item/weapon/reagent_containers/food/snacks/sliceable))
@@ -1558,7 +1594,6 @@
 				spawn(600)
 					R.add_reagent(refill, fillevel)
 
-
 			playsound(M.loc,'drink.ogg', rand(10,50), 1)
 			return 1
 
@@ -1637,7 +1672,23 @@
 			icon_state = "pill[rand(1,20)]"
 
 	attackby(obj/item/weapon/W as obj, mob/user as mob)
-
+		if (istype(W, /obj/item/weapon/storage/pill_bottle))
+			var/obj/item/weapon/storage/pill_bottle/P = W
+			if (P.mode == 1)
+				for (var/obj/item/weapon/reagent_containers/pill/O in locate(src.x,src.y,src.z))
+					if(P.contents.len < P.storage_slots)
+						O.loc = P
+						P.orient2hud(user)
+					else
+						user << "\blue The pill bottle is full."
+						return
+				user << "\blue You pick up all the pills."
+			else
+				if (P.contents.len < P.storage_slots)
+					loc = P
+					P.orient2hud(user)
+				else
+					user << "\blue The pill bottle is full."
 		return
 	attack_self(mob/user as mob)
 		return
@@ -2193,6 +2244,24 @@
 		var/datum/disease/F = new /datum/disease/wizarditis(0)
 		var/list/data = list("viruses"= list(F))
 		reagents.add_reagent("blood", 20, data)
+
+/obj/item/weapon/reagent_containers/glass/bottle/pacid
+	name = "Polytrinic Acid Bottle"
+	desc = "A small bottle. Contains a small amount of Polytronic Acid"
+	icon = 'chemical.dmi'
+	icon_state = "bottle17"
+	New()
+		..()
+		reagents.add_reagent("pacid", 30)
+
+/obj/item/weapon/reagent_containers/glass/bottle/adminordrazine
+	name = "Adminordrazine Bottle"
+	desc = "A small bottle. Contains the liquid essence of the gods."
+	icon = 'drinks.dmi'
+	icon_state = "holyflask"
+	New()
+		..()
+		reagents.add_reagent("adminordrazine", 30)
 
 
 /obj/item/weapon/reagent_containers/glass/beaker/cryoxadone
@@ -3190,14 +3259,6 @@
 					icon_state = "manlydorfglass"
 					name = "The Manly Dorf"
 					desc = "A manly concotion made from Ale and Beer. Intended for true men only."
-				if("irishcream")
-					icon_state = "irishcreamglass"
-					name = "Irish Cream"
-					desc = "It's cream, mixed with whiskey. What else would you expect from the Irish?"
-				if("cubalibre")
-					icon_state = "cubalibreglass"
-					name = "Cuba Libre"
-					desc = "A classic mix of rum and cola."
 				if("irishcream")
 					icon_state = "irishcreamglass"
 					name = "Irish Cream"

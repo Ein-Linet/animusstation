@@ -2,7 +2,7 @@
 	set category = null
 	set name = "Check Reagents"
 
-	if(!authenticated || !holder)
+	if(!holder)
 		src << "Only administrators may use this command."
 		return
 	switch(alert("What do you want?",,"View Reagents","Add Reagent","Create Holder"))
@@ -22,7 +22,7 @@
 	set category = null
 	set name = "View Reagents"
 
-	if(!authenticated || !holder)
+	if(!holder)
 		src << "Only administrators may use this command."
 		return
 	if(!O.reagents || !istype(O.reagents, /datum/reagents))
@@ -42,7 +42,7 @@
 	set category = null
 	set name = "Add Reagent"
 
-	if(!authenticated || !holder)
+	if(!holder)
 		src << "Only administrators may use this command."
 		return
 	if(!O.reagents || !istype(O.reagents, /datum/reagents))
@@ -65,7 +65,7 @@
 	set category = null
 	set name = "Create Reagents Holder Datum"
 
-	if(!authenticated || !holder)
+	if(!holder)
 		src << "Only administrators may use this command."
 		return
 	if(O.reagents && istype(O.reagents, /datum/reagents) && alert("Delete old holder?",,"Yes","No")=="No")

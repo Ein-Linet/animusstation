@@ -111,6 +111,7 @@ emp_act
 	if(!I || !user)	return 0
 
 	var/datum/organ/external/affecting = get_organ(ran_zone(user.zone_sel.selecting))
+
 	var/hit_area = parse_zone(affecting.name)
 
 	if((user != src) && check_shields(I.force, "the [I.name]"))
@@ -121,7 +122,8 @@ emp_act
 	var/armor = run_armor_check(affecting, "melee", "Your armor has protected you from a hit to the [hit_area].", "Your armor has softened hit to your [hit_area].")
 	if(armor >= 2)	return 0
 	if(!I.force)	return 0
-	apply_damage(I.force, I.damtype, affecting, armor)
+
+	apply_damage(I.force, I.damtype, affecting, armor , I)
 
 	var/bloody = 0
 	if((I.damtype == BRUTE) && prob(25 + (I.force * 3)))
@@ -137,12 +139,8 @@ emp_act
 				else if(H.w_uniform)	H.w_uniform.add_blood(src)
 				if (H.gloves)
 					H.gloves.add_blood(H)
-					H.gloves.transfer_blood = 2
-					H.gloves.bloody_hands_mob = H
 				else
 					H.add_blood(H)
-					H.bloody_hands = 2
-					H.bloody_hands_mob = H
 
 		switch(hit_area)
 			if("head")//Harder to score a stun but if you do it lasts a bit longer

@@ -1,3 +1,5 @@
+#define PI 3.1415
+
 #define R_IDEAL_GAS_EQUATION	8.31 //kPa*L/(K*mol)
 #define ONE_ATMOSPHERE		101.325	//kPa
 
@@ -99,7 +101,12 @@ var/MAX_EXPLOSION_RANGE = 14
 //FLAGS BITMASK
 #define ONBACK 1			// can be put in back slot
 #define TABLEPASS 2			// can pass by a table or rack
-#define HALFMASK 4			// mask only gets 1/2 of air supply from internals
+
+/********************************************************************************
+*	WOO WOO WOO	THIS IS UNUSED	WOO WOO WOO										*
+*	#define HALFMASK 4	// mask only gets 1/2 of air supply from internals		*
+*	WOO WOO WOO	THIS IS UNUSED	WOO WOO WOO										*
+********************************************************************************/
 
 #define HEADSPACE 4			// head wear protects against space
 
@@ -247,6 +254,7 @@ var/list/global_mutations = list() // list of hidden mutation things
 #define TOX "tox"
 #define OXY "oxy"
 #define CLONE "clone"
+#define HALLOSS "halloss"
 
 #define STUN "stun"
 #define WEAKEN "weaken"
@@ -263,3 +271,5 @@ var/static/list/scarySounds = list('thudswoosh.ogg','Taser.ogg','armbomb.ogg','h
 #define SEC_LEVEL_BLUE 1
 #define SEC_LEVEL_RED 2
 #define SEC_LEVEL_DELTA 3
+
+#define TRANSITIONEDGE 7 //Distance from edge to move to another z-level

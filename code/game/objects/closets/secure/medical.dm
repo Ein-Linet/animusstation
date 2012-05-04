@@ -6,7 +6,7 @@
 	icon_locked = "medical1"
 	icon_opened = "medicalopen"
 	icon_broken = "medicalbroken"
-	icon_off = "medical1"
+	icon_off = "medicaloff"
 	req_access = list(access_medical)
 
 
@@ -34,7 +34,7 @@
 	icon_locked = "medical1"
 	icon_opened = "medicalopen"
 	icon_broken = "medicalbroken"
-	icon_off = "medical1"
+	icon_off = "medicaloff"
 	req_access = list(access_medical)
 
 
@@ -44,9 +44,9 @@
 		new /obj/item/weapon/tank/anesthetic(src)
 		new /obj/item/weapon/tank/anesthetic(src)
 		new /obj/item/weapon/tank/anesthetic(src)
-		new /obj/item/clothing/mask/medical(src)
-		new /obj/item/clothing/mask/medical(src)
-		new /obj/item/clothing/mask/medical(src)
+		new /obj/item/clothing/mask/breath/medical(src)
+		new /obj/item/clothing/mask/breath/medical(src)
+		new /obj/item/clothing/mask/breath/medical(src)
 		return
 
 
@@ -54,7 +54,12 @@
 /obj/structure/closet/secure_closet/medical3
 	name = "Medical Doctor's Locker"
 	req_access = list(access_medical)
-
+	icon_state = "securemed1"
+	icon_closed = "securemed"
+	icon_locked = "securemed1"
+	icon_opened = "securemedopen"
+	icon_broken = "securemedbroken"
+	icon_off = "securemedoff"
 
 	New()
 		..()
@@ -100,7 +105,12 @@
 /obj/structure/closet/secure_closet/CMO
 	name = "Chief Medical Officer"
 	req_access = list(access_cmo)
-
+	icon_state = "cmosecure1"
+	icon_closed = "cmosecure"
+	icon_locked = "cmosecure1"
+	icon_opened = "cmosecureopen"
+	icon_broken = "cmosecurebroken"
+	icon_off = "cmosecureoff"
 
 	New()
 		..()
@@ -136,12 +146,12 @@
 /obj/structure/closet/secure_closet/chemical
 	name = "Chemical Closet"
 	desc = "Store dangerous chemicals in here."
-	icon_state = "medical1"
-	icon_closed = "medical"
-	icon_locked = "medical1"
-	icon_opened = "medicalopen"
-	icon_broken = "medicalbroken"
-	icon_off = "medical1"
+	icon_state = "securemed1"
+	icon_closed = "securemed"
+	icon_locked = "securemed1"
+	icon_opened = "securemedopen"
+	icon_broken = "securemedbroken"
+	icon_off = "securemedoff"
 	req_access = list(access_medical)
 
 

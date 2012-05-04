@@ -438,6 +438,13 @@ datum
 			required_reagents = list("silicon" = 1, "hydrogen" = 1, "anti_toxin" = 1)
 			result_amount = 5
 
+		lipozine
+			name = "Lipozine"
+			id = "Lipozine"
+			result = "lipozine"
+			required_reagents = list("sodiumchloride" = 1, "ethanol" = 1, "radium" = 1)
+			result_amount = 3
+
 ///////////////////////////////////////////////////////////////////////////////////
 
 // foam and foam precursor
@@ -766,7 +773,7 @@ datum
 					if(M:eyecheck() <= 0)
 						flick("e_flash", M.flash)
 
-				for(var/i = 1, i <= created_volume, i++)
+				for(var/i = 1, i <= created_volume + rand(1,2), i++)
 					var/chosen = pick(borks)
 					var/obj/B = new chosen
 					if(B)

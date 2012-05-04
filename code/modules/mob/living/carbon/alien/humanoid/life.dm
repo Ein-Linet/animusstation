@@ -6,6 +6,7 @@
 
 		temperature_alert = 0
 
+
 /mob/living/carbon/alien/humanoid/Life()
 	set invisibility = 0
 	set background = 1
@@ -13,7 +14,11 @@
 	if (src.monkeyizing)
 		return
 
+	..()
+
 	if (src.stat != 2) //still breathing
+
+
 
 		//First, resolve location and get a breath
 
@@ -375,7 +380,7 @@
 				src.drowsyness--
 				src.eye_blurry = max(2, src.eye_blurry)
 				if (prob(5))
-					src.sleeping = 1
+					src.sleeping += 1
 					src.Paralyse(5)
 
 			confused = max(0, confused - 1)

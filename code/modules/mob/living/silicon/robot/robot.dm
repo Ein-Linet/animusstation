@@ -10,22 +10,36 @@
 		updateicon()
 //		syndicate = syndie
 		if(real_name == "Cyborg")
-			real_name += " [pick(rand(1, 999))]"
+			ident = rand(1, 999)
+			real_name += "-[ident]"
 			name = real_name
+
 	spawn (4)
-		if (client)
-			connected_ai = activeais()
-		if (connected_ai)
-			connected_ai.connected_robots += src
-//			laws = connected_ai.laws //The borg inherits its AI's laws
-			laws = new /datum/ai_laws
-			lawsync()
-			src << "<b>Unit slaved to [connected_ai.name], downloading laws.</b>"
-			lawupdate = 1
+		if(!syndie)
+			if (client)
+				connected_ai = activeais()
+			if (connected_ai)
+				connected_ai.connected_robots += src
+	//			laws = connected_ai.laws //The borg inherits its AI's laws
+				laws = new /datum/ai_laws
+				lawsync()
+				src << "<b>Unit slaved to [connected_ai.name], downloading laws.</b>"
+				lawupdate = 1
+			else
+				laws = new /datum/ai_laws/asimov
+				lawupdate = 0
+				src << "<b>Unable to locate an AI, reverting to standard Asimov laws.</b>"
 		else
-			laws = new /datum/ai_laws/asimov
+			laws = new /datum/ai_laws/antimov
 			lawupdate = 0
-			src << "<b>Unable to locate an AI, reverting to standard Asimov laws.</b>"
+			scrambledcodes = 1
+			src << "Follow your laws."
+			cell.maxcharge = 25000
+			cell.charge = 25000
+			module = new /obj/item/weapon/robot_module/syndicate(src)
+			hands.icon_state = "standard"
+			icon_state = "secborg"
+			modtype = "Synd"
 
 		radio = new /obj/item/device/radio(src)
 		camera = new /obj/machinery/camera(src)
@@ -122,7 +136,7 @@
 			hands.icon_state = "security"
 			icon_state = "bloodhound"
 			modtype = "Sec"
-			speed = -1
+			//speed = -1 Secborgs have nerfed tasers now, so the speed boost is not necessary
 			nopush = 1
 			feedback_inc("cyborg_security",1)
 
@@ -213,6 +227,11 @@
 		else
 			stat(null, text("No Cell Inserted!"))
 
+		if(module)
+			internal = locate(/obj/item/weapon/tank/jetpack) in module.modules
+			if(internal)
+				stat("Internal Atmosphere Info", internal.name)
+				stat("Tank Pressure", internal.air_contents.return_pressure())
 
 /mob/living/silicon/robot/restrained()
 	return 0
@@ -222,7 +241,7 @@
 	flick("flash", flash)
 
 	if (stat == 2 && client)
-		gib(1)
+		gib()
 		return
 
 	else if (stat == 2 && !client)
@@ -234,7 +253,7 @@
 			if (stat != 2)
 				adjustBruteLoss(100)
 				adjustFireLoss(100)
-				gib(1)
+				gib()
 				return
 		if(2.0)
 			if (stat != 2)
@@ -277,7 +296,6 @@
 				if(prob(20))
 					usr << "\red <B>You fail to push [tmob]'s fat ass out of the way.</B>"
 					now_pushing = 0
-					//unlock_medal("That's No Moon, That's A Gourmand!", 1)
 					return
 			if(tmob.nopush)
 				now_pushing = 0
@@ -474,9 +492,62 @@
 					if(prob(25))
 						src << "Hack attempt detected."
 			return
+
+	else if(istype(W, /obj/item/borg/upgrade/))
+		var/obj/item/borg/upgrade/U = W
+		if(!opened)
+			usr << "You must access the borgs internals!"
+		else if(!src.module && U.require_module)
+			usr << "The borg must choose a module before he can be upgraded!"
+		else if(U.locked)
+			usr << "The upgrade is locked and cannot be used yet!"
+		else
+			if(U.action(src))
+				usr << "You apply the upgrade to [src]!"
+				usr.drop_item()
+				U.loc = src
+			else
+				usr << "Upgrade error!"
+
+
 	else
 		spark_system.start()
 		return ..()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /mob/living/silicon/robot/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
 	if (!ticker)
@@ -713,7 +784,6 @@
 		else
 			overlays += "ov-openpanel -c"
 	return
-
 
 
 /mob/living/silicon/robot/proc/installed_modules()
@@ -995,7 +1065,7 @@ Frequency:
 		return
 
 /mob/living/silicon/robot/proc/self_destruct()
-	gib(1)
+	gib()
 	return
 
 /mob/living/silicon/robot/proc/UnlinkSelf()
@@ -1019,3 +1089,11 @@ Frequency:
 		R.UnlinkSelf()
 		R << "Buffers flushed and reset.  All systems operational."
 		src.verbs -= /mob/living/silicon/robot/proc/ResetSecurityCodes
+
+
+/mob/living/silicon/robot/proc/flashproof()
+	if(module)
+		for(var/obj/item/borg/upgrade/flashproof/F in module.modules)
+			return 1
+
+	return 0

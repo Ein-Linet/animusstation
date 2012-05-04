@@ -142,9 +142,15 @@ proc/process_ghost_teleport_locs()
 	music = "music/escape.ogg"
 
 /area/shuttle/escape/station
+	name = "Emergency Shuttle Station"
 	icon_state = "shuttle2"
 
 /area/shuttle/escape/centcom
+	name = "Emergency Shuttle Centcom"
+	icon_state = "shuttle"
+
+/area/shuttle/escape/transit // the area to pass through for 3 minute transit
+	name = "Emergency Shuttle Transit"
 	icon_state = "shuttle"
 
 /area/shuttle/escape_pod1
@@ -157,6 +163,9 @@ proc/process_ghost_teleport_locs()
 /area/shuttle/escape_pod1/centcom
 	icon_state = "shuttle"
 
+/area/shuttle/escape_pod1/transit
+	icon_state = "shuttle"
+
 /area/shuttle/escape_pod2
 	name = "Escape Pod Two"
 	music = "music/escape.ogg"
@@ -165,6 +174,9 @@ proc/process_ghost_teleport_locs()
 	icon_state = "shuttle2"
 
 /area/shuttle/escape_pod2/centcom
+	icon_state = "shuttle"
+
+/area/shuttle/escape_pod2/transit
 	icon_state = "shuttle"
 
 /area/shuttle/escape_pod3
@@ -177,6 +189,9 @@ proc/process_ghost_teleport_locs()
 /area/shuttle/escape_pod3/centcom
 	icon_state = "shuttle"
 
+/area/shuttle/escape_pod3/transit
+	icon_state = "shuttle"
+
 /area/shuttle/escape_pod5 //Pod 4 was lost to meteors
 	name = "Escape Pod Five"
 	music = "music/escape.ogg"
@@ -185,6 +200,9 @@ proc/process_ghost_teleport_locs()
 	icon_state = "shuttle2"
 
 /area/shuttle/escape_pod5/centcom
+	icon_state = "shuttle"
+
+/area/shuttle/escape_pod5/transit
 	icon_state = "shuttle"
 
 /area/shuttle/mining
@@ -366,6 +384,24 @@ proc/process_ghost_teleport_locs()
 	icon_state = "cave"
 	requires_power = 0
 
+/area/asteroid/artifactroom
+	name = "Asteroid - Artifact"
+	icon_state = "cave"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /area/planet/clown
 	name = "Clown Planet"
 	icon_state = "honk"
@@ -424,7 +460,31 @@ proc/process_ghost_teleport_locs()
 	icon_state = "yellow"
 	requires_power = 0
 
+
+
+/area/borg_deathsquad
+	name = "Borg Deathsquad"
+	icon_state = "yellow"
+	requires_power = 0
+
+/area/borg_deathsquad/start
+	name = "Borg Deathsquad - Ready"
+
+
+/area/borg_deathsquad/station
+	name = "Borg Deathsquad - Arrived"
+
+
+
+
+
+
+
+
 //PRISON
+/area/prison
+	name = "Brig Prison Wing"
+	icon_state = "brig"
 
 /area/prison/arrival_airlock
 	name = "Prison Station Airlock"
@@ -712,6 +772,55 @@ proc/process_ghost_teleport_locs()
 	name = "Law Office"
 	icon_state = "law"
 
+
+
+
+
+
+
+/area/holodeck
+	name = "Holodeck"
+	icon_state = "Holodeck"
+	luminosity = 1
+	sd_lighting = 0
+
+/area/holodeck/alphadeck
+	name = "Holodeck Alpha"
+
+
+/area/holodeck/source_plating
+	name = "Holodeck - Off"
+	icon_state = "Holodeck"
+
+/area/holodeck/source_emptycourt
+	name = "Holodeck - Empty Court"
+
+/area/holodeck/source_boxingcourt
+	name = "Holodeck - Boxing Court"
+
+/area/holodeck/source_thunderdomecourt
+	name = "Holodeck - Thunderdome Court"
+
+/area/holodeck/source_beach
+	name = "Holodeck - Beach"
+	icon_state = "Holodeck" // Lazy.
+
+/area/holodeck/source_burntest
+	name = "Holodeck - Atmospheric Burn Test"
+
+/area/holodeck/source_wildlife
+	name = "Holodeck - Wildlife Simulation"
+
+
+
+
+
+
+
+
+
+
+
 //Engineering
 
 /area/engine
@@ -855,7 +964,7 @@ proc/process_ghost_teleport_locs()
 //Security
 
 /area/security/main
-	name = "Security"
+	name = "Security Office"
 	icon_state = "security"
 
 /area/security/brig
@@ -993,6 +1102,10 @@ proc/process_ghost_teleport_locs()
 
 /area/storage/autolathe
 	name = "Autolathe Storage"
+	icon_state = "storage"
+
+/area/storage/art
+	name = "Art Supply Storage"
 	icon_state = "storage"
 
 /area/storage/auxillary
@@ -1316,6 +1429,7 @@ var/list/the_station_areas = list (
 	/area/hallway,
 	/area/bridge,
 	/area/crew_quarters,
+	/area/holodeck,
 	/area/mint,
 	/area/library,
 	/area/chapel,

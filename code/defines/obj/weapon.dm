@@ -2,12 +2,6 @@
 	name = "weapon"
 	icon = 'weapons.dmi'
 
-/obj/item/weapon/offhand
-	name = "offhand"
-	var/linked_weapon_name = ""
-	w_class = 5.0
-	icon_state = "offhand"
-
 /obj/item/weapon/shield
 	name = "shield"
 
@@ -277,6 +271,17 @@
 	throw_speed = 4
 	throw_range = 20
 
+/obj/item/weapon/corncob
+	name = "corn cob"
+	desc = "A reminder of meals gone by."
+	icon = 'harvest.dmi'
+	icon_state = "corncob"
+	item_state = "corncob"
+	w_class = 1.0
+	throwforce = 0
+	throw_speed = 4
+	throw_range = 20
+
 /obj/item/weapon/soap
 	name = "soap"
 	desc = "A cheap bar of soap. Doesn't smell."
@@ -477,9 +482,17 @@
 	icon_state = "id"
 	item_state = "card-id"
 	var/access = list()
-	var/registered = null
+	var/registered_name = null // The name registered_name on the card
+
 	var/assignment = null
+	var/over_jumpsuit = 1 // If set to 0, it won't display on top of the mob's jumpsuit
 	var/dorm = 0		// determines if this ID has claimed a dorm already
+
+/obj/item/weapon/card/id/silver
+	name = "identification card"
+	desc = "A silver card which shows honour and dedication."
+	icon_state = "silver"
+	item_state = "silver_id"
 
 /obj/item/weapon/card/id/gold
 	name = "identification card"
@@ -496,7 +509,7 @@
 /obj/item/weapon/card/id/syndicate_command
 	name = "syndicate ID card"
 	desc = "An ID straight from the Syndicate."
-	registered = "Syndicate"
+	registered_name = "Syndicate"
 	assignment = "Syndicate Overlord"
 	access = list(access_syndicate)
 
@@ -505,7 +518,7 @@
 	desc = "The spare ID of the High Lord himself."
 	icon_state = "gold"
 	item_state = "gold_id"
-	registered = "Captain"
+	registered_name = "Captain"
 	assignment = "Captain"
 	New()
 		access = get_access("Captain")
@@ -515,7 +528,7 @@
 	name = "\improper CentCom. ID"
 	desc = "An ID straight from Cent. Com."
 	icon_state = "centcom"
-	registered = "Central Command"
+	registered_name = "Central Command"
 	assignment = "General"
 	New()
 		access = get_all_centcom_access()
@@ -535,7 +548,7 @@
 	throw_range = 5
 	m_amt = 50
 	g_amt = 20
-	flags = TABLEPASS|USEDELAY|FPRINT|CONDUCT
+	flags = TABLEPASS|USEDELAY|FPRINT|CONDUCT | ONBELT
 	item_state = "coil_red"
 
 /obj/item/weapon/cable_coil/cut
@@ -553,12 +566,18 @@
 	color = "green"
 	icon_state = "coil_green"
 
+/obj/item/weapon/cable_coil/random/New()
+	color = pick("red","yellow","green","blue")
+	icon_state = "coil_[color]"
+	..()
+
+
 /obj/item/weapon/crowbar
 	name = "crowbar"
 	desc = "Used to hit floors"
 	icon = 'items.dmi'
 	icon_state = "crowbar"
-	flags = FPRINT | TABLEPASS| CONDUCT
+	flags = FPRINT | TABLEPASS| CONDUCT | ONBELT
 	force = 5.0
 	throwforce = 7.0
 	item_state = "wrench"
@@ -569,17 +588,6 @@
 /obj/item/weapon/crowbar/red
 	icon = 'items.dmi'
 	icon_state = "red_crowbar"
-
-/obj/item/weapon/fireaxe  // DEM AXES MAN, marker -Agouri
-	icon_state = "fireaxe0"
-	name = "fire axe"
-	desc = "Let me axe you a question."
-	force = 5
-	w_class = 4.0
-	flags = ONBACK
-	twohanded = 1
-	force_unwielded = 5
-	force_wielded = 18
 
 /obj/item/weapon/cane
 	name = "cane"
@@ -849,7 +857,7 @@
 	desc = "You can be totally screwwy with this."
 	icon = 'items.dmi'
 	icon_state = "screwdriver"
-	flags = FPRINT | TABLEPASS| CONDUCT
+	flags = FPRINT | TABLEPASS| CONDUCT | ONBELT
 	force = 5.0
 	w_class = 1.0
 	throwforce = 5.0
@@ -1025,48 +1033,65 @@
 	g_amt = 50
 	var/rigged = 0		// true if rigged to explode
 	var/minor_fault = 0 //If not 100% reliable, it will build up faults.
+	var/construction_cost = list("metal"=750,"glass"=75)
+	var/construction_time=100
 
 /obj/item/weapon/cell/crap
-	name = "\improper Nanotrassen brand rechargable AA battery"
+	name = "\improper Nanotrasen brand rechargable AA battery"
 	desc = "You can't top the plasma top." //TOTALLY TRADEMARK INFRINGEMENT
 	origin_tech = "powerstorage=0"
 	maxcharge = 500
 	g_amt = 40
 
+/obj/item/weapon/cell/secborg
+	name = "\improper Security borg rechargable D battery"
+	origin_tech = "powerstorage=0"
+	maxcharge = 600	//600 max charge / 100 charge per shot = six shots
+	g_amt = 40
+
 /obj/item/weapon/cell/high
 	name = "high-capacity power cell"
 	origin_tech = "powerstorage=2"
+	icon_state = "hcell"
 	maxcharge = 10000
 	g_amt = 60
 
 /obj/item/weapon/cell/super
 	name = "super-capacity power cell"
 	origin_tech = "powerstorage=5"
+	icon_state = "scell"
 	maxcharge = 20000
 	g_amt = 70
+	construction_cost = list("metal"=750,"glass"=100)
 
 /obj/item/weapon/cell/hyper
 	name = "hyper-capacity power cell"
 	origin_tech = "powerstorage=6"
+	icon_state = "hpcell"
 	maxcharge = 30000
 	g_amt = 80
+	construction_cost = list("metal"=500,"glass"=150,"gold"=200,"silver"=200)
 
 /obj/item/weapon/cell/infinite
 	name = "infinite-capacity power cell!"
+	icon_state = "icell"
 	origin_tech =  null
 	maxcharge = 30000
 	g_amt = 80
 	use()
 		return 1
 
-/*/obj/item/weapon/cell/potato
-	name = "Potato Battery"
+/obj/item/weapon/cell/potato
+	name = "potato battery"
 	desc = "A rechargable starch based power cell."
-	icon = 'harvest.dmi'
-	icon_state = "potato_battery"
-	maxcharge = 100
+	origin_tech = "powerstorage=1"
+	icon = 'power.dmi' //'harvest.dmi'
+	icon_state = "cell" //"potato_battery"
+	charge = 100
+	maxcharge = 300
 	m_amt = 0
-	g_amt = 0*/
+	g_amt = 0
+	minor_fault = 1
 
 /obj/item/weapon/camera_bug/attack_self(mob/usr as mob)
 	var/list/cameras = new/list()
@@ -1610,3 +1635,10 @@
 	gender = PLURAL
 	icon = 'wizard.dmi'
 	icon_state = "ectoplasm"
+
+/obj/item/weapon/research//Makes testing much less of a pain -Sieve
+	name = "research"
+	icon = 'stock_parts.dmi'
+	icon_state = "capacitor"
+	desc = "A debug item for research."
+	origin_tech = "materials=8;programming=8;magnets=8;powerstorage=8;bluespace=8;combat=8;biotech=8;syndicate=8"

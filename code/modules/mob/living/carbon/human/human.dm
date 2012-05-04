@@ -54,6 +54,10 @@
 	var/mutantrace = null
 
 	var/list/organs = list()
+	var/bloodloss = 0
+	var/datum/reagents/vessel
+	var/pale = 0
+
 
 /mob/living/carbon/human/dummy
 	real_name = "Test Dummy"
@@ -62,30 +66,19 @@
 
 
 /mob/living/carbon/human/New()
+
+	..()
+
+
+
 	var/datum/reagents/R = new/datum/reagents(1000)
 	reagents = R
 	R.my_atom = src
 
-	if(!dna)	dna = new /datum/dna(null)
+	if(!dna)
+		dna = new /datum/dna(null)
 
-	var/datum/organ/external/chest/chest = new /datum/organ/external/chest(src)
-	var/datum/organ/external/head/head = new /datum/organ/external/head(src)
-	var/datum/organ/external/l_arm/l_arm = new /datum/organ/external/l_arm(src)
-	var/datum/organ/external/r_arm/r_arm = new /datum/organ/external/r_arm(src)
-	var/datum/organ/external/r_leg/r_leg = new /datum/organ/external/r_leg(src)
-	var/datum/organ/external/l_leg/l_leg = new /datum/organ/external/l_leg(src)
-	chest.owner = src
-	head.owner = src
-	r_arm.owner = src
-	l_arm.owner = src
-	r_leg.owner = src
-	l_leg.owner = src
-	organs += chest
-	organs += head
-	organs += r_arm
-	organs += l_arm
-	organs += r_leg
-	organs += l_leg
+	make_human_organs()
 
 	var/g = "m"
 	if (gender == MALE)
@@ -96,16 +89,61 @@
 		gender = MALE
 		g = "m"
 
-	spawn (1)
-		if(!stand_icon)
-			stand_icon = new /icon('human.dmi', "body_[g]_s")
-		if(!lying_icon)
-			lying_icon = new /icon('human.dmi', "body_[g]_l")
+	spawn(1)
+		stand_icon = new /icon('human.dmi', "body_[g]_s")
+		lying_icon = new /icon('human.dmi', "body_[g]_l")
 		icon = stand_icon
 		update_clothing()
+
 		src << "\blue Your icons have been generated!"
 
-	..()
+
+	spawn(10) // Failsafe for.. weirdness.
+		update_clothing()
+		update_body()
+
+	vessel = new/datum/reagents(600)
+	vessel.my_atom = src
+	vessel.add_reagent("blood",560)
+	spawn(1)
+		fixblood()
+
+
+/mob/living/carbon/human/proc/fixblood()
+	for(var/datum/reagent/blood/B in vessel.reagent_list)
+		if(B.id == "blood")
+			B.data = list("donor"=src,"viruses"=null,"blood_DNA"=dna.unique_enzymes,"blood_type"=dna.b_type,"resistances"=null,"trace_chem"=null)
+
+/mob/living/carbon/human/proc/drip(var/amt as num)
+	if(!amt)
+		return
+
+	var/amm = 0.1 * amt
+	var/turf/T = get_turf(src)
+	var/list/obj/effect/decal/cleanable/blood/drip/nums = list()
+	var/list/iconL = list("1","2","3","4","5")
+
+	vessel.remove_reagent("blood",amm)
+
+	for(var/obj/effect/decal/cleanable/blood/drip/G in T)
+		nums += G
+		iconL.Remove(G.icon_state)
+		if(nums.len >= 3)
+			var/obj/effect/decal/cleanable/blood/drip/D = pick(nums)
+			D.blood_DNA.len++
+			D.blood_DNA[D.blood_DNA.len] = list(dna.unique_enzymes,dna.b_type)
+//			if(virus2)
+//				D.virus2 = virus2.getcopy()
+			return
+
+	var/obj/effect/decal/cleanable/blood/drip/this = new(T)
+	this.icon_state = pick(iconL)
+	this.blood_DNA = list(list(dna.unique_enzymes,dna.b_type))
+//	this.blood_owner = src
+
+//	if(virus2)
+//		this.virus2 = virus2.getcopy()
+
 
 //	organStructure = new /obj/effect/organstructure/human(src)
 	isys = new /datum/implant_system(src)
@@ -192,11 +230,19 @@
 
 	if (istype(loc, /turf/space)) return -1 // It's hard to be slowed down in space by... anything
 
-	var/health_deficiency = (100 - health)
+	var/health_deficiency = (100 - health - halloss)
 	if(health_deficiency >= 40) tally += (health_deficiency / 25)
 
 	var/hungry = (500 - nutrition)/5 // So overeat would be 100 and default level would be 80
 	if (hungry >= 70) tally += hungry/50
+
+
+	for(var/organ in list("l_leg","l_foot","r_leg","r_foot"))
+		var/datum/organ/external/o = get_organ(organ)
+		if(o.broken)
+			tally += 6
+		if(o.destroyed)
+			tally += 12
 
 	if(wear_suit)
 		tally += wear_suit.slowdown
@@ -251,7 +297,7 @@
 // /obj/item/clothing/head/bomb_hood(src)
 
 	if (stat == 2 && client)
-		gib(1)
+		gib()
 		return
 
 	else if (stat == 2 && !client)
@@ -266,7 +312,7 @@
 		if (1.0)
 			b_loss += 500
 			if (!prob(getarmor(null, "bomb")))
-				gib(1)
+				gib()
 				return
 			else
 				var/atom/target = get_edge_target_turf(src, get_dir(src, get_step_away(src, src)))
@@ -467,8 +513,8 @@
 				return
 			if (!( W.flags & ONBACK ))
 				return
-			if(W.twohanded && W.wielded)
-				usr << "Unwield the [initial(W.name)] first!"
+			if(istype(W,/obj/item/weapon/twohanded) && W:wielded)
+				usr << "<span class='warning'>Unwield the [initial(W.name)] first!</span>"
 				return
 			u_equip(W)
 			back = W
@@ -1048,8 +1094,8 @@
 		if (wear_id)
 			if (istype(wear_id, /obj/item/weapon/card/id))
 				var/obj/item/weapon/card/id/id = wear_id
-				if (id.registered)
-					name = id.registered
+				if (id.registered_name)
+					name = id.registered_name
 				else
 					name = "Unknown"
 			else if (istype(wear_id, /obj/item/device/pda))
@@ -1064,8 +1110,8 @@
 		if (wear_id)
 			if (istype(wear_id, /obj/item/weapon/card/id))
 				var/obj/item/weapon/card/id/id = wear_id
-				if (id.registered != real_name)
-					name = "[real_name] (as [id.registered])"
+				if (id.registered_name != real_name)
+					name = "[real_name] (as [id.registered_name])"
 
 
 			else if (istype(wear_id, /obj/item/device/pda))
@@ -1248,58 +1294,152 @@
 		return 1
 	return 0
 
+#define BS12TEST 1
 /mob/living/carbon/human/proc/update_body()
-	if(stand_icon)
-		del(stand_icon)
-	if(lying_icon)
-		del(lying_icon)
 
-	if (mutantrace)
-		return
+	if(!BS12TEST)
 
-	var/g = "m"
-	if (gender == MALE)
-		g = "m"
-	else if (gender == FEMALE)
-		g = "f"
+		if(stand_icon)
+			del(stand_icon)
+		if(lying_icon)
+			del(lying_icon)
 
-	stand_icon = new /icon('human.dmi', "blank")
-	lying_icon = new /icon('human.dmi', "blank")
+		if (mutantrace)
+			return
 
-	var/husk = (mutations & HUSK)
-	var/obese = (mutations & FAT)
+		var/g = "m"
+		if (gender == MALE)
+			g = "m"
+		else if (gender == FEMALE)
+			g = "f"
 
-	if (husk)
-		stand_icon.Blend(new /icon('human.dmi', "husk_s"), ICON_OVERLAY)
-		lying_icon.Blend(new /icon('human.dmi', "husk_l"), ICON_OVERLAY)
-	else if(obese)
-		stand_icon.Blend(new /icon('human.dmi', "fatbody_s"), ICON_OVERLAY)
-		lying_icon.Blend(new /icon('human.dmi', "fatbody_l"), ICON_OVERLAY)
+		stand_icon = new /icon('human.dmi', "blank")
+		lying_icon = new /icon('human.dmi', "blank")
+
+		var/husk = (mutations & HUSK)
+		var/obese = (mutations & FAT)
+
+		if (husk)
+			stand_icon.Blend(new /icon('human.dmi', "husk_s"), ICON_OVERLAY)
+			lying_icon.Blend(new /icon('human.dmi', "husk_l"), ICON_OVERLAY)
+		else if(obese)
+			stand_icon.Blend(new /icon('human.dmi', "fatbody_s"), ICON_OVERLAY)
+			lying_icon.Blend(new /icon('human.dmi', "fatbody_l"), ICON_OVERLAY)
+		else
+			stand_icon.Blend(new /icon('human.dmi', "chest_[g]_s"), ICON_OVERLAY)
+			lying_icon.Blend(new /icon('human.dmi', "chest_[g]_l"), ICON_OVERLAY)
+
+			for (var/part in list("head", "arm_left", "arm_right", "hand_left", "hand_right", "leg_left", "leg_right", "foot_left", "foot_right"))
+				stand_icon.Blend(new /icon('human.dmi', "[part]_s"), ICON_OVERLAY)
+				lying_icon.Blend(new /icon('human.dmi', "[part]_l"), ICON_OVERLAY)
+
+			stand_icon.Blend(new /icon('human.dmi', "groin_[g]_s"), ICON_OVERLAY)
+			lying_icon.Blend(new /icon('human.dmi', "groin_[g]_l"), ICON_OVERLAY)
+
+		// Skin tone
+		if (s_tone >= 0)
+			stand_icon.Blend(rgb(s_tone, s_tone, s_tone), ICON_ADD)
+			lying_icon.Blend(rgb(s_tone, s_tone, s_tone), ICON_ADD)
+		else
+			stand_icon.Blend(rgb(-s_tone,  -s_tone,  -s_tone), ICON_SUBTRACT)
+			lying_icon.Blend(rgb(-s_tone,  -s_tone,  -s_tone), ICON_SUBTRACT)
+
+		if (underwear < 6 && underwear > 0)
+			if(!obese)
+				stand_icon.Blend(new /icon('human.dmi', "underwear[underwear]_[g]_s"), ICON_OVERLAY)
+				lying_icon.Blend(new /icon('human.dmi', "underwear[underwear]_[g]_l"), ICON_OVERLAY)
+
 	else
+		if(stand_icon)
+			del(stand_icon)
+		if(lying_icon)
+			del(lying_icon)
+
+		if (mutantrace)
+			return
+
+		var/g = "m"
+		if (gender == MALE)
+			g = "m"
+		else if (gender == FEMALE)
+			g = "f"
+
+		stand_icon = new /icon('human.dmi', "torso_[g]_s")
+		lying_icon = new /icon('human.dmi', "torso_[g]_l")
+
+		var/husk = (mutations & HUSK)
+		var/obese = (mutations & FAT)
+
 		stand_icon.Blend(new /icon('human.dmi', "chest_[g]_s"), ICON_OVERLAY)
 		lying_icon.Blend(new /icon('human.dmi', "chest_[g]_l"), ICON_OVERLAY)
 
-		for (var/part in list("head", "arm_left", "arm_right", "hand_left", "hand_right", "leg_left", "leg_right", "foot_left", "foot_right"))
-			stand_icon.Blend(new /icon('human.dmi', "[part]_s"), ICON_OVERLAY)
-			lying_icon.Blend(new /icon('human.dmi', "[part]_l"), ICON_OVERLAY)
+		var/datum/organ/external/head = get_organ("head")
+		if(!head.destroyed)
+			stand_icon.Blend(new /icon('human.dmi', "head_[g]_s"), ICON_OVERLAY)
+			lying_icon.Blend(new /icon('human.dmi', "head_[g]_l"), ICON_OVERLAY)
+
+		for(var/datum/organ/external/part in organs)
+			if(!istype(part, /datum/organ/external/groin) \
+				&& !istype(part, /datum/organ/external/chest) \
+				&& !istype(part, /datum/organ/external/head) \
+				&& !part.destroyed)
+				var/icon/temp = new /icon('human.dmi', "[part.icon_name]_s")
+				if(part.robot)
+					temp.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28), rgb(0,0,0))
+				stand_icon.Blend(temp, ICON_OVERLAY)
+				temp = new /icon('human.dmi', "[part.icon_name]_l")
+				if(part.robot)
+					temp.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28), rgb(0,0,0))
+				lying_icon.Blend(temp , ICON_OVERLAY)
 
 		stand_icon.Blend(new /icon('human.dmi', "groin_[g]_s"), ICON_OVERLAY)
 		lying_icon.Blend(new /icon('human.dmi', "groin_[g]_l"), ICON_OVERLAY)
 
-	// Skin tone
-	if (s_tone >= 0)
-		stand_icon.Blend(rgb(s_tone, s_tone, s_tone), ICON_ADD)
-		lying_icon.Blend(rgb(s_tone, s_tone, s_tone), ICON_ADD)
-	else
-		stand_icon.Blend(rgb(-s_tone,  -s_tone,  -s_tone), ICON_SUBTRACT)
-		lying_icon.Blend(rgb(-s_tone,  -s_tone,  -s_tone), ICON_SUBTRACT)
+		if (husk)
+			var/icon/husk_s = new /icon('human.dmi', "husk_s")
+			var/icon/husk_l = new /icon('human.dmi', "husk_l")
 
-	if (underwear < 6 && underwear > 0)
-		if(!obese)
-			stand_icon.Blend(new /icon('human.dmi', "underwear[underwear]_[g]_s"), ICON_OVERLAY)
-			lying_icon.Blend(new /icon('human.dmi', "underwear[underwear]_[g]_l"), ICON_OVERLAY)
+			for(var/datum/organ/external/part in organs)
+				if(!istype(part, /datum/organ/external/groin) \
+					&& !istype(part, /datum/organ/external/chest) \
+					&& !istype(part, /datum/organ/external/head) \
+					&& part.destroyed)
+					husk_s.Blend(new /icon('dam_mask.dmi', "[part.icon_name]"), ICON_SUBTRACT)
+					husk_l.Blend(new /icon('dam_mask.dmi', "[part.icon_name]2"), ICON_SUBTRACT)
+
+			stand_icon.Blend(husk_s, ICON_OVERLAY)
+			lying_icon.Blend(husk_l, ICON_OVERLAY)
+		else if(obese)
+			stand_icon.Blend(new /icon('human.dmi', "fatbody_s"), ICON_OVERLAY)
+			lying_icon.Blend(new /icon('human.dmi', "fatbody_l"), ICON_OVERLAY)
+
+		// Skin tone
+		if (s_tone >= 0)
+			stand_icon.Blend(rgb(s_tone, s_tone, s_tone), ICON_ADD)
+			lying_icon.Blend(rgb(s_tone, s_tone, s_tone), ICON_ADD)
+		else
+			stand_icon.Blend(rgb(-s_tone,  -s_tone,  -s_tone), ICON_SUBTRACT)
+			lying_icon.Blend(rgb(-s_tone,  -s_tone,  -s_tone), ICON_SUBTRACT)
+//		if(pale)
+//			stand_icon.Blend(rgb(100,100,100))
+//			lying_icon.Blend(rgb(100,100,100))
+
+		if (underwear < 6 && underwear > 0)
+			if(!obese)
+				stand_icon.Blend(new /icon('human.dmi', "underwear[underwear]_[g]_s"), ICON_OVERLAY)
+				lying_icon.Blend(new /icon('human.dmi', "underwear[underwear]_[g]_l"), ICON_OVERLAY)
+
+
+
 
 /mob/living/carbon/human/proc/update_face()
+	if(organs)
+		var/datum/organ/external/head = get_organ("head")
+		if(head)
+			if(head.destroyed)
+				del(face_standing)
+				del(face_lying)
+				return
 	if(!facial_hair_style || !hair_style)	return//Seems people like to lose their icons, this should stop the runtimes for now
 	del(face_standing)
 	del(face_lying)
@@ -1438,116 +1578,105 @@
 		for(var/mob/O in viewers(target, null))
 			O.show_message(text("\red <B>[] is trying to put \a [] on []</B>", source, item, target), 1)
 	else
-		if (place == "syringe")
-			for(var/mob/O in viewers(target, null))
-				O.show_message(text("\red <B>[] is trying to inject []!</B>", source, target), 1)
-		else
-			if (place == "pill")
-				for(var/mob/O in viewers(target, null))
-					O.show_message(text("\red <B>[] is trying to force [] to swallow []!</B>", source, target, item), 1)
-			else
-				if(place == "fuel")
-					for(var/mob/O in viewers(target, null))
-						O.show_message(text("\red [source] is trying to force [target] to eat the [item:content]!"), 1)
+		var/message=null
+		switch(place)
+			if("syringe")
+				message = text("\red <B>[] is trying to inject []!</B>", source, target)
+			if("pill")
+				message = text("\red <B>[] is trying to force [] to swallow []!</B>", source, target, item)
+			if("fuel")
+				message = text("\red [source] is trying to force [target] to eat the [item:content]!")
+			if("drink")
+				message = text("\red <B>[] is trying to force [] to swallow a gulp of []!</B>", source, target, item)
+			if("dnainjector")
+				message = text("\red <B>[] is trying to inject [] with the []!</B>", source, target, item)
+			if("mask")
+				if(istype(target.wear_mask, /obj/item/clothing)&&!target.wear_mask:canremove)
+					message = text("\red <B>[] fails to take off \a [] from []'s body!</B>", source, target.wear_mask, target)
 				else
-					if (place == "drink")
+					message = text("\red <B>[] is trying to take off \a [] from []'s head!</B>", source, target.wear_mask, target)
+/*			if("headset")
+				message = text("\red <B>[] is trying to take off \a [] from []'s face!</B>", source, target.w_radio, target) */
+			if("l_hand")
+				message = text("\red <B>[] is trying to take off \a [] from []'s left hand!</B>", source, target.l_hand, target)
+			if("r_hand")
+				message = text("\red <B>[] is trying to take off \a [] from []'s right hand!</B>", source, target.r_hand, target)
+			if("gloves")
+				if(istype(target.gloves, /obj/item/clothing)&&!target.gloves:canremove)
+					message = text("\red <B>[] fails to take off \a [] from []'s body!</B>", source, target.gloves, target)
+				else
+					message = text("\red <B>[] is trying to take off the [] from []'s hands!</B>", source, target.gloves, target)
+			if("eyes")
+				if(istype(target.glasses, /obj/item/clothing)&&!target.glasses:canremove)
+					message = text("\red <B>[] fails to take off \a [] from []'s body!</B>", source, target.glasses, target)
+				else
+					message = text("\red <B>[] is trying to take off the [] from []'s eyes!</B>", source, target.glasses, target)
+			if("ears")
+				if(istype(target.ears, /obj/item/clothing)&&!target.ears:canremove)
+					message = text("\red <B>[] fails to take off \a [] from []'s body!</B>", source, target.ears, target)
+				else
+					message = text("\red <B>[] is trying to take off the [] from []'s ears!</B>", source, target.ears, target)
+			if("head")
+				if(istype(target.head, /obj/item/clothing)&&!target.head:canremove)
+					message = text("\red <B>[] fails to take off \a [] from []'s body!</B>", source, target.head, target)
+				else
+					message = text("\red <B>[] is trying to take off the [] from []'s head!</B>", source, target.head, target)
+			if("shoes")
+				if(istype(target.shoes, /obj/item/clothing)&&!target.shoes:canremove)
+					message = text("\red <B>[] fails to take off \a [] from []'s body!</B>", source, target.shoes, target)
+				else
+					message = text("\red <B>[] is trying to take off the [] from []'s feet!</B>", source, target.shoes, target)
+			if("belt")
+				message = text("\red <B>[] is trying to take off the [] from []'s belt!</B>", source, target.belt, target)
+			if("suit")
+				if(istype(target.wear_suit, /obj/item/clothing)&&!target.wear_suit:canremove)
+					message = text("\red <B>[] fails to take off \a [] from []'s body!</B>", source, target.wear_suit, target)
+				else
+					message = text("\red <B>[] is trying to take off \a [] from []'s body!</B>", source, target.wear_suit, target)
+			if("back")
+				message = text("\red <B>[] is trying to take off \a [] from []'s back!</B>", source, target.back, target)
+			if("handcuff")
+				message = text("\red <B>[] is trying to unhandcuff []!</B>", source, target)
+			if("uniform")
+				if(istype(target.w_uniform, /obj/item/clothing)&&!target.w_uniform:canremove)
+					message = text("\red <B>[] fails to take off \a [] from []'s body!</B>", source, target.w_uniform, target)
+				else
+					message = text("\red <B>[] is trying to take off \a [] from []'s body!</B>", source, target.w_uniform, target)
+			if("s_store")
+				message = text("\red <B>[] is trying to take off \a [] from []'s suit!</B>", source, target.s_store, target)
+			if("h_store")
+				message = text("\red <B>[] is trying to empty []'s hat!</B>", source, target)
+			if("pockets")
+				for(var/obj/item/weapon/mousetrap/MT in  list(target.l_store, target.r_store))
+					if(MT.armed)
 						for(var/mob/O in viewers(target, null))
-							O.show_message(text("\red <B>[] is trying to force [] to swallow a gulp of []!</B>", source, target, item), 1)
-					else
-						if (place == "dnainjector")
-							for(var/mob/O in viewers(target, null))
-								O.show_message(text("\red <B>[] is trying to inject [] with the []!</B>", source, target, item), 1)
-						else
-							var/message = null
-							switch(place)
-								if("mask")
-									if(istype(target.wear_mask, /obj/item/clothing)&&!target.wear_mask:canremove)
-										message = text("\red <B>[] fails to take off \a [] from []'s body!</B>", source, target.wear_mask, target)
-									else
-										message = text("\red <B>[] is trying to take off \a [] from []'s head!</B>", source, target.wear_mask, target)
-/*								if("headset")
-									message = text("\red <B>[] is trying to take off \a [] from []'s face!</B>", source, target.w_radio, target) */
-								if("l_hand")
-									message = text("\red <B>[] is trying to take off \a [] from []'s left hand!</B>", source, target.l_hand, target)
-								if("r_hand")
-									message = text("\red <B>[] is trying to take off \a [] from []'s right hand!</B>", source, target.r_hand, target)
-								if("gloves")
-									if(istype(target.gloves, /obj/item/clothing)&&!target.gloves:canremove)
-										message = text("\red <B>[] fails to take off \a [] from []'s body!</B>", source, target.gloves, target)
-									else
-										message = text("\red <B>[] is trying to take off the [] from []'s hands!</B>", source, target.gloves, target)
-								if("eyes")
-									if(istype(target.glasses, /obj/item/clothing)&&!target.glasses:canremove)
-										message = text("\red <B>[] fails to take off \a [] from []'s body!</B>", source, target.glasses, target)
-									else
-										message = text("\red <B>[] is trying to take off the [] from []'s eyes!</B>", source, target.glasses, target)
-								if("ears")
-									if(istype(target.ears, /obj/item/clothing)&&!target.ears:canremove)
-										message = text("\red <B>[] fails to take off \a [] from []'s body!</B>", source, target.ears, target)
-									else
-										message = text("\red <B>[] is trying to take off the [] from []'s ears!</B>", source, target.ears, target)
-								if("head")
-									if(istype(target.head, /obj/item/clothing)&&!target.head:canremove)
-										message = text("\red <B>[] fails to take off \a [] from []'s body!</B>", source, target.head, target)
-									else
-										message = text("\red <B>[] is trying to take off the [] from []'s head!</B>", source, target.head, target)
-								if("shoes")
-									if(istype(target.shoes, /obj/item/clothing)&&!target.shoes:canremove)
-										message = text("\red <B>[] fails to take off \a [] from []'s body!</B>", source, target.shoes, target)
-									else
-										message = text("\red <B>[] is trying to take off the [] from []'s feet!</B>", source, target.shoes, target)
-								if("belt")
-									message = text("\red <B>[] is trying to take off the [] from []'s belt!</B>", source, target.belt, target)
-								if("suit")
-									if(istype(target.wear_suit, /obj/item/clothing)&&!target.wear_suit:canremove)
-										message = text("\red <B>[] fails to take off \a [] from []'s body!</B>", source, target.wear_suit, target)
-									else
-										message = text("\red <B>[] is trying to take off \a [] from []'s body!</B>", source, target.wear_suit, target)
-								if("back")
-									message = text("\red <B>[] is trying to take off \a [] from []'s back!</B>", source, target.back, target)
-								if("handcuff")
-									message = text("\red <B>[] is trying to unhandcuff []!</B>", source, target)
-								if("uniform")
-									if(istype(target.w_uniform, /obj/item/clothing)&&!target.w_uniform:canremove)
-										message = text("\red <B>[] fails to take off \a [] from []'s body!</B>", source, target.w_uniform, target)
-									else
-										message = text("\red <B>[] is trying to take off \a [] from []'s body!</B>", source, target.w_uniform, target)
-								if("s_store")
-									message = text("\red <B>[] is trying to take off \a [] from []'s suit!</B>", source, target.s_store, target)
-								if("h_store")
-									message = text("\red <B>[] is trying to empty []'s hat!</B>", source, target)
-								if("pockets")
-									for(var/obj/item/weapon/mousetrap/MT in  list(target.l_store, target.r_store))
-										if(MT.armed)
-											for(var/mob/O in viewers(target, null))
-												if(O == source)
-													O.show_message(text("\red <B>You reach into the [target]'s pockets, but there was a live mousetrap in there!</B>"), 1)
-												else
-													O.show_message(text("\red <B>[source] reaches into [target]'s pockets and sets off a hidden mousetrap!</B>"), 1)
-											target.u_equip(MT)
-											if (target.client)
-												target.client.screen -= MT
-											MT.loc = source.loc
-											MT.triggered(source, source.hand ? "l_hand" : "r_hand")
-											MT.layer = OBJ_LAYER
-											return
-									message = text("\red <B>[] is trying to empty []'s pockets!!</B>", source, target)
-								if("CPR")
-									if (target.cpr_time >= world.time + 3)
-										//SN src = null
-										del(src)
-										return
-									message = text("\red <B>[] is trying perform CPR on []!</B>", source, target)
-								if("id")
-									message = text("\red <B>[] is trying to take off [] from []'s uniform!</B>", source, target.wear_id, target)
-								if("internal")
-									if (target.internal)
-										message = text("\red <B>[] is trying to remove []'s internals</B>", source, target)
-									else
-										message = text("\red <B>[] is trying to set on []'s internals.</B>", source, target)
-								else
-							for(var/mob/M in viewers(target, null))
-								M.show_message(message, 1)
+							if(O == source)
+								O.show_message(text("\red <B>You reach into the [target]'s pockets, but there was a live mousetrap in there!</B>"), 1)
+							else
+								O.show_message(text("\red <B>[source] reaches into [target]'s pockets and sets off a hidden mousetrap!</B>"), 1)
+						target.u_equip(MT)
+						if (target.client)
+							target.client.screen -= MT
+						MT.loc = source.loc
+						MT.triggered(source, source.hand ? "l_hand" : "r_hand")
+						MT.layer = OBJ_LAYER
+						return
+				message = text("\red <B>[] is trying to empty []'s pockets!!</B>", source, target)
+			if("CPR")
+				if (target.cpr_time >= world.time + 3)
+					//SN src = null
+					del(src)
+					return
+				message = text("\red <B>[] is trying perform CPR on []!</B>", source, target)
+			if("id")
+				message = text("\red <B>[] is trying to take off [] from []'s uniform!</B>", source, target.wear_id, target)
+			if("internal")
+				if (target.internal)
+					message = text("\red <B>[] is trying to remove []'s internals</B>", source, target)
+				else
+					message = text("\red <B>[] is trying to set on []'s internals.</B>", source, target)
+		for(var/mob/M in viewers(target, null))
+			M.show_message(message, 1)
 	spawn( 40 )
 		done()
 		return
@@ -1567,7 +1696,7 @@ It can still be worn/put on as normal.
 	if(source.loc != s_loc)						return
 	if(target.loc != t_loc)						return
 	if(LinkBlocked(s_loc,t_loc))				return
-	if(item && source.equipped() != item)	return
+	if(item && source.equipped() != item)		return
 	if ((source.restrained() || source.stat))	return
 	switch(place)
 		if("mask")
@@ -1581,9 +1710,9 @@ It can still be worn/put on as normal.
 				if (W)
 					W.loc = target.loc
 					W.dropped(target)
-				if (W)
-					W.layer = initial(W.layer)
-					W.add_fingerprint(source)
+					if (W)
+						W.layer = initial(W.layer)
+						W.add_fingerprint(source)
 			else
 				if (istype(item, /obj/item/clothing/mask))
 					source.drop_item()
@@ -1770,9 +1899,9 @@ It can still be worn/put on as normal.
 					target.client.screen -= W
 				if (W)
 					W.loc = target.loc
-					W.dropped(target)
 					W.layer = initial(W.layer)
 					W.add_fingerprint(source)
+					W.dropped(target)			//dropped sometimes deletes src so put it last
 			else
 				if(istype(item, /obj/item))
 					source.drop_item()
@@ -1794,9 +1923,9 @@ It can still be worn/put on as normal.
 					target.client.screen -= W
 				if (W)
 					W.loc = target.loc
-					W.dropped(target)
 					W.layer = initial(W.layer)
 					W.add_fingerprint(source)
+					W.dropped(target)			//dropped sometimes deletes src so put it last
 			else
 				if (istype(item, /obj/item))
 					source.drop_item()
@@ -2080,7 +2209,7 @@ It can still be worn/put on as normal.
 	var/obj/item/device/pda/pda = wear_id
 	var/obj/item/weapon/card/id/id = wear_id
 	if (istype(pda))
-		if (pda.id)
+		if (pda.id && istype(pda.id, /obj/item/weapon/card/id))
 			. = pda.id.assignment
 		else
 			. = pda.ownjob
@@ -2099,11 +2228,11 @@ It can still be worn/put on as normal.
 	var/obj/item/weapon/card/id/id = wear_id
 	if (istype(pda))
 		if (pda.id)
-			. = pda.id.registered
+			. = pda.id.registered_name
 		else
 			. = pda.owner
 	else if (istype(id))
-		. = id.registered
+		. = id.registered_name
 	else
 		return if_no_id
 	return
@@ -2116,7 +2245,7 @@ It can still be worn/put on as normal.
 	if (istype(pda))
 		. = pda.owner
 	else if (istype(id))
-		. = id.registered
+		. = id.registered_name
 	else
 		return if_no_id
 	return
@@ -2233,6 +2362,40 @@ It can still be worn/put on as normal.
 		spawn( 0 )
 			O.process()
 			return
+
+	if (href_list["criminal"])
+		if(istype(usr, /mob/living/carbon/human))
+			var/mob/living/carbon/human/H = usr
+			if(istype(H.glasses, /obj/item/clothing/glasses/hud/security) || istype(H.glasses, /obj/item/clothing/glasses/sunglasses/sechud))
+				var/perpname = "wot"
+				var/modified = 0
+
+				if(wear_id)
+					if(istype(wear_id,/obj/item/weapon/card/id))
+						perpname = wear_id:registered_name
+					else if(istype(wear_id,/obj/item/device/pda))
+						var/obj/item/device/pda/tempPda = wear_id
+						perpname = tempPda.owner
+				else
+					perpname = src.name
+
+				for (var/datum/data/record/E in data_core.general)
+					if (E.fields["name"] == perpname)
+						for (var/datum/data/record/R in data_core.security)
+							if (R.fields["id"] == E.fields["id"])
+
+								var/setcriminal = input(usr, "Specify a new criminal status for this person.", "Security HUD", R.fields["criminal"]) in list("None", "*Arrest*", "Incarcerated", "Parolled", "Released", "Cancel")
+
+								if(istype(H.glasses, /obj/item/clothing/glasses/hud/security) || istype(H.glasses, /obj/item/clothing/glasses/sunglasses/sechud))
+									if(setcriminal != "Cancel")
+										R.fields["criminal"] = setcriminal
+										modified = 1
+
+										spawn()
+											H.handle_regular_hud_updates()
+
+				if(!modified)
+					usr << "\red Unable to locate a data core entry for this person."
 	..()
 	return
 

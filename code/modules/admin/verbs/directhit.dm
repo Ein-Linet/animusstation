@@ -7,7 +7,7 @@
 	set category = "Fun"
 	if(!T)
 		return
-	if(!src.authenticated || !src.holder)
+	if(!src.holder)
 		src << "Only administrators may use this command."
 		return
 
@@ -18,7 +18,7 @@
 	set desc = "Trow something in player"
 	set category = "Fun"
 
-	if(!src.authenticated || !src.holder)
+	if(!src.holder)
 		src << "Only administrators may use this command."
 		return
 
