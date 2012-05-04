@@ -230,6 +230,7 @@ datum
 
 							var/created_volume = C.result_amount*multiplier
 							if(C.result)
+								feedback_set_details("chemical_reaction","[C.result]|[C.result_amount*multiplier]")
 								var/data = null
 								switch(C.result)
 									if("vaccine2")

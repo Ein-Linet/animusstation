@@ -190,7 +190,6 @@ datum
 						var/datum/disease/newVirus = new D.type
 						blood_prop.viruses += newVirus
 						newVirus.holder = blood_prop
-
 						/*
 						if(T.density==0)
 							newVirus.spread_type = CONTACT_FEET
@@ -713,27 +712,30 @@ datum
 							del (M:wear_mask)
 							M << "\red Your mask melts away but protects you from the acid!"
 							return
+					if(!M.unacidable)
+						if(prob(15) && istype(M, /mob/living/carbon/human) && volume >= 30)
 
-					if(prob(15) && istype(M, /mob/living/carbon/human) && volume >= 30)
-						var/datum/organ/external/affecting = M:get_organ("head")
-						if(affecting)
-							affecting.take_damage(25, 0)
-							M:UpdateDamageIcon()
-							M:emote("scream")
-							M << "\red Your face has become disfigured!"
-							M.real_name = "Unknown"
-					else
-						M.take_organ_damage(min(15, volume * 2)) // uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
+							var/datum/organ/external/affecting = M:get_organ("head")
+							if(affecting)
+								affecting.take_damage(25, 0)
+								M:UpdateDamageIcon()
+								M:emote("scream")
+								M << "\red Your face has become disfigured!"
+								M.real_name = "Unknown"
+						else
+							M.take_organ_damage(min(15, volume * 2)) // uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
 				else
-					M.take_organ_damage(min(15, volume * 2))
+					if(!M.unacidable)
+						M.take_organ_damage(min(15, volume * 2))
 
 			reaction_obj(var/obj/O, var/volume)
 				if((istype(O,/obj/item) || istype(O,/obj/effect/glowshroom)) && prob(10))
-					var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(O.loc)
-					I.desc = "Looks like this was \an [O] some time ago."
-					for(var/mob/M in viewers(5, O))
-						M << "\red \the [O] melts."
-					del(O)
+					if(!O.unacidable)
+						var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(O.loc)
+						I.desc = "Looks like this was \an [O] some time ago."
+						for(var/mob/M in viewers(5, O))
+							M << "\red \the [O] melts."
+						del(O)
 
 		pacid
 			name = "Polytrinic acid"
@@ -761,36 +763,43 @@ datum
 							del (M:head)
 							M << "\red Your helmet melts into uselessness!"
 							return
-						var/datum/organ/external/affecting = M:get_organ("head")
-						affecting.take_damage(35, 0)
-						M:UpdateDamageIcon()
-						M:emote("scream")
-						M << "\red Your face has become disfigured!"
-						M.real_name = "Unknown"
+
+						if(!M.unacidable)
+							var/datum/organ/external/affecting = M:get_organ("head")
+							affecting.take_damage(35, 0)
+							M:UpdateDamageIcon()
+							M:emote("scream")
+							M << "\red Your face has become disfigured!"
+							M.real_name = "Unknown"
 					else
 						if(istype(M, /mob/living/carbon/monkey) && M:wear_mask)
 							del (M:wear_mask)
 							M << "\red Your mask melts away but protects you from the acid!"
 							return
-						M.take_organ_damage(min(15, volume * 4)) // same deal as sulphuric acid
+
+
+						if(!M.unacidable)
+							M.take_organ_damage(min(15, volume * 4)) // same deal as sulphuric acid
 				else
-					if(istype(M, /mob/living/carbon/human))
-						var/datum/organ/external/affecting = M:get_organ("head")
-						affecting.take_damage(30, 0)
-						M:UpdateDamageIcon()
-						M:emote("scream")
-						M << "\red Your face has become disfigured!"
-						M.real_name = "Unknown"
-					else
-						M.take_organ_damage(min(15, volume * 4))
+					if(!M.unacidable)
+						if(istype(M, /mob/living/carbon/human))
+							var/datum/organ/external/affecting = M:get_organ("head")
+							affecting.take_damage(30, 0)
+							M:UpdateDamageIcon()
+							M:emote("scream")
+							M << "\red Your face has become disfigured!"
+							M.real_name = "Unknown"
+						else
+							M.take_organ_damage(min(15, volume * 4))
 
 			reaction_obj(var/obj/O, var/volume)
 				if((istype(O,/obj/item) || istype(O,/obj/effect/glowshroom)))
-					var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(O.loc)
-					I.desc = "Looks like this was \an [O] some time ago."
-					for(var/mob/M in viewers(5, O))
-						M << "\red \the [O] melts."
-					del(O)
+					if(!O.unacidable)
+						var/obj/effect/decal/cleanable/molten_item/I = new/obj/effect/decal/cleanable/molten_item(O.loc)
+						I.desc = "Looks like this was \an [O] some time ago."
+						for(var/mob/M in viewers(5, O))
+							M << "\red \the [O] melts."
+						del(O)
 
 		glycerol
 			name = "Glycerol"
@@ -1005,7 +1014,6 @@ datum
 				fuel.moles = 15
 				napalm.trace_gases += fuel
 				the_turf.assume_air(napalm)
-
 			reaction_turf(var/turf/T, var/volume)
 				src = null
 				var/datum/gas_mixture/napalm = new
@@ -1014,7 +1022,6 @@ datum
 				napalm.trace_gases += fuel
 				T.assume_air(napalm)
 				return
-
 			on_mob_life(var/mob/living/M as mob)
 				if(!M) M = holder.my_atom
 				M:adjustToxLoss(1)
@@ -1724,6 +1731,23 @@ datum
 				..()
 				return
 
+		lipozine
+			name = "Lipozine" // The anti-nutriment.
+			id = "lipozine"
+			description = "A chemical compound that causes a powerful fat-burning reaction."
+			reagent_state = LIQUID
+			nutriment_factor = 10 * REAGENTS_METABOLISM
+			color = "#BBEDA4" // rgb: 187, 237, 164
+
+			on_mob_life(var/mob/living/M as mob)
+				if(!M) M = holder.my_atom
+				M:nutrition -= nutriment_factor
+				M:overeatduration = 0
+				if(M:nutrition < 0)//Prevent from going into negatives.
+					M:nutrition = 0
+				..()
+				return
+
 		soysauce
 			name = "Soysauce"
 			id = "soysauce"
@@ -2282,7 +2306,7 @@ datum
 				..()
 				M.dizziness = max(0,M.dizziness-5)
 				M:drowsyness = max(0,M:drowsyness-3)
-				M:sleeping = 0
+				M:sleeping = max(0,M.sleeping - 2)
 				if (M.bodytemperature < 310)//310 is the normal bodytemp. 310.055
 					M.bodytemperature = min(310, M.bodytemperature+5)
 				M.make_jittery(5)
@@ -2301,7 +2325,7 @@ datum
 				M.dizziness = max(0,M.dizziness-2)
 				M:drowsyness = max(0,M:drowsyness-1)
 				M:jitteriness = max(0,M:jitteriness-3)
-				M:sleeping = 0
+				M:sleeping = max(0,M.sleeping-1)
 				if(M:getToxLoss() && prob(20))
 					M:adjustToxLoss(-1)
 				if (M.bodytemperature < 310)  //310 is the normal bodytemp. 310.055
@@ -2320,7 +2344,7 @@ datum
 				..()
 				M.dizziness = max(0,M.dizziness-5)
 				M:drowsyness = max(0,M:drowsyness-3)
-				M:sleeping = 0
+				M:sleeping = max(0,M.sleeping-2)
 				if (M.bodytemperature > 310)//310 is the normal bodytemp. 310.055
 					M.bodytemperature = min(310, M.bodytemperature-5)
 				M.make_jittery(5)
@@ -2338,7 +2362,7 @@ datum
 				..()
 				M.dizziness = max(0,M.dizziness-2)
 				M:drowsyness = max(0,M:drowsyness-1)
-				M:sleeping = 0
+				M.sleeping = max(0,M.sleeping-2)
 				if(M:getToxLoss() && prob(20))
 					M:adjustToxLoss(-1)
 				if (M.bodytemperature > 310)//310 is the normal bodytemp. 310.055
@@ -2372,7 +2396,7 @@ datum
 				M.druggy = max(M.druggy, 30)
 				M.dizziness +=5
 				M:drowsyness = 0
-				M:sleeping = 0
+				M:sleeping = max(0,M.sleeping-2)
 				if (M.bodytemperature > 310)//310 is the normal bodytemp. 310.055
 					M.bodytemperature = max(310, M.bodytemperature-5)
 				M:nutrition += 1
@@ -2388,7 +2412,7 @@ datum
 
 			on_mob_life(var/mob/living/M as mob)
 				M:drowsyness = max(0,M:drowsyness-7)
-				M:sleeping = 0
+				M:sleeping = max(0,M.sleeping-1)
 				if (M.bodytemperature > 310)
 					M.bodytemperature = max(310, M.bodytemperature-5)
 				M.make_jittery(5)
@@ -2405,7 +2429,7 @@ datum
 
 			on_mob_life(var/mob/living/M as mob)
 				M:drowsyness = max(0,M:drowsyness-7)
-				M:sleeping = 0
+				M:sleeping = max(0,M.sleeping-2)
 				if (M.bodytemperature > 310)
 					M.bodytemperature = max(310, M.bodytemperature-5)
 				M.make_jittery(5)
@@ -2673,7 +2697,7 @@ datum
 			on_mob_life(var/mob/living/M as mob)
 				M.dizziness = max(0,M.dizziness-5)
 				M:drowsyness = max(0,M:drowsyness-3)
-				M:sleeping = 0
+				M:sleeping = max(0,M.sleeping-2)
 				if (M.bodytemperature > 310)
 					M.bodytemperature = max(310, M.bodytemperature-5)
 				..()
@@ -2689,7 +2713,7 @@ datum
 			on_mob_life(var/mob/living/M as mob)
 				M.dizziness = max(0,M.dizziness-5)
 				M:drowsyness = max(0,M:drowsyness-3)
-				M:sleeping = 0//Copy-paste from Coffee, derp
+				M:sleeping = max(0,M.sleeping-2)//Copy-paste from Coffee, derp
 				M.make_jittery(5)
 				..()
 				return
@@ -2762,7 +2786,6 @@ datum
 			on_mob_life(var/mob/living/M as mob)
 				M.dizziness = max(0,M.dizziness-5)
 				M:drowsyness = max(0,M:drowsyness-3)
-				M:sleeping = 0
 				if (M.bodytemperature > 310)
 					M.bodytemperature = max(310, M.bodytemperature-5)
 				..()

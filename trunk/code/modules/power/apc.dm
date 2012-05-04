@@ -762,7 +762,7 @@
 			return 0
 	return 1
 
-/obj/machinery/power/apc/Topic(href, href_list)
+/obj/machinery/power/apc/Topic(href, href_list, var/usingUI = 1)
 	if (!can_use(usr))
 		return
 	src.add_fingerprint(usr)
@@ -795,6 +795,7 @@
 			if (ticker.mode.config_tag == "malfunction")
 				if (src.z == 1) //if (is_type_in_list(get_area(src), the_station_areas))
 					operating ? ticker.mode:apcs++ : ticker.mode:apcs--
+
 		src.update()
 		updateicon()
 
@@ -849,18 +850,19 @@
 			malfai.malfhack = src
 			malfai.malfhacking = 1
 			sleep(600)
-			if (!src.aidisabled)
-				malfai.malfhack = null
-				malfai.malfhacking = 0
-				if (ticker.mode.config_tag == "malfunction")
-					if (src.z == 1) //if (is_type_in_list(get_area(src), the_station_areas))
-						ticker.mode:apcs++
-				if(usr:parent)
-					src.malfai = usr:parent
-				else
-					src.malfai = usr
-				malfai << "Hack complete. The APC is now under your exclusive control."
-				updateicon()
+			if(src)
+				if (!src.aidisabled)
+					malfai.malfhack = null
+					malfai.malfhacking = 0
+					if (ticker.mode.config_tag == "malfunction")
+						if (src.z == 1) //if (is_type_in_list(get_area(src), the_station_areas))
+							ticker.mode:apcs++
+					if(usr:parent)
+						src.malfai = usr:parent
+					else
+						src.malfai = usr
+					malfai << "Hack complete. The APC is now under your exclusive control."
+					updateicon()
 
 	else if (href_list["occupyapc"])
 		malfoccupy(usr)
@@ -869,7 +871,9 @@
 	else if (href_list["deoccupyapc"])
 		malfvacate()
 
-	src.updateDialog()
+	if(usingUI)
+		src.updateDialog()
+
 	return
 
 /obj/machinery/power/apc/proc/malfoccupy(var/mob/living/silicon/ai/malf)
@@ -879,7 +883,8 @@
 		return
 	src.occupant = new /mob/living/silicon/ai(src,malf.laws,null,1)
 	src.occupant.adjustOxyLoss(malf.getOxyLoss())
-	src.occupant.name = "[malf.name] APC Copy"
+	if(!findtext(src.occupant.name,"APC Copy"))
+		src.occupant.name = "[malf.name] APC Copy"
 	if(malf.parent)
 		src.occupant.parent = malf.parent
 	else

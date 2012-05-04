@@ -132,6 +132,23 @@
 					if(A.client)
 						hear += A
 
+	// Soulstones
+	for(var/obj/item/device/soulstone/C in V)
+		for(var/mob/living/simple_animal/shade/M in C)
+			if(isInSight(source,C))
+				if(M.client)
+					hear += M
+
+	// Kind of a hacky fix, but should fix most cases without undo issues.
+	for(var/mob/M as mob in V)
+		for(var/obj/item/device/soulstone/C in M.contents)
+			for(var/mob/living/simple_animal/shade/A in C)
+				if(isInSight(source,A))
+					if(A.client)
+						hear += A
+
+
+
 	// Brains/MMIs/pAIs
 	for(var/mob/living/carbon/brain/C in world)
 		if(get_turf(C) in V)
@@ -170,6 +187,12 @@
 			if(isInSight(source,C))
 				if(C.occupant.client)
 					hear += C.occupant
+
+	for(var/obj/item/device/radio/theradio in V)
+		if(isInSight(source,theradio))
+			hear += theradio
+
+
 
 	return hear
 
@@ -219,3 +242,15 @@ proc/isInSight(var/atom/A, var/atom/B)
 
 	else
 		return 0
+
+
+proc/doafterattack(obj/target , obj/source)
+
+	if (istype(target, /obj/item/weapon/storage/backpack ))
+		return 0
+
+	else if (locate (/obj/structure/table, source.loc))
+		return 0
+
+	else
+		return 1

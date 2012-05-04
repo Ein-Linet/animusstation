@@ -169,10 +169,10 @@ client
 
 		if(istype(D,/atom))
 			var/atom/A = D
-			body += "<a href='byond://?src=\ref[src];datumedit=\ref[D];varnameedit=name'><b>[D]</b></a>"
-			if(A.dir)
-				body += "<br><font size='1'><a href='byond://?src=\ref[src];rotatedatum=\ref[D];rotatedir=left'><<</a> <a href='byond://?src=\ref[src];datumedit=\ref[D];varnameedit=dir'>[dir2text(A.dir)]</a> <a href='byond://?src=\ref[src];rotatedatum=\ref[D];rotatedir=right'>>></a></font>"
-			if(istype(A,/mob))
+			if(ismob(A))
+				body += "<a href='byond://?src=\ref[src];rename=\ref[D]'><b>[D]</b></a>"
+				if(A.dir)
+					body += "<br><font size='1'><a href='byond://?src=\ref[src];rotatedatum=\ref[D];rotatedir=left'><<</a> <a href='byond://?src=\ref[src];datumedit=\ref[D];varnameedit=dir'>[dir2text(A.dir)]</a> <a href='byond://?src=\ref[src];rotatedatum=\ref[D];rotatedir=right'>>></a></font>"
 				var/mob/M = A
 				body += "<br><font size='1'><a href='byond://?src=\ref[src];datumedit=\ref[D];varnameedit=ckey'>[M.ckey ? M.ckey : "No ckey"]</a> / <a href='byond://?src=\ref[src];datumedit=\ref[D];varnameedit=real_name'>[M.real_name ? M.real_name : "No real name"]</a></font>"
 				body += {"
@@ -187,6 +187,10 @@ client
 
 
 				"}
+			else
+				body += "<a href='byond://?src=\ref[src];datumedit=\ref[D];varnameedit=name'><b>[D]</b></a>"
+				if(A.dir)
+					body += "<br><font size='1'><a href='byond://?src=\ref[src];rotatedatum=\ref[D];rotatedir=left'><<</a> <a href='byond://?src=\ref[src];datumedit=\ref[D];varnameedit=dir'>[dir2text(A.dir)]</a> <a href='byond://?src=\ref[src];rotatedatum=\ref[D];rotatedir=right'>>></a></font>"
 		else
 			body += "<b>[D]</b>"
 
@@ -241,6 +245,8 @@ client
 			body += "<option value='byond://?src=\ref[src];ninja=\ref[D]'>Make Space Ninja</option>"
 			body += "<option value='byond://?src=\ref[src];godmode=\ref[D]'>Toggle Godmode</option>"
 			body += "<option value='byond://?src=\ref[src];build_mode=\ref[D]'>Toggle Build Mode</option>"
+			body += "<option value='byond://?src=\ref[src];direct_control=\ref[D]'>Assume Direct Control</option>"
+			body += "<option value='byond://?src=\ref[src];drop_everything=\ref[D]'>Drop Everything</option>"
 			if(ishuman(D))
 				body += "<option value>---</option>"
 				body += "<option value='byond://?src=\ref[src];makeai=\ref[D]'>Make AI</option>"
@@ -363,16 +369,21 @@ client
 
 			if (L.len > 0 && !(name == "underlays" || name == "overlays" || name == "vars" || L.len > 500))
 				// not sure if this is completely right...
-				if (0) // (L.vars.len > 0)
+				if(0)   //(L.vars.len > 0)
 					html += "<ol>"
-					for (var/entry in L)
-						html += debug_variable(entry, L[entry], level + 1)
 					html += "</ol>"
 				else
 					html += "<ul>"
-					for (var/index = 1, index <= L.len, index++)
-						html += debug_variable("[index]", L[index], level + 1)
+					var/index = 1
+					for (var/entry in L)
+						if(istext(entry))
+							html += debug_variable(entry, L[entry], level + 1)
+						//html += debug_variable("[index]", L[index], level + 1)
+						else
+							html += debug_variable(index, L[index], level + 1)
+						index++
 					html += "</ul>"
+
 		else
 			html += "[name] = <span class='value'>[value]</span>"
 
@@ -384,6 +395,30 @@ client
 
 		if (href_list["Vars"])
 			debug_variables(locate(href_list["Vars"]))
+
+		//~CARN: for renaming mobs (updates their real_name and their ID/PDA if applicable).
+		else if (href_list["rename"])
+			var/new_name = input(usr,"What would you like to name this mob?","Input a name") as text|null
+			if(!new_name)	return
+			var/mob/M = locate(href_list["rename"])
+			if(!istype(M))	return
+
+			message_admins("Admin [key_name_admin(usr)] renamed [key_name_admin(M)] to [new_name].", 1)
+			if(istype(M, /mob/living/carbon/human))
+				for(var/obj/item/weapon/card/id/ID in M.contents)
+					if(ID.registered_name == M.real_name)
+						ID.name = "[new_name]'s ID Card ([ID.assignment])"
+						ID.registered_name = new_name
+						break
+				for(var/obj/item/device/pda/PDA in M.contents)
+					if(PDA.owner == M.real_name)
+						PDA.name = "PDA-[new_name] ([PDA.ownjob])"
+						PDA.owner = new_name
+						break
+			M.real_name = new_name
+			M.name = new_name
+			href_list["datumrefresh"] = href_list["rename"]
+
 		else if (href_list["varnameedit"])
 			if(!href_list["datumedit"] || !href_list["varnameedit"])
 				usr << "Varedit error: Not all information has been sent Contact a coder."
@@ -479,7 +514,6 @@ client
 			if(!src.holder)
 				return
 			src.cmd_admin_gib(MOB)
-////I'm removing buildmode because it's shitty and runtimes a lot.	-Pete
 
 		else if (href_list["build_mode"])
 			if(!href_list["build_mode"])
@@ -493,6 +527,34 @@ client
 				return
 			togglebuildmode(MOB)
 			href_list["datumrefresh"] = href_list["build_mode"]
+
+		else if (href_list["drop_everything"])
+			if(!href_list["drop_everything"])
+				return
+			var/mob/MOB = locate(href_list["drop_everything"])
+			if(!MOB)
+				return
+			if(!ismob(MOB))
+				return
+			if(!src.holder)
+				return
+
+			if(usr.client)
+				usr.client.cmd_admin_drop_everything(MOB)
+
+		else if (href_list["direct_control"])
+			if(!href_list["direct_control"])
+				return
+			var/mob/MOB = locate(href_list["direct_control"])
+			if(!MOB)
+				return
+			if(!ismob(MOB))
+				return
+			if(!src.holder)
+				return
+
+			if(usr.client)
+				usr.client.cmd_assume_direct_control(MOB)
 
 		else if (href_list["delall"])
 			if(!href_list["delall"])

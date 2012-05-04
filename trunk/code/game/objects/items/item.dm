@@ -11,20 +11,6 @@
 /obj/item/proc/dropped(mob/user as mob)
 	..()
 
-	// So you can't drop the Offhand
-	if(istype(src, /obj/item/weapon/offhand))
-		user.drop_item(src)
-
-		var/obj/item/O_r = user.r_hand
-		var/obj/item/O_l = user.l_hand
-		if(O_r.twohanded)
-			if(O_r.wielded)
-				user.drop_item(O_r)
-		if(O_l.twohanded)
-			if(O_l.wielded)
-				user.drop_item(O_l)
-		del(src)
-
 // called just as an item is picked up (loc is not yet changed)
 /obj/item/proc/pickup(mob/user)
 	return
@@ -107,6 +93,18 @@
 
 /obj/item/attack_hand(mob/user as mob)
 	if (!user) return
+	if (user.hand)
+		if(ishuman(user))
+			var/datum/organ/external/temp = user:get_organ("l_hand")
+			if(temp.destroyed)
+				user << "\blue You look at your stump."
+				return
+	else
+		if(ishuman(user))
+			var/datum/organ/external/temp = user:get_organ("r_hand")
+			if(temp.destroyed)
+				user << "\blue You look at your stump."
+
 	if (istype(src.loc, /obj/item/weapon/storage))
 		for(var/mob/M in range(1, src.loc))
 			if (M.s_active == src.loc)
@@ -185,39 +183,6 @@
 /obj/item/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	return
 
-/obj/item/attack_self(mob/user as mob)
-	..()
-	if(twohanded)
-		if(wielded) //Trying to unwield it
-			wielded = 0
-			force = force_unwielded
-			src.name = "[initial(name)] (Unwielded)"
-			src.update_icon() //If needed by the particular item
-			user << "\blue You are now carrying the [initial(name)] with one hand."
-
-			if(istype(user.get_inactive_hand(),/obj/item/weapon/offhand))
-				del user.get_inactive_hand()
-			return
-		else //Trying to wield it
-			if(user.get_inactive_hand())
-				user << "\red You need your other hand to be empty"
-				return
-			wielded = 1
-			force = force_wielded
-			src.name = "[initial(name)] (Wielded)"
-			src.update_icon() //If needed by the particular item
-			user << "\blue You grab the [initial(name)] with both hands."
-
-			var/obj/item/weapon/offhand/O = new /obj/item/weapon/offhand(user) ////Let's reserve his other hand~
-			O.name = text("[initial(src.name)] - Offhand")
-			O.desc = "Your second grip on the [initial(src.name)]"
-			if(user.hand)
-				user.r_hand = O          ///Place dat offhand in the opposite hand
-			else
-				user.l_hand = O
-			O.layer = 20
-			return
-
 /obj/item/proc/attack(mob/living/M as mob, mob/living/user as mob, def_zone)
 
 	if (!istype(M)) // not sure if this is the right thing...
@@ -232,10 +197,9 @@
 	user.lastattacked = M
 	M.lastattacker = user
 
-	user.attack_log += "\[[time_stamp()]\]<font color='red'> Attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>"
-	M.attack_log += "\[[time_stamp()]\]<font color='orange'> Attacked by [user.name] ([user.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>"
-
-	log_attack("<font color='red'>[user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")
+	user.attack_log += "\[[time_stamp()]\]<font color='red'> Attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)]) (DAMTYE: [uppertext(src.damtype)])</font>"
+	M.attack_log += "\[[time_stamp()]\]<font color='orange'> Attacked by [user.name] ([user.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)]) (DAMTYE: [uppertext(src.damtype)])</font>"
+	log_attack("<font color='red'>[user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)]) (DAMTYE: [uppertext(src.damtype)])</font>" )
 
 	//spawn(1800)            // this wont work right
 	//	M.lastattacker = null
@@ -269,42 +233,49 @@
 							if(Metroid)
 								Metroid.SStun = 1
 								sleep(rand(5,20))
-								Metroid.SStun = 0
+								if(Metroid)
+									Metroid.SStun = 0
 
 						spawn(0)
-							Metroid.canmove = 0
-							step_away(Metroid, user)
-							if(prob(25 + power))
-								sleep(2)
+							if(Metroid)
+								Metroid.canmove = 0
 								step_away(Metroid, user)
-							Metroid.canmove = 1
+								if(prob(25 + power))
+									sleep(2)
+									if(Metroid && user)
+										step_away(Metroid, user)
+								Metroid.canmove = 1
 
 				else
 					if(prob(10 + power*2))
+						if(Metroid)
+							if(Metroid.Victim)
+								if(prob(80) && !Metroid.client)
+									Metroid.Discipline++
 
-						if(Metroid.Victim)
-							if(prob(80) && !Metroid.client)
-								Metroid.Discipline++
+									if(Metroid.Discipline == 1)
+										Metroid.attacked = 0
 
-								if(Metroid.Discipline == 1)
-									Metroid.attacked = 0
+								spawn()
+									if(Metroid)
+										Metroid.SStun = 1
+										sleep(rand(5,20))
+										if(Metroid)
+											Metroid.SStun = 0
 
-							spawn()
-								Metroid.SStun = 1
-								sleep(rand(5,20))
-								Metroid.SStun = 0
-
-						Metroid.Victim = null
-						Metroid.anchored = 0
+							Metroid.Victim = null
+							Metroid.anchored = 0
 
 
 						spawn(0)
-							step_away(Metroid, user)
-							Metroid.canmove = 0
-							if(prob(25 + power*4))
-								sleep(2)
+							if(Metroid && user)
 								step_away(Metroid, user)
-							Metroid.canmove = 1
+								Metroid.canmove = 0
+								if(prob(25 + power*4))
+									sleep(2)
+									if(Metroid && user)
+										step_away(Metroid, user)
+								Metroid.canmove = 1
 
 
 		var/showname = "."

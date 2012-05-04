@@ -6,7 +6,7 @@ var/global/sent_strike_team = 0
 	set category = "Fun"
 	set name = "Spawn Death Squad"
 	set desc = "Spawns a squad of commandos in CentCom if you want to run an admin event."
-	if(!src.authenticated || !src.holder)
+	if(!src.holder)
 		src << "Only administrators may use this command."
 		return
 	if(!ticker)
@@ -37,7 +37,6 @@ var/global/sent_strike_team = 0
 
 	if (emergency_shuttle.direction == 1 && emergency_shuttle.online == 1)
 		emergency_shuttle.recall()
-		world << "\blue <B>Alert: The shuttle is going back!</B>"
 
 	var/commando_number = commandos_possible //for selecting a leader
 	var/leader_selected = 0 //when the leader is chosen. The last person spawned.
@@ -107,6 +106,7 @@ var/global/sent_strike_team = 0
 
 	message_admins("\blue [key_name_admin(usr)] has spawned a CentCom strike squad.", 1)
 	log_admin("[key_name(usr)] used Spawn Death Squad.")
+	feedback_add_details("admin_verb","DTHS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/create_death_commando(obj/spawn_location, leader_selected = 0)
 	var/mob/living/carbon/human/new_commando = new(spawn_location.loc)
@@ -135,7 +135,7 @@ var/global/sent_strike_team = 0
 	if(!(new_commando.mind in ticker.mode.traitors))//If they weren't already an extra traitor.
 		ticker.mode.traitors += new_commando.mind//Adds them to current traitor list. Which is really the extra antagonist list.
 	new_commando.equip_death_commando(leader_selected)
-	del(spawn_location)
+//	del(spawn_location)
 	return new_commando
 
 /mob/living/carbon/human/proc/equip_death_commando(leader_selected = 0)
@@ -190,7 +190,7 @@ var/global/sent_strike_team = 0
 	W.access = get_all_accesses()//They get full station access.
 	W.access += list(access_cent_general, access_cent_specops, access_cent_living, access_cent_storage)//Let's add their alloted CentCom access.
 	W.assignment = "Death Commando"
-	W.registered = real_name
+	W.registered_name = real_name
 	equip_if_possible(W, slot_wear_id)
 
 	resistances += "alien_embryo"

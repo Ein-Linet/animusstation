@@ -409,6 +409,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //list that will contain r
 					newChannel.channel_name = src.channel_name
 					newChannel.author = src.scanned_user
 					newChannel.locked = c_locked
+					feedback_inc("newscaster_channels",1)
 					for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)  //Let's add the new channel in all casters.
 						NEWSCASTER.channel_list += newChannel                          //Now that it is sane, get it into the list.
 					src.screen=5
@@ -437,7 +438,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //list that will contain r
 				var/datum/feed_message/newMsg = new /datum/feed_message
 				newMsg.author = src.scanned_user
 				newMsg.body = src.msg
-				//for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
+				feedback_inc("newscaster_stories",1)
 				for(var/datum/feed_channel/FC in src.channel_list)
 					if(FC.channel_name == src.channel_name)
 						FC.messages += newMsg                      // To avoid further confusion, this one for adds the message to all existing newscasters' channel_list's channels.
@@ -614,11 +615,11 @@ var/list/obj/machinery/newscaster/allCasters = list() //list that will contain r
 			if( istype(I, /obj/item/device/pda) )
 				var/obj/item/device/pda/P = I
 				if(P.id)
-					src.scanned_user = "[P.id.registered] ([P.id.assignment])"
+					src.scanned_user = "[P.id.registered_name] ([P.id.assignment])"
 					src.screen=2
 			else
 				var/obj/item/weapon/card/id/T = I
-				src.scanned_user = text("[T.registered] ([T.assignment])")
+				src.scanned_user = text("[T.registered_name] ([T.assignment])")
 				src.screen=2*/  //Obsolete after autorecognition
 
 	if (src.isbroken)
@@ -805,12 +806,12 @@ obj/item/weapon/newspaper/attackby(obj/item/weapon/W as obj, mob/user as mob)
 		if(istype(human_user.wear_id, /obj/item/device/pda) )	//autorecognition, woo!
 			var/obj/item/device/pda/P = human_user.wear_id
 			if(P.id)
-				src.scanned_user = "[P.id.registered] ([P.id.assignment])"
+				src.scanned_user = "[P.id.registered_name] ([P.id.assignment])"
 			else
 				src.scanned_user = "Unknown"
 		else if(istype(human_user.wear_id, /obj/item/weapon/card/id) )
 			var/obj/item/weapon/card/id/ID = human_user.wear_id
-			src.scanned_user ="[ID.registered] ([ID.assignment])"
+			src.scanned_user ="[ID.registered_name] ([ID.assignment])"
 		else
 			src.scanned_user ="Unknown"
 	else
@@ -818,6 +819,7 @@ obj/item/weapon/newspaper/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
 
 /obj/machinery/newscaster/proc/print_paper()
+	feedback_inc("newscaster_newspapers_printed",1)
 	var/obj/item/weapon/newspaper/NEWSPAPER = new /obj/item/weapon/newspaper
 	for(var/datum/feed_channel/FC in src.channel_list)
 		NEWSPAPER.news_content += FC

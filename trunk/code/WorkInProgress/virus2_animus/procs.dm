@@ -2,7 +2,7 @@
 	set category = "Special Verbs"
 	set name = "Direct Infection"
 
-	if(!authenticated || !holder)
+	if(!holder)
 		src << "Only administrators may use this command."
 		return
 	var/list/viruses = get_premaded_diseases()

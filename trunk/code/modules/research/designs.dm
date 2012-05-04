@@ -1044,7 +1044,7 @@ datum
 			desc = "A basic power cell that holds 1000 units of energy"
 			id = "basic_cell"
 			req_tech = list("powerstorage" = 1)
-			build_type = PROTOLATHE | AUTOLATHE
+			build_type = PROTOLATHE | AUTOLATHE |MECHFAB
 			materials = list("$metal" = 700, "$glass" = 50)
 			build_path = "/obj/item/weapon/cell"
 
@@ -1053,7 +1053,7 @@ datum
 			desc = "A power cell that holds 10000 units of energy"
 			id = "high_cell"
 			req_tech = list("powerstorage" = 2)
-			build_type = PROTOLATHE | AUTOLATHE
+			build_type = PROTOLATHE | AUTOLATHE | MECHFAB
 			materials = list("$metal" = 700, "$glass" = 60)
 			build_path = "/obj/item/weapon/cell/high"
 
@@ -1063,7 +1063,7 @@ datum
 			id = "super_cell"
 			req_tech = list("powerstorage" = 3, "materials" = 2)
 			reliability_base = 75
-			build_type = PROTOLATHE
+			build_type = PROTOLATHE | MECHFAB
 			materials = list("$metal" = 700, "$glass" = 70)
 			build_path = "/obj/item/weapon/cell/super"
 
@@ -1073,7 +1073,7 @@ datum
 			id = "hyper_cell"
 			req_tech = list("powerstorage" = 5, "materials" = 4)
 			reliability_base = 70
-			build_type = PROTOLATHE
+			build_type = PROTOLATHE | MECHFAB
 			materials = list("$metal" = 400, "$gold" = 150, "$silver" = 150, "$glass" = 70)
 			build_path = "/obj/item/weapon/cell/hyper"
 
@@ -1224,6 +1224,16 @@ datum
 			reliability_base = 74
 			build_path = "/obj/item/device/mmi/radio_enabled"
 
+		synthetic_flash
+			name = "Synthetic Flash"
+			desc = "When a problem arises, SCIENCE is the solution."
+			id = "sflash"
+			req_tech = list("magnets" = 3, "combat" = 2)
+			build_type = MECHFAB
+			materials = list("$metal" = 750, "$glass" = 750)
+			reliability_base = 76
+			build_path = "/obj/item/device/flash/synthetic"
+
 /////////////////////////////////////////
 /////////////////Weapons/////////////////
 /////////////////////////////////////////
@@ -1310,6 +1320,14 @@ datum
 			build_type = PROTOLATHE
 			materials = list("$metal" = 5000, "$glass" = 500, "$silver" = 3000)
 			build_path = "/obj/item/weapon/gun/energy/temperature"
+		flora_gun
+			name = "Floral Somatoray"
+			desc = "A tool that discharges controlled radiation which induces mutation in plant cells. Harmless to other organic life."
+			id = "flora_gun"
+			req_tech = list("materials" = 2, "biotech" = 3, "powerstorage" = 3)
+			build_type = PROTOLATHE
+			materials = list("$metal" = 2000, "$glass" = 500, "$uranium" = 500)
+			build_path = "/obj/item/weapon/gun/energy/floragun"
 
 		large_grenade
 			name = "Large Grenade"

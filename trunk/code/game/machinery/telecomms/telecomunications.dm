@@ -103,11 +103,10 @@
 			if(machine.is_freq_listening(signal))
 				machine.traffic++
 
-			spawn()
-				if(copysig && copy)
-					machine.receive_information(copy, src)
-				else
-					machine.receive_information(signal, src)
+			if(copysig && copy)
+				machine.receive_information(copy, src)
+			else
+				machine.receive_information(signal, src)
 
 		if(send_count > 0 && is_freq_listening(signal))
 			traffic++
@@ -404,8 +403,10 @@
 				log.parameters["name"] = signal.data["name"]
 				log.parameters["realname"] = signal.data["realname"]
 
-				if(!istype(M, /mob/new_player))
+				if(!istype(M, /mob/new_player) && M)
 					log.parameters["uspeech"] = M.universal_speak
+				else
+					log.parameters["uspeech"] = 0
 
 				// If the signal is still compressed, make the log entry gibberish
 				if(signal.data["compression"] > 0)

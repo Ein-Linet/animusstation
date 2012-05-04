@@ -83,12 +83,12 @@
 /obj/structure/closet/secure_closet/warden
 	name = "Warden's Locker"
 	req_access = list(access_armory)
-	icon_state = "sec1"
-	icon_closed = "sec"
-	icon_locked = "sec1"
-	icon_opened = "secopen"
-	icon_broken = "secbroken"
-	icon_off = "secoff"
+	icon_state = "wardensecure1"
+	icon_closed = "wardensecure"
+	icon_locked = "wardensecure1"
+	icon_opened = "wardensecureopen"
+	icon_broken = "wardensecurebroken"
+	icon_off = "wardensecureoff"
 
 
 	New()
@@ -162,8 +162,6 @@
 		new /obj/item/weapon/storage/fcard_kit(src)
 		new /obj/item/weapon/fcardholder(src)
 		new /obj/item/weapon/clipboard(src)
-		new /obj/item/device/detective_scanner(src)
-		new /obj/item/weapon/storage/box/evidence(src)
 		return
 
 

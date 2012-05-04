@@ -1,8 +1,25 @@
 var/global/datum/controller/game_controller/master_controller //Set in world.New()
+var/global/datum/failsafe/Failsafe
 var/global/controllernum = "no"
+var/global/controller_iteration = 0
+
+
+
+
 
 datum/controller/game_controller
 	var/processing = 1
+
+	var/global/air_master_ready = 0
+	var/global/tension_master_ready = 0
+	var/global/sun_ready = 0
+	var/global/mobs_ready = 0
+	var/global/diseases_ready = 0
+	var/global/machines_ready = 0
+	var/global/objects_ready = 0
+	var/global/networks_ready = 0
+	var/global/powernets_ready = 0
+	var/global/ticker_ready = 0
 
 	proc
 		setup()
@@ -34,11 +51,14 @@ datum/controller/game_controller
 		if(!tension_master)
 			tension_master = new /datum/tension()
 
-		world.tick_lag = 0.9
+		world.tick_lag = config.Ticklag
 
 		setup_objects()
 
 		setupgenetics()
+
+		for(var/i = 0, i < max_secret_rooms, i++)
+			make_mining_asteroid_secret()
 
 		syndicate_code_phrase = generate_code_phrase()//Sets up code phrase for traitors, for the round.
 		syndicate_code_response = generate_code_phrase()
@@ -126,21 +146,49 @@ datum/controller/game_controller
 		
 	process()
 
+		if(!Failsafe)
+			Failsafe = new /datum/failsafe
+			spawn(0)
+				Failsafe.spin()
+
+
 		if(!processing)
 			return 0
 		controllernum = "yes"
-		spawn (100) controllernum = "no"
+		spawn (100)
+			controllernum = "no"
 
-		air_master.process()
-		
+		controller_iteration++
+
+		air_master_ready = 0
+		tension_master_ready = 0
+		sun_ready = 0
+		mobs_ready = 0
+		diseases_ready = 0
+		machines_ready = 0
+		objects_ready = 0
+		networks_ready = 0
+		powernets_ready = 0
+		ticker_ready = 0
+
+
+
+
+
+		spawn(0)
+			air_master.process()
+			air_master_ready = 1
+		spawn(0)
+			tension_master.process()
+			tension_master_ready = 1
+
 		sleep(1)
-		
-		tension_master.process()
 
-		sleep(1)
+		spawn(0)
+			sun.calc_position()
+			sun_ready = 1
 
-		sun.calc_position()
-
+		sleep(-1)
 		sleep(1)
 
 		process_mobs()
@@ -165,3 +213,39 @@ datum/controller/game_controller
 
 
 		return 1
+
+
+
+/datum/failsafe // This thing pretty much just keeps poking the master controller
+	var/spinning = 1
+	var/current_iteration = 0
+
+/datum/failsafe/proc/spin()
+	if(!master_controller) // Well fuck.  How did this happen?
+		sleep(50)
+		if(!master_controller)
+			master_controller = new /datum/controller/game_controller()
+		spawn(-1)
+			master_controller.setup()
+
+	else
+		while(spinning)
+			current_iteration = controller_iteration
+			sleep(600) // Wait 15 seconds
+			if(current_iteration == controller_iteration) // Mm.  The master controller hasn't ticked yet.
+
+				for (var/mob/M in world)
+					if (M.client && M.client.holder)
+						M << "<font color='red' size='2'><b> Warning.  The Master Controller has not fired in the last 60 seconds.  Restart recommended.  Automatic restart in 60 seconds.</b></font>"
+
+				sleep(600)
+				if(current_iteration == controller_iteration)
+					for (var/mob/M in world)
+						if (M.client && M.client.holder)
+							M << "<font color='red' size='2'><b> Warning.  The Master Controller has not fired in the last 2 minutes.  Automatic restart beginning.</b></font>"
+					master_controller.process()
+					sleep(150)
+				else
+					for (var/mob/M in world)
+						if (M.client && M.client.holder)
+							M << "<font color='red' size='2'><b> The Master Controller has fired.  Automatic restart aborted.</b></font>"

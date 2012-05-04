@@ -9,6 +9,7 @@ var/list/forbidden_varedit_object_types = list(
 	set name = "Edit Variables"
 	set desc="(target) Edit a target item's variables"
 	src.modify_variables(O)
+	feedback_add_details("admin_verb","EDITV") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/cmd_modify_ticker_variables()
 	set category = "Debug"
@@ -18,6 +19,7 @@ var/list/forbidden_varedit_object_types = list(
 		src << "Game hasn't started yet."
 	else
 		src.modify_variables(ticker)
+		feedback_add_details("admin_verb","ETV") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/mod_list_add_ass() //haha
 
@@ -269,7 +271,7 @@ var/list/forbidden_varedit_object_types = list(
 /client/proc/modify_variables(var/atom/O, var/param_var_name = null, var/autodetect_class = 0, var/stealth = 0)
 	var/list/locked = list("vars", "key", "ckey", "client", "firemut", "ishulk", "telekinesis", "xray", "virus", "cuffed", "ka", "last_eaten", "urine", "poo", "icon", "icon_state")
 
-	if(!stealth && (!src.authenticated || !src.holder))
+	if(!stealth && !src.holder)
 		src << "Only administrators may use this command."
 		return
 

@@ -4,15 +4,15 @@
 		list/allwords = list("travel","self","see","hell","blood","join","tech","destroy", "other", "hide")
 
 
-/proc/iscultist(mob/living/carbon/M as mob)
+/proc/iscultist(mob/living/M as mob)
 	return istype(M) && M.mind && ticker && ticker.mode && (M.mind in ticker.mode.cult)
 
 /proc/is_convertable_to_cult(datum/mind/mind)
 	if(!istype(mind))	return 0
-	if(istype(mind.current, /mob/living/carbon/human) && (mind.assigned_role in list("Captain", "Head of Security", "Security Officer", "Detective", "Chaplain", "Warden", "Commissar")))	return 0
+	/*if(istype(mind.current, /mob/living/carbon/human) && (mind.assigned_role in list("Captain", "Head of Security", "Security Officer", "Detective", "Chaplain", "Warden", "Commissar")))	return 0
 	for(var/obj/item/weapon/implant/loyalty/L in mind.current)
 		if(L && L.implanted)
-			return 0
+			return 0 */
 	return 1
 
 

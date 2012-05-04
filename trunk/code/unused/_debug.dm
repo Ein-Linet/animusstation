@@ -508,7 +508,7 @@ Doing this because FindTurfs() isn't even used
 /mob/verb/revent(number as num)
 	set category = "Debug"
 	set name = "Change event %"
-	if(!src.authenticated || !src.holder)
+	if(!src.holder)
 		src << "Only administrators may use this command."
 		return
 	if(src.authenticated && src.holder)
@@ -520,7 +520,7 @@ Doing this because FindTurfs() isn't even used
 /mob/verb/funbutton()
 	set category = "Admin"
 	set name = "Random Expl.(REMOVE ME)"
-	if(!src.authenticated || !src.holder)
+	if(!src.holder)
 		src << "Only administrators may use this command."
 		return
 	for(var/turf/T in world)
@@ -544,7 +544,7 @@ Doing this because FindTurfs() isn't even used
 /mob/verb/removeplasma()
 	set category = "Debug"
 	set name = "Stabilize Atmos."
-	if(!src.authenticated || !src.holder)
+	if(!src.holder)
 		src << "Only administrators may use this command."
 		return
 	spawn(0)
@@ -571,7 +571,7 @@ Doing this because FindTurfs() isn't even used
 /mob/verb/fire(turf/T as turf in world)
 	set category = "Special Verbs"
 	set name = "Create Fire"
-	if(!src.authenticated || !src.holder)
+	if(!src.holder)
 		src << "Only administrators may use this command."
 		return
 	world << "[usr.key] created fire"
@@ -582,7 +582,7 @@ Doing this because FindTurfs() isn't even used
 /mob/verb/co2(turf/T as turf in world)
 	set category = "Special Verbs"
 	set name = "Create CO2"
-	if(!src.authenticated || !src.holder)
+	if(!src.holder)
 		src << "Only administrators may use this command."
 		return
 	world << "[usr.key] created CO2"
@@ -592,7 +592,7 @@ Doing this because FindTurfs() isn't even used
 /mob/verb/n2o(turf/T as turf in world)
 	set category = "Special Verbs"
 	set name = "Create N2O"
-	if(!src.authenticated || !src.holder)
+	if(!src.holder)
 		src << "Only administrators may use this command."
 		return
 	world << "[usr.key] created N2O"
@@ -602,7 +602,7 @@ Doing this because FindTurfs() isn't even used
 /mob/verb/explosion(T as obj|mob|turf in world)
 	set category = "Special Verbs"
 	set name = "Create Explosion"
-	if(!src.authenticated || !src.holder)
+	if(!src.holder)
 		src << "Only administrators may use this command."
 		return
 	world << "[usr.key] created an explosion"
@@ -612,20 +612,4 @@ Doing this because FindTurfs() isn't even used
 	pt.gas.temperature = 500+T0C
 	pt.ignite()
 
-/obj/debug/debugger
-	name =	"Quantum Debugger"
-	desc =  "A quantum debugger used by Centcomm Reality Engineers to help monitor transiant variables."
-	icon = 'stationobjs.dmi'
-	icon_state = "blackbox"
 
-	var/list/list1
-	var/list/list2
-	var/list/list3
-	var/list/list4
-	var/list/list5
-
-	var/var1
-	var/var2
-	var/var3
-	var/var4
-	var/var5

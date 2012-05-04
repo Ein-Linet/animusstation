@@ -129,11 +129,12 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 
 		if(!src.loc)
 			on = 0
-		var/area/A = src.loc.loc
-		if(!A || !isarea(A) || !A.master)
-			on = 0
 		else
-			on = A.master.powered(EQUIP) // set "on" to the power status
+			var/area/A = src.loc.loc
+			if(!A || !isarea(A) || !A.master)
+				on = 0
+			else
+				on = A.master.powered(EQUIP) // set "on" to the power status
 
 		if(!on)
 			icon_state = "intercom-p"
@@ -420,6 +421,9 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 
 	  	// Oh my god; the comms are down or something because the signal hasn't been broadcasted yet.
 	  	// Send a mundane broadcast with limited targets:
+
+		//THIS IS TEMPORARY.
+		if(!connection)	return	//~Carn
 
 		Broadcast_Message(connection, M, voicemask, M.voice_message,
 						  src, message, displayname, jobname, real_name, M.voice_name,

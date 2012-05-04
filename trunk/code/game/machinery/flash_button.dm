@@ -21,8 +21,8 @@
 		return src.attack_hand(user)
 
 	attackby(obj/item/weapon/W, mob/user as mob)
-		if(istype(W, /obj/item/device/detective_scanner))
-			return
+/*		if(istype(W, /obj/item/device/detective_scanner))
+			return*/
 		return src.attack_hand(user)
 
 	attack_hand(mob/user as mob)

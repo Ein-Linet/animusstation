@@ -586,6 +586,7 @@ datum/borrowbook // Datum used to keep track of who has borrowed what when and f
 						B.icon_state = ticker.Bible_icon_state
 						B.item_state = ticker.Bible_item_state
 						B.name = ticker.Bible_name
+						B.deity_name = ticker.Bible_deity_name
 
 					bibledelay = 60
 					spawn(0)
@@ -671,6 +672,22 @@ datum/borrowbook // Datum used to keep track of who has borrowed what when and f
 							alert("Upload Complete.")
 						dbcon.Disconnect()
 	if(href_list["targetid"])
+
+		if(!bibledelay)//Taken from the bible code part thing
+			bibledelay = 60
+			spawn(0)
+				while(bibledelay >= 1 && src)
+					sleep(10)
+					bibledelay -- // subtract one second to countdown
+
+				bibledelay = 0
+
+		else
+			for (var/mob/V in hearers(src))
+				V.show_message("<b>[src]</b>'s monitor flashes, \"[bibledelay] seconds remaining until the printer is ready for use.\"")
+
+
+
 		var/sqlid = sanitizeSQL(href_list["targetid"])
 		var/DBConnection/dbcon = new()
 		dbcon.Connect("dbi:mysql:[sqldb]:[sqladdress]:[sqlport]","[sqllogin]","[sqlpass]")

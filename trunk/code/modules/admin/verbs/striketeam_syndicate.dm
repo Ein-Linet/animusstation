@@ -6,7 +6,7 @@ var/global/sent_syndicate_strike_team = 0
 	set category = "Fun"
 	set name = "Spawn Syndicate Strike Team"
 	set desc = "Spawns a squad of commandos in the Syndicate Mothership if you want to run an admin event."
-	if(!src.authenticated || !src.holder)
+	if(!src.holder)
 		src << "Only administrators may use this command."
 		return
 	if(!ticker)
@@ -37,7 +37,6 @@ var/global/sent_syndicate_strike_team = 0
 
 	if (emergency_shuttle.direction == 1 && emergency_shuttle.online == 1)
 		emergency_shuttle.recall()
-		world << "\blue <B>Alert: The shuttle is going back!</B>"
 
 	var/syndicate_commando_number = syndicate_commandos_possible //for selecting a leader
 	var/syndicate_leader_selected = 0 //when the leader is chosen. The last person spawned.
@@ -107,6 +106,7 @@ var/global/sent_syndicate_strike_team = 0
 
 	message_admins("\blue [key_name_admin(usr)] has spawned a Syndicate strike squad.", 1)
 	log_admin("[key_name(usr)] used Spawn Syndicate Squad.")
+	feedback_add_details("admin_verb","SDTHS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/create_syndicate_death_commando(obj/spawn_location, syndicate_leader_selected = 0)
 	var/mob/living/carbon/human/new_syndicate_commando = new(spawn_location.loc)
@@ -186,7 +186,7 @@ var/global/sent_syndicate_strike_team = 0
 	W.access = get_all_accesses()//They get full station access because obviously the syndicate has HAAAX, and can make special IDs for their most elite members.
 	W.access += list(access_cent_general, access_cent_specops, access_cent_living, access_cent_storage, access_syndicate)//Let's add their forged CentCom access and syndicate access.
 	W.assignment = "Syndicate Commando"
-	W.registered = real_name
+	W.registered_name = real_name
 	equip_if_possible(W, slot_wear_id)
 
 	resistances += "alien_embryo"

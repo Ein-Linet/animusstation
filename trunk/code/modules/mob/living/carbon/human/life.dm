@@ -19,6 +19,8 @@
 	if(!loc)			// Fixing a null error that occurs when the mob isn't found in the world -- TLE
 		return
 
+	..()
+
 	var/datum/gas_mixture/environment = loc.return_air()
 
 	if (stat != 2) //still breathing
@@ -95,8 +97,6 @@
 		if(!currentTurf.sd_lumcount)
 			playsound_local(src,pick(scarySounds),50, 1, -1)
 
-	..() //for organs
-
 /mob/living/carbon/human
 	proc
 		clamp_values()
@@ -123,21 +123,37 @@
 
 		handle_disabilities()
 			if(hallucination > 0)
-				if(hallucinations.len == 0 && hallucination >= 20 && health > 0)
-					if(prob(5))
+				if(hallucination >= 20 && health > 0)
+					if(prob(3))
 						fake_attack(src)
 				//for(var/atom/a in hallucinations)
 				//	a.hallucinate(src)
 				if(!handling_hal && hallucination > 20)
 					spawn handle_hallucinations() //The not boring kind!
-				hallucination -= 2
+
+				if(hallucination <= 2)
+					halloss = 0
+					hallucination = 0
+				else
+					hallucination -= 2
 				//if(health < 0)
 				//	for(var/obj/a in hallucinations)
 				//		del a
 			else
-				halloss = 0
+				//halloss = 0
 				for(var/atom/a in hallucinations)
 					del a
+
+				if(halloss > 100)
+					src << "You're too tired to keep going..."
+					for(var/mob/O in viewers(src, null))
+						if(O == src)
+							continue
+						O.show_message(text("\red <B>[src] slumps to the ground panting, too weak to continue fighting."), 1)
+					Paralyse(15)
+					setHalLoss(99)
+
+
 			if (disabilities & 2)
 				if ((prob(1) && paralysis < 1 && r_epil < 1))
 					src << "\red You have a seizure!"
@@ -315,8 +331,17 @@
 			return null
 
 		update_canmove()
-			if(paralysis || stunned || weakened || buckled || (changeling && changeling.changeling_fakedeath)) canmove = 0
-			else canmove = 1
+			if(sleeping || paralysis || stunned || weakened || resting || buckled || (changeling && changeling.changeling_fakedeath))
+				canmove = 0
+
+			else
+				lying = 0
+				canmove = 1
+	/*			for(var/obj/effect/stop/S in geaslist)
+					if(S.victim == src)
+						geaslist -= S
+						del(S)
+*/
 
 		handle_breath(datum/gas_mixture/breath)
 			if(nodamage)
@@ -399,7 +424,7 @@
 					if(SA_pp > SA_para_min) // Enough to make us paralysed for a bit
 						Paralyse(3) // 3 gives them one second to wake up and run away a bit!
 						if(SA_pp > SA_sleep_min) // Enough to make us sleep as well
-							sleeping = max(sleeping, 2)
+							sleeping = max(src.sleeping+2, 10)
 					else if(SA_pp > 0.01)	// There is sleeping gas in their lungs, but only a little, so give them a bit of a warning
 						if(prob(20))
 							spawn(0) emote(pick("giggle", "laugh"))
@@ -450,7 +475,7 @@
 					var/transfer_coefficient
 
 					transfer_coefficient = 1
-					if(head && (head.body_parts_covered & HEAD) && (environment.temperature < head.protective_temperature))
+					if(head && (head.body_parts_covered & HEAD) && (environment.temperature < head.protective_temperature) && !istype(head, /obj/item/weapon/paper))
 						transfer_coefficient *= head.heat_transfer_coefficient
 					if(wear_mask && (wear_mask.body_parts_covered & HEAD) && (environment.temperature < wear_mask.protective_temperature))
 						transfer_coefficient *= wear_mask.heat_transfer_coefficient
@@ -651,7 +676,7 @@
 				src << "\red You suddenly feel blubbery!"
 				mutations |= FAT
 				update_body()
-			if (overeatduration < 100 && mutations & FAT)
+			if ((overeatduration < 100 && mutations & FAT))
 				src << "\blue You feel fit again!"
 				mutations &= ~FAT
 				update_body()
@@ -675,7 +700,7 @@
 				drowsyness--
 				eye_blurry = max(2, eye_blurry)
 				if (prob(5))
-					sleeping = 1
+					sleeping += 1
 					Paralyse(5)
 
 			confused = max(0, confused - 1)
@@ -695,17 +720,53 @@
 
 		//	health = 100 - (getOxyLoss() + getToxLoss() + getFireLoss() + getBruteLoss() + getCloneLoss())
 
+			var/leg_tally = 2
+			for(var/datum/organ/external/E in organs)
+				E.process()
+				if(E.robot && prob(E.brute_dam + E.burn_dam))
+					if(E.name == "l_hand" || E.name == "l_arm")
+						if(hand && equipped())
+							drop_item()
+							emote("custom v drops what they were holding, their limb malfunctioning!")
+							var/datum/effect/effect/system/spark_spread/spark_system = new /datum/effect/effect/system/spark_spread()
+							spark_system.set_up(5, 0, src)
+							spark_system.attach(src)
+							spark_system.start()
+							spawn(10)
+								del(spark_system)
+					else if(E.name == "r_hand" || E.name == "r_arm")
+						if(!hand && equipped())
+							drop_item()
+							emote("custom v drops what they were holding, their limb malfunctioning!")
+							var/datum/effect/effect/system/spark_spread/spark_system = new /datum/effect/effect/system/spark_spread()
+							spark_system.set_up(5, 0, src)
+							spark_system.attach(src)
+							spark_system.start()
+							spawn(10)
+								del(spark_system)
+					else if(E.name == "l_leg" || E.name == "l_foot" \
+						|| E.name == "r_leg" || E.name == "r_foot" && !lying)
+						leg_tally--									// let it fail even if just foot&leg
+				if(E.broken || E.destroyed)
+					if(E.name == "l_hand" || E.name == "l_arm")
+						if(hand && equipped())
+							drop_item()
+							emote("scream")
+					else if(E.name == "r_hand" || E.name == "r_arm")
+						if(!hand && equipped())
+							drop_item()
+							emote("scream")
+					else if(E.name == "l_leg" || E.name == "l_foot" \
+						|| E.name == "r_leg" || E.name == "r_foot" && !lying)
+						leg_tally--									// let it fail even if just foot&leg
+
+			// can't stand
+			if(leg_tally == 0 && !paralysis && !(lying || resting))
+				emote("scream")
+				emote("collapse")
+				paralysis = 10
+
 			if(getOxyLoss() > 50) Paralyse(3)
-
-			if(sleeping)
-				if(paralysis <= 5)		//Ok, so it figures that people stand up and start running faster than they are paralysed
-					Paralyse(4)
-				if (prob(10) && health && !hal_crit) spawn(0) emote("snore")
-				//sleeping--
-
-			if(resting)
-				if(weakened <= 0)
-					Weaken(2)
 
 			if(health < config.health_threshold_dead || brain_op_stage == 4.0)
 				death()
@@ -719,10 +780,42 @@
 				Paralyse(5)
 
 			if (stat != 2) //Alive.
+
+				var/blood_volume = round(vessel.get_reagent_amount("blood"))
+				if(bloodloss)
+					drip(bloodloss)
+				if(!blood_volume)
+					bloodloss = 0
+				else if(blood_volume > 448)
+					if(pale)
+						pale = 0
+						update_body()
+				else if(blood_volume <= 448 && blood_volume > 336)
+					adjustToxLoss(1)
+					if(!pale)
+						pale = 1
+						update_body()
+						var/word = pick("dizzy","woosey","faint")
+						src << "\red You feel [word]"
+					if(prob(1))
+						var/word = pick("dizzy","woosey","faint")
+						src << "\red You feel [word]"
+				else if(blood_volume <= 336 && blood_volume > 244)
+					adjustToxLoss(5)
+					if(!pale)
+						pale = 1
+						update_body()
+					eye_blurry += 6
+					if(prob(15))
+						paralysis += rand(1,3)
+				else if(blood_volume <= 244 && blood_volume > 122)
+					if(toxloss <= 101)
+						toxloss = 101
+
 				if (silent)
 					silent--
 
-				if (paralysis || stunned || weakened || (changeling && changeling.changeling_fakedeath)) //Stunned etc.
+				if (resting || sleeping || paralysis || stunned || weakened || (changeling && changeling.changeling_fakedeath)) //Stunned etc.
 					if (stunned > 0)
 						AdjustStunned(-1)
 						stat = 0
@@ -731,12 +824,26 @@
 						lying = 1
 						stat = 0
 					if (paralysis > 0)
-						if(sleeping > 0)
-							handle_dreams()
 						AdjustParalysis(-1)
 						blinded = 1
 						lying = 1
 						stat = 1
+
+					if (sleeping > 0)
+						handle_dreams()
+						adjustHalLoss(-5)
+						blinded = 1
+						lying = 1
+						stat = 1
+						if (prob(10) && health && !hal_crit)
+							spawn(0)
+								emote("snore")
+						sleeping--
+
+					if(resting)
+						lying = 1
+						stat = 0
+
 					var/h = hand
 					hand = 0
 					drop_item()
@@ -755,6 +862,32 @@
 				silent = 0
 
 			if (stuttering) stuttering--
+
+			var/datum/organ/external/head/head = get_organ("head")
+			if(head && !head.disfigured)
+				if(head.brute_dam >= 45 || head.burn_dam >= 45)
+					head.disfigured = 1
+					emote("scream")
+					real_name = "Unknown"
+					src << "\red Your face has become disfigured."
+//					face_op_stage = 0.0
+			var/blood_max = 0
+			for(var/datum/organ/external/temp in organs)
+				if(!temp.bleeding || temp.robot) //THAT WAS DUMB.
+					continue
+			//	else
+			//		if(prob(35))
+			//			bloodloss += rand(1,10)
+				if(temp.wounds)
+					for(var/datum/organ/wound/W in temp.wounds)
+						if(W.wound_size && W.bleeding)
+							blood_max += W.wound_size
+				if(temp.destroyed && !temp.gauzed)
+					blood_max += 50 //Yer missing a fucking limb.
+			bloodloss = min(bloodloss+1,(blood_max))
+
+
+
 
 			if (eye_blind)
 				eye_blind--
@@ -854,21 +987,40 @@
 				if (mutantrace == "lizard" || mutantrace == "metroid")
 					see_in_dark = 3
 					see_invisible = 1
+
+				else if (istajaran(src))
+					see_in_dark = 8
+
 				else if (druggy) // If drugged~
 					see_in_dark = 2
 					//see_invisible regulated by drugs themselves.
 				else
 					see_in_dark = 2
-					var/seer = 0
-					for(var/obj/effect/rune/R in world)
-						if(loc==R.loc && R.word1==wordsee && R.word2==wordhell && R.word3==wordjoin)
-							seer = 1
-					if(!seer)
-						see_invisible = 0
 
-			else if(istype(head, /obj/item/clothing/head/helmet/welding))
+				var/seer = 0
+				for(var/obj/effect/rune/R in world)
+					if(loc==R.loc && R.word1==wordsee && R.word2==wordhell && R.word3==wordjoin)
+						seer = 1
+				if(!seer)
+					see_invisible = 0
+
+
+
+
+
+
+
+			else if(istype(head, /obj/item/clothing/head/helmet/welding))		// wat.  This is never fucking called.
 				if(!head:up && tinted_weldhelh)
 					see_in_dark = 1
+
+
+
+
+
+
+
+
 
 		/* HUD shit goes here, as long as it doesn't modify src.sight flags */
 		// The purpose of this is to stop xray and w/e from preventing you from using huds -- Love, Doohl
@@ -912,7 +1064,7 @@
 
 			if (healths)
 				if (stat != 2)
-					switch(health)
+					switch(health - halloss)
 						if(100 to INFINITY)
 							healths.icon_state = "health0"
 						if(80 to 100)
@@ -969,35 +1121,35 @@
 
 			if(pullin)	pullin.icon_state = "pull[pulling ? 1 : 0]"
 
-			if(resting || lying || sleeping)	rest.icon_state = "rest[(resting || lying || sleeping) ? 1 : 0]"
+			if(rest)	rest.icon_state = "rest[(resting || lying || sleeping) ? 1 : 0]"
 
 
 			if (toxin || hal_screwyhud == 4)	toxin.icon_state = "tox[toxins_alert ? 1 : 0]"
-			if (oxygen || hal_screwyhud == 3) oxygen.icon_state = "oxy[oxygen_alert ? 1 : 0]"
-			if (fire) fire.icon_state = "fire[fire_alert ? 1 : 0]"
+			if (oxygen || hal_screwyhud == 3)	oxygen.icon_state = "oxy[oxygen_alert ? 1 : 0]"
+			if (fire) fire.icon_state = "fire[fire_alert ? 1 : 0]"													//NOTE: INVESTIGATE NUKE BURNINGS
 			//NOTE: the alerts dont reset when youre out of danger. dont blame me,
 			//blame the person who coded them. Temporary fix added.
 
-			switch(bodytemperature) //310.055 optimal body temp
-
-				if(370 to INFINITY)
-					bodytemp.icon_state = "temp4"
-				if(350 to 370)
-					bodytemp.icon_state = "temp3"
-				if(335 to 350)
-					bodytemp.icon_state = "temp2"
-				if(320 to 335)
-					bodytemp.icon_state = "temp1"
-				if(300 to 320)
-					bodytemp.icon_state = "temp0"
-				if(295 to 300)
-					bodytemp.icon_state = "temp-1"
-				if(280 to 295)
-					bodytemp.icon_state = "temp-2"
-				if(260 to 280)
-					bodytemp.icon_state = "temp-3"
-				else
-					bodytemp.icon_state = "temp-4"
+			if(bodytemp)
+				switch(bodytemperature) //310.055 optimal body temp
+					if(370 to INFINITY)
+						bodytemp.icon_state = "temp4"
+					if(350 to 370)
+						bodytemp.icon_state = "temp3"
+					if(335 to 350)
+						bodytemp.icon_state = "temp2"
+					if(320 to 335)
+						bodytemp.icon_state = "temp1"
+					if(300 to 320)
+						bodytemp.icon_state = "temp0"
+					if(295 to 300)
+						bodytemp.icon_state = "temp-1"
+					if(280 to 295)
+						bodytemp.icon_state = "temp-2"
+					if(260 to 280)
+						bodytemp.icon_state = "temp-3"
+					else
+						bodytemp.icon_state = "temp-4"
 
 			if(!client)	return 0 //Wish we did not need these
 			client.screen -= hud_used.blurry
@@ -1116,7 +1268,17 @@
 							if(!M.nodamage)
 								M.adjustBruteLoss(5)
 							nutrition += 10
-
+/*  One day.
+			if(nutrition <= 100)
+				if (prob (1))
+					src << "\red Your stomach rumbles."
+				if(nutrition <= 50)
+					if (prob (25))
+						bruteloss++
+					if (prob (5))
+						src << "You feel very weak."
+						weakened += rand(2, 3)
+*/
 		handle_changeling()
 			if (mind)
 				if (mind.special_role == "Changeling" && changeling)
@@ -1127,14 +1289,7 @@
 /*
 			// Commented out so hunger system won't be such shock
 			// Damage and effect from not eating
-			if(nutrition <= 50)
-				if (prob (0.1))
-					src << "\red Your stomach rumbles."
-				if (prob (10))
-					bruteloss++
-				if (prob (5))
-					src << "You feel very weak."
-					weakened += rand(2, 3)
+
 */
 /*
 snippets

@@ -230,7 +230,7 @@
 			del(src)*/
 
 /obj/effect/sign/maltesefalcon1         //The sign is 64x32, so it needs two tiles. ;3
-	desc = "The Maltese Falcon, Space Bar and Grill. Now with added monkey."
+	desc = "The Maltese Falcon, Space Bar and Grill."
 	name = "The Maltese Falcon"
 	icon = 'decals.dmi'
 	icon_state = "maltesefalcon1"
@@ -239,14 +239,13 @@
 	density = 0
 
 /obj/effect/sign/maltesefalcon2
-	desc = "The Maltese Falcon, Space Bar and Grill. Now with added monkey."
+	desc = "The Maltese Falcon, Space Bar and Grill."
 	name = "The Maltese Falcon"
 	icon = 'decals.dmi'
 	icon_state = "maltesefalcon2"
 	anchored = 1.0
 	opacity = 0
 	density = 0
-
 
 /obj/hud
 	name = "hud"
@@ -264,9 +263,8 @@
 	var/obj/screen/g_dither = null
 	var/obj/screen/blurry = null
 	var/list/darkMask = null
-	var/obj/screen/station_explosion = null
 
-	var/h_type = /obj/screen
+	var/h_type = /obj/screen		//this is like...the most pointless thing ever. Use a god damn define!
 
 /obj/item
 	name = "item"
@@ -282,10 +280,6 @@
 	var/burning = null
 	var/hitsound = null
 	var/w_class = 3.0
-	var/wielded = 0
-	var/twohanded = 0 ///Two handed and wielded off by default, nyoro~n -Agouri
-	var/force_unwielded = 0
-	var/force_wielded = 0
 	flags = FPRINT | TABLEPASS
 	pass_flags = PASSTABLE
 	pressure_resistance = 50
@@ -883,7 +877,7 @@
 		reagents = R
 		R.my_atom = src
 		POWERFLAG = rand(1,10)
-		Uses = rand(2, 5)
+		Uses = rand(7, 25)
 		//flags |= NOREACT
 
 		spawn()
@@ -1209,3 +1203,24 @@
 	name = "Geas"
 	desc = "You can't resist."
 	// name = ""
+
+
+
+/obj/debug/debugger
+	name =	"Quantum Debugger"
+	desc =  "A quantum debugger used by Centcomm Reality Engineers to help monitor transiant variables."
+	icon = 'stationobjs.dmi'
+	icon_state = "blackbox"
+
+	var/list/list1 = list()
+	var/list/list2 = list()
+	var/list/list3 = list()
+	var/list/list4 = list()
+	var/list/list5 = list()
+	var/list/list6 = list()
+
+	var/var1 = null
+	var/var2 = null
+	var/var3 = null
+	var/var4 = null
+	var/var5 = null

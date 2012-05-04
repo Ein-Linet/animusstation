@@ -72,10 +72,13 @@ ALLOW_RANDOM_EVENTS
 #TRAITOR_SCALING
 
 ## If security is prohibited from being most antagonists
-PROTECT_ROLES_FROM_ANTAGONIST
+#PROTECT_ROLES_FROM_ANTAGONIST
 
 ## If the auto-tensioner is active by default.  It creates more tratiors/other antagonists if it consideers the round slowing down.
 TENSIONER_ACTIVE
+
+## If metadata is supported
+ALLOW_METADATA
 
 ## allow players to initiate a restart vote
 ALLOW_VOTE_RESTART
@@ -98,8 +101,6 @@ VOTE_PERIOD 60
 ## allow AI job
 ALLOW_AI
 
-## goon authentication
-#AUTHENTICATION
 
 ## disable abandon mob
 NORESPAWN
@@ -123,6 +124,12 @@ HOSTEDBY Yournamehere
 
 ## set a server location for world reboot. Don't include the byond://, just give the address and port.
 # SERVER ss13.example.com:2506
+
+## forum address
+# FORUMURL http://justanotherday.example.com
+
+## Wiki address
+# WIKIURL http://www.nanotrasen.com/wiki/index.php
 
 ## Ban appeals URL - usually for a forum or wherever people should go to contact your admins.
 # BANAPPEALS http://justanotherday.example.com
@@ -148,5 +155,20 @@ WHITEERRMSG message
 ##Remove the # mark infront of this to forbid admins from posssessing the singularity.
 #FORBID_SINGULO_POSSESSION
 
+## Remove the # to show a popup 'reply to' window to every non-admin that recieves an adminPM. 
+## The intention is to make adminPMs more visible. (although I fnd popups annoying so this defaults to off)
+#POPUP_ADMIN_PM
+
+## Remove the # to allow special 'Easter-egg' events on special holidays such as seasonal holidays and stuff like 'Talk Like a Pirate Day' :3 YAARRR
+#ALLOW_HOLIDAYS
+
 ##Remove the # mark if you are going to use the SVN irc bot to relay adminhelps
 #USEIRCBOT
+
+##Defines the ticklag for the world.  0.9 is the normal one, 0.5 is smoother.
+TICKLAG 0.9
+
+## Defines if Tick Compensation is used.  It results in a minor slowdown of movement of all mobs, but attempts to result in a level movement speed across all ticks.  Recommended if tickrate is lowered.
+TICKCOMP 0
+
+

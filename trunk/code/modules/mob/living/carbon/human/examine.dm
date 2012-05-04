@@ -1,5 +1,5 @@
 /mob/living/carbon/human/examine()
-	set src in oview()
+	set src in view()
 
 	if(!usr || !src)	return
 	if(((usr.sdisabilities & 1) || usr.blinded || usr.stat) && !(istype(usr,/mob/dead/observer/)))
@@ -158,7 +158,7 @@
 			id = pda.owner
 		else if(istype(src.wear_id, /obj/item/weapon/card/id)) //just in case something other than a PDA/ID card somehow gets in the ID slot :[
 			var/obj/item/weapon/card/id/idcard = src.wear_id
-			id = idcard.registered
+			id = idcard.registered_name
 		if (id && (id != src.real_name) && (get_dist(src, usr) <= 1) && prob(10))
 			msg += "<span class='warning'>[t_He] [t_is] wearing \icon[src.wear_id] \a [src.wear_id] yet something doesn't seem right...</span>\n"
 		else
@@ -203,7 +203,7 @@
 						foundghost++
 						break
 			if(!foundghost)
-				msg += "and [t_his] soul has departed"
+				msg += " and [t_his] soul has departed"
 		msg += "...</span>\n"
 
 	else
@@ -250,6 +250,32 @@
 
 	if (src.digitalcamo)
 		msg += "[t_He] [t_is] repulsively uncanny!\n"
+
+
+	if(istype(usr, /mob/living/carbon/human))
+		var/mob/living/carbon/human/H = usr
+		if(istype(H.glasses, /obj/item/clothing/glasses/hud/security) || istype(H.glasses, /obj/item/clothing/glasses/sunglasses/sechud))
+			var/perpname = "wot"
+			var/criminal = "None"
+
+			if(wear_id)
+				if(istype(wear_id,/obj/item/weapon/card/id))
+					perpname = wear_id:registered_name
+				else if(istype(wear_id,/obj/item/device/pda))
+					var/obj/item/device/pda/tempPda = wear_id
+					perpname = tempPda.owner
+			else
+				perpname = src.name
+
+			for (var/datum/data/record/E in data_core.general)
+				if (E.fields["name"] == perpname)
+					for (var/datum/data/record/R in data_core.security)
+						if (R.fields["id"] == E.fields["id"])
+							criminal = R.fields["criminal"]
+
+
+			msg += "<span class = 'deptradio'>Criminal status:</span> <a href='?src=\ref[src];criminal=1'>\[[criminal]\]</a>\n"
+			//msg += "\[Set Hostile Identification\]\n"
 
 	msg += "*---------*</span>"
 

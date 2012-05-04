@@ -3,7 +3,7 @@
 	set name = "Edit DB Auth"
 
 	//if(Debug2)
-	if(!src.authenticated || !src.holder)
+	if(!src.holder)
 		src << "Only administrators may use this command."
 		return
 
@@ -18,7 +18,7 @@
 	set name = "Update SQL Population"
 
 	//if(Debug2)
-	if(!src.authenticated || !src.holder)
+	if(!src.holder)
 		src << "Only administrators may use this command."
 		return
 
