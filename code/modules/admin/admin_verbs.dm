@@ -610,7 +610,7 @@
 	if(!M.client.warned)
 		M << "\red <B>You have been warned by an administrator. This is the only warning you will recieve.</B>"
 		M.client.warned = 1
-                M << browse(rules, "window=rules;size=480x320")
+		M << browse(rules, "window=rules;size=480x320")
 		message_admins("\blue [ckey] warned [M.ckey].")
 	else
 		AddBan(M.ckey, M.computer_id, "Autobanning due to previous warn", ckey, 1, AUTOBATIME)
